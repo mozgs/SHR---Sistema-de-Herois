@@ -7,23 +7,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #080c0a;
-            --bg-card: #111a15;
-            --bg-input: #18241e;
+            --bg-dark: #070b09;
+            --bg-card: #101814;
+            --bg-input: #16221c;
             --primary: #00ff88;
             --primary-glow: rgba(0, 255, 136, 0.25);
             --accent: #00e5ff;
             --danger: #ff3366;
             --text-light: #f1f5f9;
-            --text-muted: #809489;
-            --border: #20352b;
+            --text-muted: #7e9488;
+            --border: #1f3329;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background: var(--bg-dark); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
 
         header {
-            background: linear-gradient(180deg, #040605 0%, var(--bg-card) 100%);
+            background: linear-gradient(180deg, #030504 0%, var(--bg-card) 100%);
             border-bottom: 2px solid var(--primary);
             padding: 1.2rem 1rem;
             text-align: center;
@@ -32,9 +32,9 @@
 
         header h1 {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             color: var(--primary);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
         }
 
@@ -49,7 +49,7 @@
             background: var(--bg-input);
             color: var(--text-muted);
             border: 1px solid var(--border);
-            padding: 8px 20px;
+            padding: 8px 22px;
             border-radius: 20px;
             font-weight: 700;
             font-size: 0.95rem;
@@ -74,7 +74,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Nav Abas */
+        /* Nav Abas Jogador */
         .tabs-bar {
             display: flex;
             gap: 6px;
@@ -139,7 +139,7 @@
             outline: none;
         }
         input:focus, select:focus, textarea:focus { border-color: var(--primary); }
-        textarea { resize: vertical; min-height: 80px; }
+        textarea { resize: vertical; min-height: 85px; }
 
         .btn {
             background: var(--primary);
@@ -157,12 +157,13 @@
         }
         .btn:hover { background: #00cc6d; box-shadow: 0 0 10px var(--primary-glow); }
         .btn-sec { background: transparent; border: 1px solid var(--border); color: var(--text-light); }
+        .btn-sec:hover { background: var(--bg-input); }
         .btn-danger { background: rgba(255, 51, 102, 0.15); color: var(--danger); border: 1px solid var(--danger); }
         .btn-danger:hover { background: var(--danger); color: #fff; }
 
         /* Barras de Status */
         .bars-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-        .meter-bg { background: #070c09; height: 10px; border-radius: 5px; overflow: hidden; border: 1px solid var(--border); margin-top: 6px; }
+        .meter-bg { background: #050806; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin-top: 6px; }
         .meter-fill { height: 100%; transition: width 0.3s; }
         .pv-fill { background: var(--danger); }
         .pe-fill { background: var(--accent); }
@@ -198,7 +199,7 @@
 <body>
 
     <header>
-        <h1>S.H.R. — Central de RPG</h1>
+        <h1>S.H.R. — Super Hero RPG</h1>
         <div class="mode-switch">
             <button class="btn-mode active" onclick="setModo('jogador')">🎮 Modo Jogador</button>
             <button class="btn-mode" onclick="setModo('mestre')">🎲 Modo Mestre</button>
@@ -207,7 +208,7 @@
 
     <div class="container">
 
-        <!-- MODO JOGADOR -->
+        <!-- ================= MODO JOGADOR ================= -->
         <div class="view-section active" id="view-jogador">
             <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom:1rem;">
                 <button class="btn btn-sec" onclick="exportarJSON()">Exportar Ficha (.JSON)</button>
@@ -228,12 +229,12 @@
             <div class="panel-card aba-content" id="aba-0">
                 <h2 class="title">Identidade do Herói</h2>
                 <div class="form-grid">
-                    <div class="form-group"><label>Nome do Personagem</label><input type="text" id="nome" oninput="salvar()"></div>
-                    <div class="form-group"><label>Jogador</label><input type="text" id="jogador" oninput="salvar()"></div>
-                    <div class="form-group"><label>Idade</label><input type="number" id="idade" oninput="salvar()"></div>
-                    <div class="form-group"><label>Origem</label><input type="text" id="origem" oninput="salvar()"></div>
-                    <div class="form-group full"><label>Conceito</label><input type="text" id="conceito" oninput="salvar()"></div>
-                    <div class="form-group full"><label>História</label><textarea id="historia" oninput="salvar()"></textarea></div>
+                    <div class="form-group"><label>Nome do Personagem</label><input type="text" id="nome" placeholder="Ex: Capitão Vórtex" oninput="salvar()"></div>
+                    <div class="form-group"><label>Nome do Jogador</label><input type="text" id="jogador" placeholder="Seu nome" oninput="salvar()"></div>
+                    <div class="form-group"><label>Idade</label><input type="number" id="idade" placeholder="Ex: 24" oninput="salvar()"></div>
+                    <div class="form-group"><label>Origem</label><input type="text" id="origem" placeholder="Ex: Experimento Genético" oninput="salvar()"></div>
+                    <div class="form-group full"><label>Conceito</label><input type="text" id="conceito" placeholder="Ex: Velocista vigilante das ruas" oninput="salvar()"></div>
+                    <div class="form-group full"><label>História</label><textarea id="historia" placeholder="Descreva o passado do personagem..." oninput="salvar()"></textarea></div>
                 </div>
             </div>
 
@@ -243,339 +244,35 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Corpo (Base)</label>
-                        <input type="number" id="cBase" value="2" oninput="salvar(); re-calc();">
-                        <span style="font-size:0.85rem; color:var(--primary); font-weight:bold; margin-top:4px;">Total: <span id="cTotal">2</span></span>
+                        <input type="number" id="cBase" value="2" min="1" max="10" oninput="salvar(); reCalc();">
+                        <span style="font-size:0.85rem; color:var(--primary); font-weight:bold; margin-top:4px;">Total Final: <span id="cTotal">2</span></span>
                     </div>
                     <div class="form-group">
                         <label>Mente (Base)</label>
-                        <input type="number" id="mBase" value="2" oninput="salvar(); re-calc();">
-                        <span style="font-size:0.85rem; color:var(--primary); font-weight:bold; margin-top:4px;">Total: <span id="mTotal">2</span></span>
+                        <input type="number" id="mBase" value="2" min="1" max="10" oninput="salvar(); reCalc();">
+                        <span style="font-size:0.85rem; color:var(--primary); font-weight:bold; margin-top:4px;">Total Final: <span id="mTotal">2</span></span>
                     </div>
                     <div class="form-group">
                         <label>Percepção (Base)</label>
-                        <input type="number" id="pBase" value="2" oninput="salvar(); re-calc();">
-                        <span style="font-size:0.85rem; color:var(--primary); font-weight:bold; margin-top:4px;">Total: <span id="pTotal">2</span></span>
+                        <input type="number" id="pBase" value="2" min="1" max="10" oninput="salvar(); reCalc();">
+                        <span style="font-size:0.85rem; color:var(--primary); font-weight:bold; margin-top:4px;">Total Final: <span id="pTotal">2</span></span>
                     </div>
                 </div>
             </div>
 
             <!-- Aba 3: Perícias -->
             <div class="panel-card aba-content" id="aba-2" style="display:none;">
-                <h2 class="title">Perícias Selecionáveis <button class="btn" style="font-size:0.75rem;" onclick="addPericia()">+ Perícia</button></h2>
-                <table>
-                    <thead>
-                        <tr><th>Nome</th><th>Atributo</th><th>Treinamento</th><th>Bônus Item</th><th>Total</th></tr>
-                    </thead>
-                    <tbody id="tblPericias"></tbody>
-                </table>
+                <h2 class="title">Perícias <button class="btn" style="font-size:0.75rem;" onclick="addPericia()">+ Nova Perícia</button></h2>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr><th>Perícia</th><th>Atributo Base</th><th>Treinamento</th><th>Bônus Itens/Outros</th><th>Total Final</th></tr>
+                        </thead>
+                        <tbody id="tblPericias"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Aba 4: Poderes -->
             <div class="panel-card aba-content" id="aba-3" style="display:none;">
-                <h2 class="title">Habilidades & Poderes <button class="btn" style="font-size:0.75rem;" onclick="addPoder()">+ Novo Poder</button></h2>
-                <div id="listaPoderes"></div>
-            </div>
-
-            <!-- Aba 5: Status -->
-            <div class="panel-card aba-content" id="aba-4" style="display:none;">
-                <h2 class="title">Status e Recursos</h2>
-                <div class="bars-container">
-                    <div class="form-group">
-                        <label>Vitalidade (PV Atual / Máx)</label>
-                        <div style="display:flex; gap:6px;">
-                            <input type="number" id="pvAtual" value="20" oninput="salvar(); renderBarras();">
-                            <input type="number" id="pvMax" value="20" oninput="salvar(); renderBarras();">
-                        </div>
-                        <div class="meter-bg"><div class="meter-fill pv-fill" id="pvBar"></div></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Energia (PE Atual / Máx)</label>
-                        <div style="display:flex; gap:6px;">
-                            <input type="number" id="peAtual" value="10" oninput="salvar(); renderBarras();">
-                            <input type="number" id="peMax" value="10" oninput="salvar(); renderBarras();">
-                        </div>
-                        <div class="meter-bg"><div class="meter-fill pe-fill" id="peBar"></div></div>
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group full"><label>Equipamentos</label><textarea id="equipamentos" oninput="salvar()"></textarea></div>
-                    <div class="form-group full"><label>Inventário & Itens</label><textarea id="inventario" oninput="salvar()"></textarea></div>
-                </div>
-            </div>
-
-            <!-- Aba 6: Resumo -->
-            <div class="panel-card aba-content" id="aba-5" style="display:none;">
-                <h2 class="title">Resumo da Ficha</h2>
-                <div id="resumoConteudo" style="display:grid; gap:10px;"></div>
-            </div>
-        </div>
-
-        <!-- MODO MESTRE -->
-        <div class="view-section" id="view-mestre">
-            <div class="panel-card">
-                <h2 class="title">Painel da Campanha</h2>
-                <div class="form-grid">
-                    <div class="form-group"><label>Nome da Campanha</label><input type="text" id="mCampanha" oninput="salvarMestre()"></div>
-                    <div class="form-group"><label>Sessão Atual</label><input type="text" id="mSessao" oninput="salvarMestre()"></div>
-                    <div class="form-group full"><label>Anotações do Mestre</label><textarea id="mNotas" oninput="salvarMestre()"></textarea></div>
-                </div>
-            </div>
-
-            <div class="panel-card">
-                <h2 class="title">Ordem de Iniciativa & Combate <button class="btn" onclick="addNpc()">+ Ameaça / Vilão</button></h2>
-                <div id="combateLista" style="display:grid; gap:8px;"></div>
-            </div>
-        </div>
-
-    </div>
-
-    <footer><p>SHR — Super Hero RPG &copy; 2026 | Desenvolvido para GitHub Pages</p></footer>
-
-    <script>
-        let data = {
-            nome: "", jogador: "", idade: "", origem: "", conceito: "", historia: "",
-            cBase: 2, mBase: 2, pBase: 2,
-            pvAtual: 20, pvMax: 20, peAtual: 10, peMax: 10,
-            equipamentos: "", inventario: "",
-            pericias: [
-                { nome: "Acrobacia", attr: "corpo", nivel: 0, item: 0 },
-                { nome: "Atletismo", attr: "corpo", nivel: 0, item: 0 },
-                { nome: "Investigação", attr: "mente", nivel: 0, item: 0 },
-                { nome: "Tecnologia", attr: "mente", nivel: 0, item: 0 },
-                { nome: "Vigilância", attr: "percepcao", nivel: 0, item: 0 }
-            ],
-            poderes: []
-        };
-
-        let mestre = { campanha: "", sessao: "", notas: "", combate: [] };
-
-        function setModo(m) {
-            document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-
-            if(m === 'jogador') {
-                document.querySelectorAll('.btn-mode')[0].classList.add('active');
-                document.getElementById('view-jogador').classList.add('active');
-            } else {
-                document.querySelectorAll('.btn-mode')[1].classList.add('active');
-                document.getElementById('view-mestre').classList.add('active');
-                renderMestre();
-            }
-        }
-
-        function setAba(idx) {
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.aba-content').forEach(a => a.style.display = 'none');
-
-            document.querySelectorAll('.tab-item')[idx].classList.add('active');
-            document.getElementById('aba-' + idx).style.display = 'block';
-
-            if(idx === 5) renderResumo();
-        }
-
-        function reCalc() {
-            let cMod = 0, mMod = 0, pMod = 0;
-            data.poderes.forEach(p => {
-                if(p.ativo) {
-                    if(p.attr === 'corpo') cMod += p.mod;
-                    if(p.attr === 'mente') mMod += p.mod;
-                    if(p.attr === 'percepcao') pMod += p.mod;
-                }
-            });
-
-            let cT = (parseInt(data.cBase)||0) + cMod;
-            let mT = (parseInt(data.mBase)||0) + mMod;
-            let pT = (parseInt(data.pBase)||0) + pMod;
-
-            document.getElementById('cTotal').innerText = cT;
-            document.getElementById('mTotal').innerText = mT;
-            document.getElementById('pTotal').innerText = pT;
-
-            renderPericias({ corpo: cT, mente: mT, percepcao: pT });
-        }
-
-        function renderPericias(totais) {
-            const tb = document.getElementById('tblPericias');
-            tb.innerHTML = '';
-            data.pericias.forEach((p, i) => {
-                let base = totais ? totais[p.attr] : 2;
-                let tot = base + (p.nivel * 2) + (parseInt(p.item)||0);
-                tb.innerHTML += `<tr>
-                    <td><strong>${p.nome}</strong></td>
-                    <td style="text-transform:capitalize;">${p.attr}</td>
-                    <td>
-                        <select onchange="data.pericias[${i}].nivel=parseInt(this.value); salvar(); reCalc();">
-                            <option value="0" ${p.nivel==0?'selected':''}>Leigo (+0)</option>
-                            <option value="1" ${p.nivel==1?'selected':''}>Treinado (+2)</option>
-                            <option value="2" ${p.nivel==2?'selected':''}>Veterano (+4)</option>
-                            <option value="3" ${p.nivel==3?'selected':''}>Expert (+6)</option>
-                        </select>
-                    </td>
-                    <td><input type="number" value="${p.item}" style="width:60px;" oninput="data.pericias[${i}].item=parseInt(this.value)||0; salvar(); reCalc();"></td>
-                    <td><strong style="color:var(--primary)">${tot}</strong></td>
-                </tr>`;
-            });
-        }
-
-        function addPoder() {
-            let nome = prompt("Nome do Poder:");
-            if(!nome) return;
-            let tipo = prompt("Tipo (ativo ou passivo):", "ativo");
-            let custo = parseInt(prompt("Custo PE:", "0")) || 0;
-            let attr = prompt("Modifica atributo? (corpo, mente, percepcao ou deixe em branco):", "").toLowerCase();
-            let mod = parseInt(prompt("Bônus do Modificador:", "0")) || 0;
-
-            data.poderes.push({ nome, tipo, custo, attr, mod, ativo: false });
-            salvar();
-            renderPoderes();
-            reCalc();
-        }
-
-        function renderPoderes() {
-            const list = document.getElementById('listaPoderes');
-            list.innerHTML = '';
-            data.poderes.forEach((p, i) => {
-                list.innerHTML += `<div class="power-card">
-                    <div class="power-head">
-                        <strong>${p.nome} (${p.tipo})</strong>
-                        <button class="badge-toggle ${p.ativo?'on':'off'}" onclick="data.poderes[${i}].ativo=!data.poderes[${i}].ativo; salvar(); renderPoderes(); reCalc();">
-                            ${p.ativo?'ATIVO (ON)':'DESATIVADO'}
-                        </button>
-                    </div>
-                    <div style="font-size:0.85rem; color:var(--text-muted);">
-                        <span>Custo: ${p.custo} PE | Bônus: +${p.mod} em ${p.attr||'nenhum'}</span>
-                        ${p.tipo==='ativo'?`<button class="btn" style="padding:2px 6px; font-size:0.7rem; margin-left:10px;" onclick="usarPe(${p.custo})">Usar PE</button>`:''}
-                    </div>
-                </div>`;
-            });
-        }
-
-        function usarPe(c) {
-            if(data.peAtual >= c) {
-                data.peAtual -= c;
-                document.getElementById('peAtual').value = data.peAtual;
-                salvar();
-                renderBarras();
-            } else { alert("PE insuficiente!"); }
-        }
-
-        function renderBarras() {
-            let pvA = parseInt(document.getElementById('pvAtual').value) || 0;
-            let pvM = parseInt(document.getElementById('pvMax').value) || 1;
-            let peA = parseInt(document.getElementById('peAtual').value) || 0;
-            let peM = parseInt(document.getElementById('peMax').value) || 1;
-
-            document.getElementById('pvBar').style.width = Math.min(100, Math.max(0, (pvA/pvM)*100)) + '%';
-            document.getElementById('peBar').style.width = Math.min(100, Math.max(0, (peA/peM)*100)) + '%';
-        }
-
-        function salvar() {
-            data.nome = document.getElementById('nome').value;
-            data.jogador = document.getElementById('jogador').value;
-            data.cBase = parseInt(document.getElementById('cBase').value)||1;
-            data.mBase = parseInt(document.getElementById('mBase').value)||1;
-            data.pBase = parseInt(document.getElementById('pBase').value)||1;
-            data.pvAtual = parseInt(document.getElementById('pvAtual').value)||0;
-            data.pvMax = parseInt(document.getElementById('pvMax').value)||1;
-            data.peAtual = parseInt(document.getElementById('peAtual').value)||0;
-            data.peMax = parseInt(document.getElementById('peMax').value)||1;
-            localStorage.setItem('shr_data', JSON.stringify(data));
-        }
-
-        function renderResumo() {
-            document.getElementById('resumoConteudo').innerHTML = `
-                <div><strong>Nome:</strong> ${data.nome || 'N/A'}</div>
-                <div><strong>Jogador:</strong> ${data.jogador || 'N/A'}</div>
-                <div><strong>PV:</strong> ${data.pvAtual}/${data.pvMax} | <strong>PE:</strong> ${data.peAtual}/${data.peMax}</div>
-                <div><strong>Poderes Ativos:</strong> ${data.poderes.filter(p=>p.ativo).length}</div>
-            `;
-        }
-
-        function addNpc() {
-            let nome = prompt("Nome da Ameaça:");
-            let ini = parseInt(prompt("Iniciativa:", "10"))||0;
-            if(nome) {
-                mestre.combate.push({ nome, ini });
-                mestre.combate.sort((a,b)=>b.ini - a.ini);
-                salvarMestre();
-                renderMestre();
-            }
-        }
-
-        function salvarMestre() {
-            mestre.campanha = document.getElementById('mCampanha').value;
-            mestre.sessao = document.getElementById('mSessao').value;
-            mestre.notas = document.getElementById('mNotas').value;
-            localStorage.setItem('shr_mestre', JSON.stringify(mestre));
-        }
-
-        function renderMestre() {
-            const c = document.getElementById('combateLista');
-            c.innerHTML = '';
-            mestre.combate.forEach((item, i) => {
-                c.innerHTML += `<div style="background:var(--bg-input); padding:8px 12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
-                    <span><strong>#${item.ini}</strong> - ${item.nome}</span>
-                    <button class="btn btn-danger" style="padding:2px 6px; font-size:0.7rem;" onclick="mestre.combate.splice(${i},1); salvarMestre(); renderMestre();">X</button>
-                </div>`;
-            });
-        }
-
-        function exportarJSON() {
-            const a = document.createElement('a');
-            a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-            a.download = (data.nome || "heroi_shr") + ".json";
-            a.click();
-        }
-
-        function importarJSON(e) {
-            const r = new FileReader();
-            if(e.target.files[0]) {
-                r.readAsText(e.target.files[0], "UTF-8");
-                r.onload = (evt) => {
-                    try {
-                        data = JSON.parse(evt.target.result);
-                        document.getElementById('nome').value = data.nome||'';
-                        document.getElementById('jogador').value = data.jogador||'';
-                        document.getElementById('cBase').value = data.cBase||2;
-                        document.getElementById('mBase').value = data.mBase||2;
-                        document.getElementById('pBase').value = data.pBase||2;
-                        document.getElementById('pvAtual').value = data.pvAtual||20;
-                        document.getElementById('pvMax').value = data.pvMax||20;
-                        document.getElementById('peAtual').value = data.peAtual||10;
-                        document.getElementById('peMax').value = data.peMax||10;
-                        renderPoderes();
-                        reCalc();
-                        renderBarras();
-                        alert("Ficha carregada com sucesso!");
-                    } catch(err) { alert("Arquivo JSON inválido."); }
-                };
-            }
-        }
-
-        window.onload = () => {
-            const loc = localStorage.getItem('shr_data');
-            if(loc) { try { data = JSON.parse(loc); } catch(e){} }
-            const locM = localStorage.getItem('shr_mestre');
-            if(locM) { try { mestre = JSON.parse(locM); } catch(e){} }
-
-            document.getElementById('nome').value = data.nome||'';
-            document.getElementById('jogador').value = data.jogador||'';
-            document.getElementById('cBase').value = data.cBase||2;
-            document.getElementById('mBase').value = data.mBase||2;
-            document.getElementById('pBase').value = data.pBase||2;
-            document.getElementById('pvAtual').value = data.pvAtual||20;
-            document.getElementById('pvMax').value = data.pvMax||20;
-            document.getElementById('peAtual').value = data.peAtual||10;
-            document.getElementById('peMax').value = data.peMax||10;
-
-            document.getElementById('mCampanha').value = mestre.campanha||'';
-            document.getElementById('mSessao').value = mestre.sessao||'';
-            document.getElementById('mNotas').value = mestre.notas||'';
-
-            renderPoderes();
-            reCalc();
-            renderBarras();
-        };
-    </script>
-</body>
-</html>
+                <h2 class="title">Poderes & Habilidades <button class="btn" style="font-size:0.75rem;" onclick="addPoder()">+ Novo Poder
