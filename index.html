@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHR — Super Hero RPG (Sistema Completo)</title>
+    <title>SHR — Super Hero RPG (Sistema Completo V2)</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -480,4 +480,32 @@
                     </div>
                 </div>
                 <div class="nav-buttons">
-                    <button class
+                    <button class="btn btn-secondary" onclick="mudarAbaJogador(0)">&larr; Voltar</button>
+                    <button class="btn" onclick="mudarAbaJogador(2)">Avançar &rarr;</button>
+                </div>
+            </div>
+
+            <!-- Aba 3: Perícias -->
+            <div class="panel-card aba-conteudo" id="aba-j-2" style="display:none;">
+                <h2 class="section-title">
+                    Perícias
+                    <button class="btn" style="font-size: 0.8rem; padding: 6px 14px;" onclick="adicionarNovaPericia()">+ Adicionar Perícia</button>
+                </h2>
+                <div style="overflow-x: auto;">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Perícia</th>
+                                <th>Atributo</th>
+                                <th>Treinamento</th>
+                                <th>Bônus Itens</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaPericiasCorpo"></tbody>
+                    </table>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="mudarAbaJogador(1)">&larr; Voltar</button>
+                    <button class="btn" onclick="mudarAbaJogador(3)">Avançar &rarr;</button>
+                </div>
