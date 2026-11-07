@@ -39,13 +39,13 @@ h1{font-size:clamp(26px,4vw,35px);line-height:1.15;margin:7px 0 8px;letter-spaci
 .hero-info{min-width:0;flex:1}.hero-info h3{margin:1px 0 3px;font-size:16px}.hero-meta{font-size:12px;color:var(--muted)}.hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
 .tag{font-size:10px;font-weight:750;color:var(--green2);background:var(--soft);padding:4px 8px;border-radius:20px}
 .empty{padding:32px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;grid-column:1/-1}
-.panel{padding:20px}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.panel{padding:20px;margin-bottom:20px}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .quick{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-align:left;color:var(--text);cursor:pointer}.quick b{display:block;margin:6px 0 2px}.quick small{color:var(--muted)}
 .page{display:none}.page.active{display:block}
 .rule-list{display:grid;gap:10px}.rule{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.rule b{display:block;margin-bottom:3px}.rule p{margin:0;color:var(--muted);font-size:13px}
 .notice{margin-top:22px;padding:14px 16px;border-radius:12px;background:var(--soft);color:var(--text);font-size:12px}
 
-/* Estilos da Ficha Detalhada (6 Abas) */
+/* Ficha Detalhada (6 Abas) */
 .sheet-tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
 .sheet-tab{background:var(--panel);color:var(--muted);border:1px solid var(--line);padding:8px 16px;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;white-space:nowrap}
 .sheet-tab.active{background:var(--green);color:#102017;border-color:var(--green)}
@@ -66,6 +66,12 @@ table.skills-table{width:100%;border-collapse:collapse;margin-top:10px}
 table.skills-table th,table.skills-table td{padding:10px;text-align:left;border-bottom:1px solid var(--line);font-size:0.9rem}
 table.skills-table th{color:var(--muted)}
 
+/* Rolador de Dados e Feed */
+.dice-box{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:15px}
+.dice-btn{background:var(--soft);color:var(--green2);border:1px solid var(--line);padding:10px 16px;border-radius:9px;font-weight:700;cursor:pointer;transition:.2s}
+.dice-btn:hover{background:var(--green);color:#102017}
+.feed-item{background:var(--bg);border:1px solid var(--line);padding:12px;border-radius:9px;margin-bottom:8px;font-size:13px;display:flex;justify-content:space-between;align-items:center}
+
 .modal-backdrop{position:fixed;inset:0;background:#07110bc9;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal-backdrop.open{display:flex}
 .modal{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:23px;width:min(100%,470px);box-shadow:0 25px 80px #0005}.modal h2{margin:0 0 5px}.modal p{margin:0 0 18px;color:var(--muted);font-size:13px}
 .modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
@@ -82,7 +88,7 @@ table.skills-table th{color:var(--muted)}
     <button class="active" data-page="inicio"><span class="ico">⌂</span> Visão geral</button>
     <button data-page="personagens"><span class="ico">♙</span> Personagens</button>
     <button data-page="regras"><span class="ico">▤</span> Regras do sistema</button>
-    <button data-page="mestre"><span class="ico">♜</span> Área do mestre</button>
+    <button data-page="mestre"><span class="ico">♜</span> Área do mestre & Campanha</button>
   </nav></div>
   <div class="side-bottom">SHR · Central Oficial<br>Gerenciador de Campanhas.</div>
 </aside>
@@ -105,15 +111,15 @@ table.skills-table th{color:var(--muted)}
       <div class="stats">
         <div class="stat"><div class="stat-top"><span>Personagens criados</span><span class="stat-icon">♙</span></div><div class="stat-num" id="statHeroes">0</div></div>
         <div class="stat"><div class="stat-top"><span>Campanhas ativas</span><span class="stat-icon">◇</span></div><div class="stat-num">1</div></div>
-        <div class="stat"><div class="stat-top"><span>Versão da plataforma</span><span class="stat-icon">⌘</span></div><div class="stat-num">1.0</div></div>
+        <div class="stat"><div class="stat-top"><span>Versão da plataforma</span><span class="stat-icon">⌘</span></div><div class="stat-num">1.2</div></div>
       </div>
       <div class="section-head"><h2>Seus personagens</h2><span id="heroCount">0 registros</span></div>
       <div class="characters" id="recentHeroes"><div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div></div>
       <div class="section-head"><h2>Acesso rápido</h2><span>Ferramentas da plataforma</span></div>
       <div class="quick-grid">
         <button class="quick" data-goto="personagens"><span class="stat-icon">♙</span><b>Personagens</b><small>Crie e organize suas fichas detalhadas.</small></button>
-        <button class="quick" data-goto="regras"><span class="stat-icon">▤</span><b>Livro de regras</b><small>Consulte o sistema de atributos e perícias.</small></button>
-        <button class="quick" data-goto="mestre"><span class="stat-icon">♜</span><b>Ferramentas do mestre</b><small>Tracker de iniciativa e notas de campanha.</small></button>
+        <button class="quick" data-goto="regras"><span class="stat-icon">▤</span><b>Livro de regras</b><small>Consulte o sistema de atributos e o d6 por atributo.</small></button>
+        <button class="quick" data-goto="mestre"><span class="stat-icon">♜</span><b>Área do mestre</b><small>Histórias, regras caseiras, dados (d6) e iniciativa.</small></button>
       </div>
     </section>
 
@@ -161,25 +167,25 @@ table.skills-table th{color:var(--muted)}
       <!-- Aba 2: Atributos -->
       <div class="panel sheet-content" id="sheet-tab-1">
         <h2>Atributos Principais</h2>
-        <p style="color:var(--muted); font-size:13px; margin-bottom:15px;">Corpo, Mente e Percepção. Modificadores de poderes ativos somam-se automaticamente.</p>
+        <p style="color:var(--muted); font-size:13px; margin-bottom:15px;">Cada ponto de atributo concede 1 d6 para rolar contra a DT.</p>
         <div class="form-grid">
           <div class="attr-box">
             <label>Corpo (Base)</label>
             <input type="number" id="fCorpo" value="2" min="1" max="10" oninput="updateAttrBase('corpo', this.value)">
             <span style="font-size:12px; color:var(--green2); font-weight:bold;">Modificador: <span id="modCorpo">0</span></span>
-            <span style="font-size:13px; font-weight:bold;">Final: <span id="finalCorpo" style="color:var(--accent);">2</span></span>
+            <span style="font-size:13px; font-weight:bold;">Final: <span id="finalCorpo" style="color:var(--accent);">2</span> d6</span>
           </div>
           <div class="attr-box">
             <label>Mente (Base)</label>
             <input type="number" id="fMente" value="2" min="1" max="10" oninput="updateAttrBase('mente', this.value)">
             <span style="font-size:12px; color:var(--green2); font-weight:bold;">Modificador: <span id="modMente">0</span></span>
-            <span style="font-size:13px; font-weight:bold;">Final: <span id="finalMente" style="color:var(--accent);">2</span></span>
+            <span style="font-size:13px; font-weight:bold;">Final: <span id="finalMente" style="color:var(--accent);">2</span> d6</span>
           </div>
           <div class="attr-box">
             <label>Percepção (Base)</label>
             <input type="number" id="fPercepcao" value="2" min="1" max="10" oninput="updateAttrBase('percepcao', this.value)">
             <span style="font-size:12px; color:var(--green2); font-weight:bold;">Modificador: <span id="modPercepcao">0</span></span>
-            <span style="font-size:13px; font-weight:bold;">Final: <span id="finalPercepcao" style="color:var(--accent);">2</span></span>
+            <span style="font-size:13px; font-weight:bold;">Final: <span id="finalPercepcao" style="color:var(--accent);">2</span> d6</span>
           </div>
         </div>
       </div>
@@ -191,7 +197,7 @@ table.skills-table th{color:var(--muted)}
           <button class="primary" style="padding:6px 12px; font-size:12px;" onclick="addSkillModal()">+ Perícia</button>
         </div>
         <table class="skills-table">
-          <thead><tr><th>Perícia</th><th>Atributo</th><th>Treinamento</th><th>Bônus Item</th><th>Total</th></tr></thead>
+          <thead><tr><th>Perícia</th><th>Atributo</th><th>Treinamento</th><th>Bônus Item</th><th>Total (d6)</th></tr></thead>
           <tbody id="skillsTableBody"></tbody>
         </table>
       </div>
@@ -243,21 +249,57 @@ table.skills-table th{color:var(--muted)}
 
     <!-- 3. PÁGINA: REGRAS DO SISTEMA -->
     <section class="page" id="page-regras">
-      <div class="eyebrow">Documentação</div><h1>Regras do sistema</h1><p class="sub" style="margin-bottom:22px">O espaço para consultar as regras oficiais do seu RPG.</p>
+      <div class="eyebrow">Documentação</div><h1>Regras do sistema</h1><p class="sub" style="margin-bottom:22px">O sistema d6 de resolução de testes do SHR.</p>
       <div class="rule-list">
-        <div class="rule"><b>Atributos</b><p>Divididos em Corpo, Mente e Percepção. Cada um reflete a capacidade física, intelectual e sensorial do herói.</p></div>
-        <div class="rule"><b>Perícias & Modificadores</b><p>Calculadas somando o valor base do atributo, bônus de treinamento (Leigo +0, Treinado +2, Veterano +4, Expert +6) e bônus de itens.</p></div>
-        <div class="rule"><b>Poderes Ativos e Passivos</b><p>Habilidades criadas livremente. Poderes passivos ou ativos podem conceder bônus temporários ao serem ativados na aba de poderes.</p></div>
-        <div class="rule"><b>Pontos de Energia (PE)</b><p>Utilizados para custear poderes ativos durante o combate ou exploração.</p></div>
+        <div class="rule"><b>Sistema de d6 por Atributo</b><p>Cada ponto em Corpo, Mente ou Percepção concede 1 dado (d6) para rolar em testes associados.</p></div>
+        <div class="rule"><b>Dificuldade de Teste (DT)</b><p>O mestre define uma DT (ex: DT 4, 6, 8...). O jogador rola seus d6 e verifica se atinge a Dificuldade solicitada.</p></div>
+        <div class="rule"><b>Poderes com DT</b><p>Habilidades ativas podem estipular uma DT específica que os alvos devem resistir ou que o próprio herói precisa superar para conjurar o efeito.</p></div>
+        <div class="rule"><b>Pontos de Energia (PE)</b><p>Utilizados para custear poderes especiais durante a sessão.</p></div>
       </div>
     </section>
 
-    <!-- 4. PÁGINA: ÁREA DO MESTRE -->
+    <!-- 4. PÁGINA: ÁREA DO MESTRE & CAMPANHA -->
     <section class="page" id="page-mestre">
-      <div class="eyebrow">Controle da campanha</div><h1>Área do mestre</h1><p class="sub" style="margin-bottom:22px">Ferramentas para preparar e acompanhar suas sessões.</p>
-      <div class="panel" style="margin-bottom:20px;">
-        <h2 style="margin-top:0; font-size:18px;">Tracker de Iniciativa & Combate</h2>
-        <div class="field"><label>Adicionar Combatente (Herói ou Vilão)</label>
+      <div class="eyebrow">Narrativa, Regras & Mesa</div>
+      <h1>Área do Mestre & Campanha</h1>
+      <p class="sub" style="margin-bottom:22px">Gerencie a história, jogue os dados d6 da mesa e registre as rolagens publicamente.</p>
+      
+      <!-- Rolador de Dados d6 com DT e Feed Público -->
+      <div class="panel">
+        <h2 style="margin-top:0; font-size:18px;">🎲 Rolador de Dados d6 & DT</h2>
+        <p style="color:var(--muted); font-size:13px; margin-bottom:12px;">Defina quantos d6 rolar e qual a DT alvo para registrar no feed público.</p>
+        <div class="form-grid" style="max-width:500px;">
+          <div class="field"><label>Quem está rolando?</label><input id="rollerName" placeholder="Ex: Mestre ou Jogador X"></div>
+          <div class="field"><label>Quantidade de d6</label><input id="diceCount" type="number" value="3" min="1" max="20"></div>
+          <div class="field"><label>DT Alvo (Dificuldade)</label><input id="targetDt" type="number" value="4" min="1" max="30"></div>
+        </div>
+        <button class="primary" style="margin-top:10px;" onclick="rollCustomD6()">Rolar d6 contra DT</button>
+        
+        <h3 style="font-size:14px; margin:20px 0 8px;">Registro Público de Rolagens d6 (Feed ao vivo)</h3>
+        <div id="diceFeed" style="max-height:180px; overflow-y:auto; display:grid; gap:6px;">
+          <div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">Nenhuma rolagem feita nesta sessão ainda.</div>
+        </div>
+      </div>
+
+      <!-- Criação de História e Lore -->
+      <div class="panel">
+        <h2 style="margin-top:0; font-size:18px;">📖 Histórias, Lore & Ganchos de Aventura</h2>
+        <div class="field"><label>Resumo do Mundo / Lore Atual</label><textarea id="loreText" placeholder="Escreva sobre a cidade, facções ou o prólogo da história..." oninput="saveMasterNotes()"></textarea></div>
+      </div>
+
+      <!-- Criação de Regras Caseiras (Homebrew) -->
+      <div class="panel">
+        <h2 style="margin-top:0; font-size:18px;">⚖️ Criação de Regras Caseiras (Homebrew)</h2>
+        <div class="field"><label>Adicionar Nova Regra da Mesa</label>
+          <div style="display:flex; gap:10px;"><input id="ruleTitle" placeholder="Título da Regra"><button class="primary" onclick="addHomebrewRule()">Adicionar Regra</button></div>
+        </div>
+        <div id="ruleListContainer" style="margin-top:15px; display:grid; gap:8px;"></div>
+      </div>
+
+      <!-- Tracker de Iniciativa -->
+      <div class="panel">
+        <h2 style="margin-top:0; font-size:18px;">⚡ Tracker de Iniciativa</h2>
+        <div class="field"><label>Adicionar Combatente</label>
           <div style="display:flex; gap:10px;"><input id="mName" placeholder="Nome"><input id="mInit" type="number" placeholder="Iniciativa" style="width:110px;"><button class="primary" onclick="addCombatant()">Adicionar</button></div>
         </div>
         <div id="combatList" style="margin-top:15px; display:grid; gap:8px;"></div>
@@ -284,12 +326,14 @@ const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 let heroes=JSON.parse(localStorage.getItem('shrHeroes')||'[]');
 let currentHeroId=null;
 let mestreCombat=JSON.parse(localStorage.getItem('shrCombat')||'[]');
+let diceLog=JSON.parse(localStorage.getItem('shrDiceLog')||'[]');
+let homebrewRules=JSON.parse(localStorage.getItem('shrRules')||'[]');
 
 function saveHeroes(){
   localStorage.setItem('shrHeroes',JSON.stringify(heroes));
   renderHeroes();
 }
-function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;}[c]))}
 
 function renderHeroes(){
   $('#statHeroes').textContent=heroes.length;
@@ -300,360 +344,4 @@ function renderHeroes(){
       <div class="hero-emblem">✦</div>
       <div class="hero-info">
         <h3>${escapeHTML(h.name)}</h3>
-        <div class="hero-meta">${escapeHTML(h.player||'Jogador não informado')} · ${escapeHTML(h.origin||'Origem não definida')}</div>
-        <div class="hero-tags"><span class="tag">PV: ${h.pvAtual}/${h.pvMax}</span><span class="tag">PE: ${h.peAtual}/${h.peMax}</span></div>
-      </div>
-    </article>
-  `;
-
-  $('#recentHeroes').innerHTML=heroes.length?heroes.slice(-4).reverse().map(cardHTML).join(''):'<div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div>';
-  $('#allHeroes').innerHTML=heroes.length?heroes.slice().reverse().map(cardHTML).join(''):'<div class="empty">Nenhum personagem cadastrado ainda.</div>';
-}
-
-function navigate(page){
-  $$('.page').forEach(p=>p.classList.remove('active'));
-  $('#page-'+page).classList.add('active');
-  $$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
-  $('#crumb').textContent=({inicio:'Visão geral',personagens:'Personagens','ficha-detalhe':'Ficha do Herói',regras:'Regras do sistema',mestre:'Área do mestre'})[page]||page;
-  $('#sidebar').classList.remove('open');
-}
-
-$$('.nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
-$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.goto)));
-
-function openModal(){$('#modal').classList.add('open');$('#heroName').focus()}
-function closeModal(){$('#modal').classList.remove('open')}
-$('#newHeroTop').onclick=openModal;$('#newHeroPage').onclick=openModal;$('#cancelModal').onclick=closeModal;
-$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-
-$('#heroForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const newH={
-    id:'h_'+Date.now(),
-    name:$('#heroName').value.trim(),
-    player:$('#heroPlayer').value.trim(),
-    origin:$('#heroOrigin').value.trim(),
-    concept:$('#heroPower').value.trim(),
-    history:'', age:'',
-    corpoBase:2, menteBase:2, percepcaoBase:2,
-    pvAtual:20, pvMax:20, peAtual:10, peMax:10,
-    equip:'', inv:'', notes:'',
-    pericias:[
-      {name:'Acrobacia',attr:'corpo',nivel:0,bonusItem:0},
-      {name:'Atletismo',attr:'corpo',nivel:0,bonusItem:0},
-      {name:'Investigação',attr:'mente',nivel:0,bonusItem:0},
-      {name:'Tecnologia',attr:'mente',nivel:0,bonusItem:0},
-      {name:'Vigilância',attr:'percepcao',nivel:0,bonusItem:0}
-    ],
-    poderes:[
-      {id:1,name:$('#heroPower').value.trim()||'Poder Principal',type:'ativo',desc:'Habilidade principal do herói',cost:2,attr:'corpo',mod:2,ativo:false}
-    ]
-  };
-  heroes.push(newH);
-  saveHeroes();
-  e.target.reset();
-  closeModal();
-  openHeroSheet(newH.id);
-});
-
-// Lógica da Ficha Detalhada
-function openHeroSheet(id){
-  currentHeroId=id;
-  const h=heroes.find(x=>x.id===id);
-  if(!h)return;
-  
-  $('#fNome').value=h.name||'';
-  $('#fPlayer').value=h.player||'';
-  $('#fAge').value=h.age||'';
-  $('#fOrigin').value=h.origin||'';
-  $('#fConcept').value=h.concept||'';
-  $('#fHistory').value=h.history||'';
-  
-  $('#fCorpo').value=h.corpoBase||2;
-  $('#fMente').value=h.menteBase||2;
-  $('#fPercepcao').value=h.percepcaoBase||2;
-  
-  $('#fPvAtual').value=h.pvAtual||20;
-  $('#fPvMax').value=h.pvMax||20;
-  $('#fPeAtual').value=h.peAtual||10;
-  $('#fPeMax').value=h.peMax||10;
-  
-  $('#fEquip').value=h.equip||'';
-  $('#fInv').value=h.inv||'';
-  $('#fNotes').value=h.notes||'';
-
-  switchSheetTab(0);
-  calcSheet();
-  navigate('ficha-detalhe');
-}
-
-function getActiveHero(){ return heroes.find(x=>x.id===currentHeroId); }
-
-function switchSheetTab(idx){
-  $$('.sheet-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
-  $$('.sheet-content').forEach((c,i)=>c.classList.toggle('active',i===idx));
-  if(idx===5) renderSummary();
-}
-
-function updateSheetField(field,val){
-  const h=getActiveHero();if(!h)return;
-  h[field]=val;
-  saveHeroes();
-}
-
-function updateAttrBase(attr,val){
-  const h=getActiveHero();if(!h)return;
-  h[attr+'Base']=parseInt(val)||1;
-  saveHeroes();
-  calcSheet();
-}
-
-function updateResource(res,val){
-  const h=getActiveHero();if(!h)return;
-  h[res]=parseInt(val)||0;
-  saveHeroes();
-  updateBars();
-}
-
-function restorePe(){
-  const h=getActiveHero();if(!h)return;
-  h.peAtual=h.peMax;
-  $('#fPeAtual').value=h.peAtual;
-  saveHeroes();
-  updateBars();
-  alert("Energia totalmente restaurada!");
-}
-
-function updateBars(){
-  const h=getActiveHero();if(!h)return;
-  let pvPct=Math.max(0,Math.min(100,(h.pvAtual/h.pvMax)*100));
-  let pePct=Math.max(0,Math.min(100,(h.peAtual/h.peMax)*100));
-  $('#pvBar').style.width=pvPct+'%';
-  $('#peBar').style.width=pePct+'%';
-}
-
-function calcSheet(){
-  const h=getActiveHero();if(!h)return;
-  let mods={corpo:0,mente:0,percepcao:0};
-  (h.poderes||[]).forEach(p=>{
-    if(p.ativo && p.attr && p.mod) mods[p.attr]=(mods[p.attr]||0)+parseInt(p.mod);
-  });
-
-  $('#modCorpo').textContent=(mods.corpo>=0?'+':'')+mods.corpo;
-  $('#modMente').textContent=(mods.mente>=0?'+':'')+mods.mente;
-  $('#modPercepcao').textContent=(mods.percepcao>=0?'+':'')+mods.percepcao;
-
-  let fC=(h.corpoBase||2)+mods.corpo;
-  let fM=(h.menteBase||2)+mods.mente;
-  let fP=(h.percepcaoBase||2)+mods.percepcao;
-
-  $('#finalCorpo').textContent=fC;
-  $('#finalMente').textContent=fM;
-  $('#finalPercepcao').textContent=fP;
-
-  renderSkills({corpo:fC,mente:fM,percepcao:fP});
-  renderPowers();
-  updateBars();
-}
-
-function renderSkills(totals){
-  const h=getActiveHero();if(!h)return;
-  const tbody=$('#skillsTableBody');tbody.innerHTML='';
-  (h.pericias||[]).forEach((s,i)=>{
-    let base=totals[s.attr]||2;
-    let total=base+(s.nivel*2)+(s.bonusItem||0);
-    tbody.innerHTML+=`
-      <tr>
-        <td><strong>${escapeHTML(s.name)}</strong></td>
-        <td style="text-transform:capitalize">${s.attr}</td>
-        <td>
-          <select onchange="updateSkillLevel(${i},this.value)">
-            <option value="0" ${s.nivel==0?'selected':''}>Leigo (+0)</option>
-            <option value="1" ${s.nivel==1?'selected':''}>Treinado (+2)</option>
-            <option value="2" ${s.nivel==2?'selected':''}>Veterano (+4)</option>
-            <option value="3" ${s.nivel==3?'selected':''}>Expert (+6)</option>
-          </select>
-        </td>
-        <td><input type="number" value="${s.bonusItem||0}" style="width:70px;" oninput="updateSkillItem(${i},this.value)"></td>
-        <td><strong style="color:var(--green2)">${total}</strong></td>
-      </tr>
-    `;
-  });
-}
-
-function updateSkillLevel(idx,val){
-  const h=getActiveHero();if(!h)return;
-  h.pericias[idx].nivel=parseInt(val);
-  saveHeroes();
-  calcSheet();
-}
-function updateSkillItem(idx,val){
-  const h=getActiveHero();if(!h)return;
-  h.pericias[idx].bonusItem=parseInt(val)||0;
-  saveHeroes();
-  calcSheet();
-}
-
-function addSkillModal(){
-  const h=getActiveHero();if(!h)return;
-  let name=prompt("Nome da nova perícia:");
-  if(!name)return;
-  let attr=prompt("Atributo base (corpo, mente, percepcao):","corpo").toLowerCase();
-  if(['corpo','mente','percepcao'].includes(attr)){
-    h.pericias.push({name,attr,nivel:0,bonusItem:0});
-    saveHeroes();
-    calcSheet();
-  }else{alert("Atributo inválido!");}
-}
-
-function renderPowers(){
-  const h=getActiveHero();if(!h)return;
-  const container=$('#powersContainer');container.innerHTML='';
-  if(!h.poderes || h.poderes.length===0){
-    container.innerHTML='<p style="color:var(--muted)">Nenhum poder cadastrado.</p>';
-    return;
-  }
-  h.poderes.forEach((p,i)=>{
-    container.innerHTML+=`
-      <div class="power-card">
-        <div class="power-head">
-          <strong>${escapeHTML(p.name)} (${(p.type||'ativo').toUpperCase()})</strong>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <button class="toggle-btn ${p.ativo?'on':'off'}" onclick="togglePower(${i})">${p.ativo?'ATIVO (ON)':'OFF'}</button>
-            <button class="danger-btn" style="padding:2px 8px;font-size:11px;" onclick="removePower(${i})">X</button>
-          </div>
-        </div>
-        <p style="margin:4px 0; color:var(--muted); font-size:13px;">${escapeHTML(p.desc||'Sem descrição')}</p>
-        <div style="font-size:12px; display:flex; gap:15px; margin-top:6px;">
-          <span>Custo PE: <b>${p.cost||0}</b></span>
-          <span>Bônus: <b>+${p.mod||0} em ${p.attr||'nenhum'}</b></span>
-          ${p.type==='ativo'?`<button class="secondary" style="padding:2px 8px; font-size:11px;" onclick="usePower(${i})">Usar Habilidade</button>`:''}
-        </div>
-      </div>
-    `;
-  });
-}
-
-function togglePower(idx){
-  const h=getActiveHero();if(!h)return;
-  h.poderes[idx].ativo=!h.poderes[idx].ativo;
-  saveHeroes();
-  calcSheet();
-}
-
-function removePower(idx){
-  const h=getActiveHero();if(!h)return;
-  h.poderes.splice(idx,1);
-  saveHeroes();
-  calcSheet();
-}
-
-function addPowerModal(){
-  const h=getActiveHero();if(!h)return;
-  let name=prompt("Nome do Poder/Habilidade:");
-  if(!name)return;
-  let type=prompt("Tipo (ativo ou passivo):","ativo").toLowerCase();
-  let desc=prompt("Descrição:");
-  let cost=parseInt(prompt("Custo em PE:","0"))||0;
-  let attr=prompt("Modifica qual atributo? (corpo, mente, percepcao ou deixe vazio):","").toLowerCase();
-  let mod=parseInt(prompt("Valor do bônus:","0"))||0;
-
-  h.poderes.push({id:Date.now(),name,type,desc,cost,attr,mod,ativo:false});
-  saveHeroes();
-  calcSheet();
-}
-
-function usePower(idx){
-  const h=getActiveHero();if(!h)return;
-  let p=h.poderes[idx];
-  let cost=p.cost||0;
-  if(h.peAtual>=cost){
-    h.peAtual-=cost;
-    $('#fPeAtual').value=h.peAtual;
-    saveHeroes();
-    updateBars();
-    alert(`Poder [${p.name}] utilizado! -${cost} PE.`);
-  }else{
-    alert("Energia (PE) insuficiente!");
-  }
-}
-
-function renderSummary(){
-  const h=getActiveHero();if(!h)return;
-  $('#sheetSummary').innerHTML=`
-    <div style="background:var(--bg); padding:12px; border-radius:8px;">
-      <p><b>Nome:</b> ${escapeHTML(h.name)} | <b>Jogador:</b> ${escapeHTML(h.player||'N/D')}</p>
-      <p><b>Origem:</b> ${escapeHTML(h.origin||'N/D')} | <b>Conceito:</b> ${escapeHTML(h.concept||'N/D')}</p>
-    </div>
-    <div style="background:var(--bg); padding:12px; border-radius:8px;">
-      <p><b>Vitalidade:</b> ${h.pvAtual}/${h.pvMax} | <b>Energia:</b> ${h.peAtual}/${h.peMax}</p>
-      <p><b>Poderes registrados:</b> ${h.poderes?h.poderes.length:0}</p>
-    </div>
-  `;
-}
-
-$('#backToHeroes').onclick=()=>navigate('personagens');
-$('#deleteHeroBtn').onclick=()=>{
-  if(confirm("Deseja realmente excluir este herói?")){
-    heroes=heroes.filter(x=>x.id!==currentHeroId);
-    saveHeroes();
-    navigate('personagens');
-  }
-};
-
-$('#exportJsonBtn').onclick=()=>{
-  const h=getActiveHero();if(!h)return;
-  const dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(h,null,2));
-  const dl=document.createElement('a');
-  dl.setAttribute("href",dataStr);
-  dl.setAttribute("download",(h.name||"heroi")+".json");
-  dl.click();
-};
-
-// Área do Mestre / Combatentes
-function addCombatant(){
-  let name=$('#mName').value.trim();
-  let init=parseInt($('#mInit').value)||0;
-  if(!name)return;
-  mestreCombat.push({name,init});
-  mestreCombat.sort((a,b)=>b.init-a.init);
-  localStorage.setItem('shrCombat',JSON.stringify(mestreCombat));
-  $('#mName').value='';$('#mInit').value='';
-  renderMestreCombat();
-}
-
-function renderMestreCombat(){
-  const box=$('#combatList');box.innerHTML='';
-  if(mestreCombat.length===0){
-    box.innerHTML='<p style="color:var(--muted); font-size:13px;">Nenhum combatente no tracker.</p>';
-    return;
-  }
-  mestreCombat.forEach((c,i)=>{
-    box.innerHTML+=`
-      <div style="background:var(--bg); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-        <span><b>#${c.init}</b> — ${escapeHTML(c.name)}</span>
-        <button class="danger-btn" style="padding:2px 8px; font-size:11px;" onclick="removeCombatant(${i})">Remover</button>
-      </div>
-    `;
-  });
-}
-function removeCombatant(i){
-  mestreCombat.splice(i,1);
-  localStorage.setItem('shrCombat',JSON.stringify(mestreCombat));
-  renderMestreCombat();
-}
-
-// Global UI Controls
-$('#themeBtn').onclick=()=>{
-  const dark=document.documentElement.dataset.theme!=='dark';
-  document.documentElement.dataset.theme=dark?'dark':'light';
-  localStorage.setItem('shrTheme',dark?'dark':'light');
-};
-if(localStorage.getItem('shrTheme')==='dark')document.documentElement.dataset.theme='dark';
-$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open');
-
-renderHeroes();
-renderMestreCombat();
-</script>
-</body>
-</html>
+        <div class="hero-meta">${escapeHTML(h
