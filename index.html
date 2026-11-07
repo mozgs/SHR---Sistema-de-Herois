@@ -11,12 +11,12 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;transition:.2s}
 button,input,select,textarea{font:inherit}button{cursor:pointer}
 .app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
-.sidebar{background:#111a15;color:#eaf4ed;padding:26px 18px;display:flex;flex-direction:column;gap:28px}
+.sidebar{background:#111a15;color:#eaf4ed;padding:26px 18px;display:flex;flex-direction:column;gap:28px;z-index:10}
 .brand{padding:4px 10px}.brand-mark{font-size:29px;font-weight:900;letter-spacing:.18em;color:#f5fff8}.brand-sub{font-size:10px;letter-spacing:.22em;color:#8ba397;margin-top:1px}
 .nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:#789084;padding:0 12px;margin-bottom:8px}
-.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#b8c8be;text-align:left;padding:11px 12px;border-radius:10px;display:flex;gap:12px;align-items:center}.nav button:hover,.nav button.active{background:#20382c;color:#fff}.nav button.active .ico{color:var(--green)}
+.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#b8c8be;text-align:left;padding:11px 12px;border-radius:10px;display:flex;gap:12px;align-items:center;width:100%}.nav button:hover,.nav button.active{background:#20382c;color:#fff}.nav button.active .ico{color:var(--green)}
 .ico{width:20px;text-align:center;font-size:17px}.side-bottom{margin-top:auto;border-top:1px solid #2a392f;padding:17px 10px;color:#82958a;font-size:12px}
-main{min-width:0}.topbar{height:76px;padding:0 34px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--panel)}
+main{min-width:0;position:relative}.topbar{height:76px;padding:0 34px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--panel)}
 .crumb{font-size:13px;color:var(--muted)}.top-actions{display:flex;gap:10px;align-items:center}
 .icon-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);width:39px;height:39px;border-radius:11px;display:grid;place-items:center}
 .avatar{width:36px;height:36px;border-radius:50%;background:var(--soft);color:var(--green2);display:grid;place-items:center;font-weight:800}
@@ -40,7 +40,7 @@ h1{font-size:clamp(26px,4vw,35px);line-height:1.15;margin:7px 0 8px;letter-spaci
 .tag{font-size:10px;font-weight:750;color:var(--green2);background:var(--soft);padding:4px 8px;border-radius:20px}
 .empty{padding:32px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;grid-column:1/-1}
 .panel{padding:20px;margin-bottom:20px}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.quick{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-align:left;color:var(--text);cursor:pointer}.quick b{display:block;margin:6px 0 2px}.quick small{color:var(--muted)}
+.quick{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-align:left;color:var(--text);cursor:pointer;width:100%}.quick b{display:block;margin:6px 0 2px}.quick small{color:var(--muted)}
 .page{display:none}.page.active{display:block}
 .rule-list{display:grid;gap:10px}.rule{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.rule b{display:block;margin-bottom:3px}.rule p{margin:0;color:var(--muted);font-size:13px}
 .notice{margin-top:22px;padding:14px 16px;border-radius:12px;background:var(--soft);color:var(--text);font-size:12px}
@@ -72,19 +72,19 @@ table.skills-table th{color:var(--muted)}
 .dice-btn:hover{background:var(--green);color:#102017}
 .feed-item{background:var(--bg);border:1px solid var(--line);padding:12px;border-radius:9px;margin-bottom:8px;font-size:13px;display:flex;justify-content:space-between;align-items:center}
 
-.modal-backdrop{position:fixed;inset:0;background:#07110bc9;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal-backdrop.open{display:flex}
+.modal-backdrop{position:fixed;inset:0;background:#07110bc9;display:none;align-items:center;justify-content:center;padding:18px;z-index:50}.modal-backdrop.open{display:flex}
 .modal{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:23px;width:min(100%,470px);box-shadow:0 25px 80px #0005}.modal h2{margin:0 0 5px}.modal p{margin:0 0 18px;color:var(--muted);font-size:13px}
 .modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
 .mobile-menu{display:none}
 
-@media(max-width:800px){.app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:4;left:-260px;top:0;bottom:0;width:250px;transition:.2s}.sidebar.open{left:0}.mobile-menu{display:inline-block}.topbar{padding:0 17px}.content{padding:24px 17px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.characters{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.welcome{align-items:flex-start;flex-direction:column}.welcome .primary{width:100%}}
+@media(max-width:800px){.app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:20;left:-260px;top:0;bottom:0;width:250px;transition:.2s}.sidebar.open{left:0}.mobile-menu{display:inline-block}.topbar{padding:0 17px}.content{padding:24px 17px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.characters{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.welcome{align-items:flex-start;flex-direction:column}.welcome .primary{width:100%}}
 </style>
 </head>
 <body>
 <div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="brand"><div class="brand-mark">SHR</div><div class="brand-sub">SUPER HERO RPG</div></div>
-  <div><div class="nav-label">Plataforma</div><nav class="nav">
+  <div><div class="nav-label">Plataforma</div><nav class="nav" id="mainNav">
     <button class="active" data-page="inicio"><span class="ico">⌂</span> Visão geral</button>
     <button data-page="personagens"><span class="ico">♙</span> Personagens</button>
     <button data-page="regras"><span class="ico">▤</span> Regras do sistema</button>
@@ -111,7 +111,7 @@ table.skills-table th{color:var(--muted)}
       <div class="stats">
         <div class="stat"><div class="stat-top"><span>Personagens criados</span><span class="stat-icon">♙</span></div><div class="stat-num" id="statHeroes">0</div></div>
         <div class="stat"><div class="stat-top"><span>Campanhas ativas</span><span class="stat-icon">◇</span></div><div class="stat-num">1</div></div>
-        <div class="stat"><div class="stat-top"><span>Versão da plataforma</span><span class="stat-icon">⌘</span></div><div class="stat-num">1.2</div></div>
+        <div class="stat"><div class="stat-top"><span>Versão da plataforma</span><span class="stat-icon">⌘</span></div><div class="stat-num">1.3</div></div>
       </div>
       <div class="section-head"><h2>Seus personagens</h2><span id="heroCount">0 registros</span></div>
       <div class="characters" id="recentHeroes"><div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div></div>
@@ -142,13 +142,13 @@ table.skills-table th{color:var(--muted)}
         </div>
       </div>
 
-      <div class="sheet-tabs">
-        <button class="sheet-tab active" onclick="switchSheetTab(0)">1. Identidade</button>
-        <button class="sheet-tab" onclick="switchSheetTab(1)">2. Atributos</button>
-        <button class="sheet-tab" onclick="switchSheetTab(2)">3. Perícias</button>
-        <button class="sheet-tab" onclick="switchSheetTab(3)">4. Poderes</button>
-        <button class="sheet-tab" onclick="switchSheetTab(4)">5. Características</button>
-        <button class="sheet-tab" onclick="switchSheetTab(5)">6. Resumo</button>
+      <div class="sheet-tabs" id="sheetTabsContainer">
+        <button class="sheet-tab active" data-tab="0">1. Identidade</button>
+        <button class="sheet-tab" data-tab="1">2. Atributos</button>
+        <button class="sheet-tab" data-tab="2">3. Perícias</button>
+        <button class="sheet-tab" data-tab="3">4. Poderes</button>
+        <button class="sheet-tab" data-tab="4">5. Características</button>
+        <button class="sheet-tab" data-tab="5">6. Resumo</button>
       </div>
 
       <!-- Aba 1: Identidade -->
@@ -194,7 +194,7 @@ table.skills-table th{color:var(--muted)}
       <div class="panel sheet-content" id="sheet-tab-2">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
           <h2 style="margin:0;">Perícias</h2>
-          <button class="primary" style="padding:6px 12px; font-size:12px;" onclick="addSkillModal()">+ Perícia</button>
+          <button class="primary" style="padding:6px 12px; font-size:12px;" id="addSkillBtn">+ Perícia</button>
         </div>
         <table class="skills-table">
           <thead><tr><th>Perícia</th><th>Atributo</th><th>Treinamento</th><th>Bônus Item</th><th>Total (d6)</th></tr></thead>
@@ -206,7 +206,7 @@ table.skills-table th{color:var(--muted)}
       <div class="panel sheet-content" id="sheet-tab-3">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
           <h2 style="margin:0;">Poderes & Habilidades</h2>
-          <button class="primary" style="padding:6px 12px; font-size:12px;" onclick="addPowerModal()">+ Novo Poder</button>
+          <button class="primary" style="padding:6px 12px; font-size:12px;" id="addPowerBtn">+ Novo Poder</button>
         </div>
         <div id="powersContainer"></div>
       </div>
@@ -228,7 +228,7 @@ table.skills-table th{color:var(--muted)}
             <div style="display:flex; gap:6px; align-items:center;">
               <input type="number" id="fPeAtual" value="10" oninput="updateResource('peAtual', this.value)">
               <input type="number" id="fPeMax" value="10" oninput="updateResource('peMax', this.value)">
-              <button class="secondary" style="padding:8px 10px; font-size:11px;" onclick="restorePe()">Restaurar</button>
+              <button class="secondary" style="padding:8px 10px; font-size:11px;" id="restorePeBtn">Restaurar</button>
             </div>
             <div class="meter-bg"><div class="meter-fill pe-fill" id="peBar" style="width:100%"></div></div>
           </div>
@@ -273,7 +273,7 @@ table.skills-table th{color:var(--muted)}
           <div class="field"><label>Quantidade de d6</label><input id="diceCount" type="number" value="3" min="1" max="20"></div>
           <div class="field"><label>DT Alvo (Dificuldade)</label><input id="targetDt" type="number" value="4" min="1" max="30"></div>
         </div>
-        <button class="primary" style="margin-top:10px;" onclick="rollCustomD6()">Rolar d6 contra DT</button>
+        <button class="primary" style="margin-top:10px;" id="rollDiceBtn">Rolar d6 contra DT</button>
         
         <h3 style="font-size:14px; margin:20px 0 8px;">Registro Público de Rolagens d6 (Feed ao vivo)</h3>
         <div id="diceFeed" style="max-height:180px; overflow-y:auto; display:grid; gap:6px;">
@@ -284,14 +284,14 @@ table.skills-table th{color:var(--muted)}
       <!-- Criação de História e Lore -->
       <div class="panel">
         <h2 style="margin-top:0; font-size:18px;">📖 Histórias, Lore & Ganchos de Aventura</h2>
-        <div class="field"><label>Resumo do Mundo / Lore Atual</label><textarea id="loreText" placeholder="Escreva sobre a cidade, facções ou o prólogo da história..." oninput="saveMasterNotes()"></textarea></div>
+        <div class="field"><label>Resumo do Mundo / Lore Atual</label><textarea id="loreText" placeholder="Escreva sobre a cidade, facções ou o prólogo da história..."></textarea></div>
       </div>
 
       <!-- Criação de Regras Caseiras (Homebrew) -->
       <div class="panel">
         <h2 style="margin-top:0; font-size:18px;">⚖️ Criação de Regras Caseiras (Homebrew)</h2>
         <div class="field"><label>Adicionar Nova Regra da Mesa</label>
-          <div style="display:flex; gap:10px;"><input id="ruleTitle" placeholder="Título da Regra"><button class="primary" onclick="addHomebrewRule()">Adicionar Regra</button></div>
+          <div style="display:flex; gap:10px;"><input id="ruleTitle" placeholder="Título da Regra"><button class="primary" id="addRuleBtn">Adicionar Regra</button></div>
         </div>
         <div id="ruleListContainer" style="margin-top:15px; display:grid; gap:8px;"></div>
       </div>
@@ -300,7 +300,7 @@ table.skills-table th{color:var(--muted)}
       <div class="panel">
         <h2 style="margin-top:0; font-size:18px;">⚡ Tracker de Iniciativa</h2>
         <div class="field"><label>Adicionar Combatente</label>
-          <div style="display:flex; gap:10px;"><input id="mName" placeholder="Nome"><input id="mInit" type="number" placeholder="Iniciativa" style="width:110px;"><button class="primary" onclick="addCombatant()">Adicionar</button></div>
+          <div style="display:flex; gap:10px;"><input id="mName" placeholder="Nome"><input id="mInit" type="number" placeholder="Iniciativa" style="width:110px;"><button class="primary" id="addCombatBtn">Adicionar</button></div>
         </div>
         <div id="combatList" style="margin-top:15px; display:grid; gap:8px;"></div>
       </div>
@@ -317,529 +317,4 @@ table.skills-table th{color:var(--muted)}
     <div class="field"><label for="heroPlayer">Jogador</label><input id="heroPlayer" maxlength="40" placeholder="Nome do jogador"></div>
     <div class="field"><label for="heroOrigin">Origem ou conceito</label><input id="heroOrigin" maxlength="60" placeholder="Ex.: Herói tecnológico"></div>
     <div class="field"><label for="heroPower">Poder principal</label><input id="heroPower" maxlength="60" placeholder="Ex.: Manipulação de energia"></div>
-    <div class="modal-actions"><button type="button" class="secondary" id="cancelModal">Cancelar</button><button class="primary" type="submit">Salvar personagem</button></div>
-  </form>
-</div>
-
-<script>
-const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-let heroes=JSON.parse(localStorage.getItem('shrHeroes')||'[]');
-let currentHeroId=null;
-let mestreCombat=JSON.parse(localStorage.getItem('shrCombat')||'[]');
-let diceLog=JSON.parse(localStorage.getItem('shrDiceLog')||'[]');
-let homebrewRules=JSON.parse(localStorage.getItem('shrRules')||'[]');
-
-function saveHeroes(){
-  localStorage.setItem('shrHeroes',JSON.stringify(heroes));
-  renderHeroes();
-}
-function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;}[c]))}
-
-function renderHeroes(){
-  const statHeroes = $('#statHeroes');
-  const heroCount = $('#heroCount');
-  if(statHeroes) statHeroes.textContent=heroes.length;
-  if(heroCount) heroCount.textContent=heroes.length+' registro(s)';
-  
-  const cardHTML=(h)=>`
-    <article class="hero-card" onclick="openHeroSheet('${h.id}')">
-      <div class="hero-emblem">✦</div>
-      <div class="hero-info">
-        <h3>${escapeHTML(h.name)}</h3>
-        <div class="hero-meta">${escapeHTML(h.player||'Jogador não informado')} · ${escapeHTML(h.origin||'Origem não definida')}</div>
-        <div class="hero-tags"><span class="tag">PV: ${h.pvAtual}/${h.pvMax}</span><span class="tag">PE: ${h.peAtual}/${h.peMax}</span></div>
-      </div>
-    </article>
-  `;
-
-  const recent = $('#recentHeroes');
-  const all = $('#allHeroes');
-  if(recent) recent.innerHTML=heroes.length?heroes.slice(-4).reverse().map(cardHTML).join(''):'<div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div>';
-  if(all) all.innerHTML=heroes.length?heroes.slice().reverse().map(cardHTML).join(''):'<div class="empty">Nenhum personagem cadastrado ainda.</div>';
-}
-
-function navigate(page){
-  $$('.page').forEach(p=>p.classList.remove('active'));
-  const target = $('#page-'+page);
-  if(target) target.classList.add('active');
-  $$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
-  const crumb = $('#crumb');
-  if(crumb) crumb.textContent=({inicio:'Visão geral',personagens:'Personagens','ficha-detalhe':'Ficha do Herói',regras:'Regras do sistema',mestre:'Área do mestre & Campanha'})[page]||page;
-  const sidebar = $('#sidebar');
-  if(sidebar) sidebar.classList.remove('open');
-  if(page==='mestre'){ renderDiceFeed(); renderHomebrewRules(); renderMestreCombat(); }
-}
-
-$$('.nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
-$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.goto)));
-
-function openModal(){
-  const modal = $('#modal');
-  if(modal) modal.classList.add('open');
-  const heroName = $('#heroName');
-  if(heroName) heroName.focus();
-}
-function closeModal(){
-  const modal = $('#modal');
-  if(modal) modal.classList.remove('open');
-}
-
-const newHeroTop = $('#newHeroTop');
-const newHeroPage = $('#newHeroPage');
-const cancelModal = $('#cancelModal');
-const modalEl = $('#modal');
-const heroForm = $('#heroForm');
-
-if(newHeroTop) newHeroTop.onclick = openModal;
-if(newHeroPage) newHeroPage.onclick = openModal;
-if(cancelModal) cancelModal.onclick = closeModal;
-if(modalEl) modalEl.addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-
-if(heroForm){
-  heroForm.addEventListener('submit',e=>{
-    e.preventDefault();
-    const newH={
-      id:'h_'+Date.now(),
-      name:$('#heroName').value.trim(),
-      player:$('#heroPlayer').value.trim(),
-      origin:$('#heroOrigin').value.trim(),
-      concept:$('#heroPower').value.trim(),
-      history:'', age:'',
-      corpoBase:2, menteBase:2, percepcaoBase:2,
-      pvAtual:20, pvMax:20, peAtual:10, peMax:10,
-      equip:'', inv:'', notes:'',
-      pericias:[
-        {name:'Acrobacia',attr:'corpo',nivel:0,bonusItem:0},
-        {name:'Atletismo',attr:'corpo',nivel:0,bonusItem:0},
-        {name:'Investigação',attr:'mente',nivel:0,bonusItem:0},
-        {name:'Tecnologia',attr:'mente',nivel:0,bonusItem:0},
-        {name:'Vigilância',attr:'percepcao',nivel:0,bonusItem:0}
-      ],
-      poderes:[
-        {id:1,name:$('#heroPower').value.trim()||'Poder Principal',type:'ativo',desc:'Habilidade principal',cost:2,dt:5,attr:'corpo',mod:2,ativo:false}
-      ]
-    };
-    heroes.push(newH);
-    saveHeroes();
-    e.target.reset();
-    closeModal();
-    openHeroSheet(newH.id);
-  });
-}
-
-// Lógica da Ficha Detalhada
-function openHeroSheet(id){
-  currentHeroId=id;
-  const h=heroes.find(x=>x.id===id);
-  if(!h)return;
-  
-  $('#fNome').value=h.name||'';
-  $('#fPlayer').value=h.player||'';
-  $('#fAge').value=h.age||'';
-  $('#fOrigin').value=h.origin||'';
-  $('#fConcept').value=h.concept||'';
-  $('#fHistory').value=h.history||'';
-  
-  $('#fCorpo').value=h.corpoBase||2;
-  $('#fMente').value=h.menteBase||2;
-  $('#fPercepcao').value=h.percepcaoBase||2;
-  
-  $('#fPvAtual').value=h.pvAtual||20;
-  $('#fPvMax').value=h.pvMax||20;
-  $('#fPeAtual').value=h.peAtual||10;
-  $('#fPeMax').value=h.peMax||10;
-  
-  $('#fEquip').value=h.equip||'';
-  $('#fInv').value=h.inv||'';
-  $('#fNotes').value=h.notes||'';
-
-  switchSheetTab(0);
-  calcSheet();
-  navigate('ficha-detalhe');
-}
-
-function getActiveHero(){ return heroes.find(x=>x.id===currentHeroId); }
-
-function switchSheetTab(idx){
-  $$('.sheet-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
-  $$('.sheet-content').forEach((c,i)=>c.classList.toggle('active',i===idx));
-  if(idx===5) renderSummary();
-}
-
-function updateSheetField(field,val){
-  const h=getActiveHero();if(!h)return;
-  h[field]=val;
-  saveHeroes();
-}
-
-function updateAttrBase(attr,val){
-  const h=getActiveHero();if(!h)return;
-  h[attr+'Base']=parseInt(val)||1;
-  saveHeroes();
-  calcSheet();
-}
-
-function updateResource(res,val){
-  const h=getActiveHero();if(!h)return;
-  h[res]=parseInt(val)||0;
-  saveHeroes();
-  updateBars();
-}
-
-function restorePe(){
-  const h=getActiveHero();if(!h)return;
-  h.peAtual=h.peMax;
-  $('#fPeAtual').value=h.peAtual;
-  saveHeroes();
-  updateBars();
-  alert("Energia totalmente restaurada!");
-}
-
-function updateBars(){
-  const h=getActiveHero();if(!h)return;
-  let pvPct=Math.max(0,Math.min(100,(h.pvAtual/h.pvMax)*100));
-  let pePct=Math.max(0,Math.min(100,(h.peAtual/h.peMax)*100));
-  const pvBar = $('#pvBar');
-  const peBar = $('#peBar');
-  if(pvBar) pvBar.style.width=pvPct+'%';
-  if(peBar) peBar.style.width=pePct+'%';
-}
-
-function calcSheet(){
-  const h=getActiveHero();if(!h)return;
-  let mods={corpo:0,mente:0,percepcao:0};
-  (h.poderes||[]).forEach(p=>{
-    if(p.ativo && p.attr && p.mod) mods[p.attr]=(mods[p.attr]||0)+parseInt(p.mod);
-  });
-
-  const modC = $('#modCorpo'), modM = $('#modMente'), modP = $('#modPercepcao');
-  if(modC) modC.textContent=(mods.corpo>=0?'+':'')+mods.corpo;
-  if(modM) modM.textContent=(mods.mente>=0?'+':'')+mods.mente;
-  if(modP) modP.textContent=(mods.percepcao>=0?'+':'')+mods.percepcao;
-
-  let fC=(h.corpoBase||2)+mods.corpo;
-  let fM=(h.menteBase||2)+mods.mente;
-  let fP=(h.percepcaoBase||2)+mods.percepcao;
-
-  const fCorpoEl = $('#finalCorpo'), fMenteEl = $('#finalMente'), fPercepEl = $('#finalPercepcao');
-  if(fCorpoEl) fCorpoEl.textContent=fC;
-  if(fMenteEl) fMenteEl.textContent=fM;
-  if(fPercepEl) fPercepEl.textContent=fP;
-
-  renderSkills({corpo:fC,mente:fM,percepcao:fP});
-  renderPowers();
-  updateBars();
-}
-
-function renderSkills(totals){
-  const h=getActiveHero();if(!h)return;
-  const tbody=$('#skillsTableBody');
-  if(!tbody) return;
-  tbody.innerHTML='';
-  (h.pericias||[]).forEach((s,i)=>{
-    let base=totals[s.attr]||2;
-    let total=base+(s.nivel*2)+(s.bonusItem||0);
-    tbody.innerHTML+=`
-      <tr>
-        <td><strong>${escapeHTML(s.name)}</strong></td>
-        <td style="text-transform:capitalize">${s.attr}</td>
-        <td>
-          <select onchange="updateSkillLevel(${i},this.value)">
-            <option value="0" ${s.nivel==0?'selected':''}>Leigo (+0)</option>
-            <option value="1" ${s.nivel==1?'selected':''}>Treinado (+2)</option>
-            <option value="2" ${s.nivel==2?'selected':''}>Veterano (+4)</option>
-            <option value="3" ${s.nivel==3?'selected':''}>Expert (+6)</option>
-          </select>
-        </td>
-        <td><input type="number" value="${s.bonusItem||0}" style="width:70px;" oninput="updateSkillItem(${i},this.value)"></td>
-        <td><strong style="color:var(--green2)">${total} d6</strong></td>
-      </tr>
-    `;
-  });
-}
-
-function updateSkillLevel(idx,val){
-  const h=getActiveHero();if(!h)return;
-  h.pericias[idx].nivel=parseInt(val);
-  saveHeroes();
-  calcSheet();
-}
-function updateSkillItem(idx,val){
-  const h=getActiveHero();if(!h)return;
-  h.pericias[idx].bonusItem=parseInt(val)||0;
-  saveHeroes();
-  calcSheet();
-}
-
-function addSkillModal(){
-  const h=getActiveHero();if(!h)return;
-  let name=prompt("Nome da nova perícia:");
-  if(!name)return;
-  let attr=prompt("Atributo base (corpo, mente, percepcao):","corpo").toLowerCase();
-  if(['corpo','mente','percepcao'].includes(attr)){
-    h.pericias.push({name,attr,nivel:0,bonusItem:0});
-    saveHeroes();
-    calcSheet();
-  }else{alert("Atributo inválido!");}
-}
-
-function renderPowers(){
-  const h=getActiveHero();if(!h)return;
-  const container=$('#powersContainer');
-  if(!container) return;
-  container.innerHTML='';
-  if(!h.poderes || h.poderes.length===0){
-    container.innerHTML='<p style="color:var(--muted)">Nenhum poder cadastrado.</p>';
-    return;
-  }
-  h.poderes.forEach((p,i)=>{
-    container.innerHTML+=`
-      <div class="power-card">
-        <div class="power-head">
-          <strong>${escapeHTML(p.name)} (${(p.type||'ativo').toUpperCase()})</strong>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <button class="toggle-btn ${p.ativo?'on':'off'}" onclick="togglePower(${i})">${p.ativo?'ATIVO (ON)':'OFF'}</button>
-            <button class="danger-btn" style="padding:2px 8px;font-size:11px;" onclick="removePower(${i})">X</button>
-          </div>
-        </div>
-        <p style="margin:4px 0; color:var(--muted); font-size:13px;">${escapeHTML(p.desc||'Sem descrição')}</p>
-        <div style="font-size:12px; display:flex; gap:15px; margin-top:6px; flex-wrap:wrap; align-items:center;">
-          <span>Custo PE: <b>${p.cost||0}</b></span>
-          <span>DT: <b style="color:var(--accent)">${p.dt||'-'}</b></span>
-          <span>Bônus: <b>+${p.mod||0} em ${p.attr||'nenhum'}</b></span>
-          ${p.type==='ativo'?`<button class="secondary" style="padding:2px 8px; font-size:11px;" onclick="usePower(${i})">Usar Habilidade</button>`:''}
-        </div>
-      </div>
-    `;
-  });
-}
-
-function togglePower(idx){
-  const h=getActiveHero();if(!h)return;
-  h.poderes[idx].ativo=!h.poderes[idx].ativo;
-  saveHeroes();
-  calcSheet();
-}
-
-function removePower(idx){
-  const h=getActiveHero();if(!h)return;
-  h.poderes.splice(idx,1);
-  saveHeroes();
-  calcSheet();
-}
-
-function addPowerModal(){
-  const h=getActiveHero();if(!h)return;
-  let name=prompt("Nome do Poder/Habilidade:");
-  if(!name)return;
-  let type=prompt("Tipo (ativo ou passivo):","ativo").toLowerCase();
-  let desc=prompt("Descrição:");
-  let cost=parseInt(prompt("Custo em PE:","0"))||0;
-  let dt=parseInt(prompt("DT do Poder (Dificuldade):","5"))||5;
-  let attr=prompt("Modifica qual atributo? (corpo, mente, percepcao ou deixe vazio):","").toLowerCase();
-  let mod=parseInt(prompt("Valor do bônus de atributo:","0"))||0;
-
-  h.poderes.push({id:Date.now(),name,type,desc,cost,dt,attr,mod,ativo:false});
-  saveHeroes();
-  calcSheet();
-}
-
-function usePower(idx){
-  const h=getActiveHero();if(!h)return;
-  let p=h.poderes[idx];
-  let cost=p.cost||0;
-  if(h.peAtual>=cost){
-    h.peAtual-=cost;
-    $('#fPeAtual').value=h.peAtual;
-    saveHeroes();
-    updateBars();
-    alert(`Poder [${p.name}] utilizado (DT ${p.dt || 'N/A'})! -${cost} PE.`);
-  }else{
-    alert("Energia (PE) insuficiente!");
-  }
-}
-
-function renderSummary(){
-  const h=getActiveHero();if(!h)return;
-  const summaryBox = $('#sheetSummary');
-  if(summaryBox){
-    summaryBox.innerHTML=`
-      <div style="background:var(--bg); padding:12px; border-radius:8px;">
-        <p><b>Nome:</b> ${escapeHTML(h.name)} | <b>Jogador:</b> ${escapeHTML(h.player||'N/D')}</p>
-        <p><b>Origem:</b> ${escapeHTML(h.origin||'N/D')} | <b>Conceito:</b> ${escapeHTML(h.concept||'N/D')}</p>
-      </div>
-      <div style="background:var(--bg); padding:12px; border-radius:8px;">
-        <p><b>Vitalidade:</b> ${h.pvAtual}/${h.pvMax} | <b>Energia:</b> ${h.peAtual}/${h.peMax}</p>
-        <p><b>Poderes registrados:</b> ${h.poderes?h.poderes.length:0}</p>
-      </div>
-    `;
-  }
-}
-
-const backToHeroes = $('#backToHeroes');
-const deleteHeroBtn = $('#deleteHeroBtn');
-const exportJsonBtn = $('#exportJsonBtn');
-
-if(backToHeroes) backToHeroes.onclick=()=>navigate('personagens');
-if(deleteHeroBtn) deleteHeroBtn.onclick=()=>{
-  if(confirm("Deseja realmente excluir este herói?")){
-    heroes=heroes.filter(x=>x.id!==currentHeroId);
-    saveHeroes();
-    navigate('personagens');
-  }
-};
-
-if(exportJsonBtn) exportJsonBtn.onclick=()=>{
-  const h=getActiveHero();if(!h)return;
-  const dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(h,null,2));
-  const dl=document.createElement('a');
-  dl.setAttribute("href",dataStr);
-  dl.setAttribute("download",(h.name||"heroi")+".json");
-  dl.click();
-};
-
-// Rolador de Dados d6 com DT e Feed Público
-function rollCustomD6(){
-  let roller = $('#rollerName').value.trim() || 'Participante';
-  let count = parseInt($('#diceCount').value) || 3;
-  let dt = parseInt($('#targetDt').value) || 4;
-  
-  let rolls = [];
-  let successes = 0;
-  for(let i=0; i<count; i++){
-    let r = Math.floor(Math.random() * 6) + 1;
-    rolls.push(r);
-    if(r >= dt) successes++;
-  }
-  
-  diceLog.unshift({
-    roller, 
-    details: `${count}d6 vs DT ${dt}`, 
-    rolls: rolls.join(', '), 
-    successes, 
-    time: new Date().toLocaleTimeString()
-  });
-  if(diceLog.length > 20) diceLog.pop();
-  localStorage.setItem('shrDiceLog', JSON.stringify(diceLog));
-  renderDiceFeed();
-}
-
-function renderDiceFeed(){
-  const feed = $('#diceFeed');
-  if(!feed) return;
-  if(!diceLog.length){
-    feed.innerHTML = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">Nenhuma rolagem feita nesta sessão ainda.</div>';
-    return;
-  }
-  feed.innerHTML = diceLog.map(d=>`
-    <div class="feed-item">
-      <span><b>${escapeHTML(d.roller)}</b> rolou <b>${d.details}</b> [${d.rolls}]</span>
-      <span><b style="color:var(--green2); font-size:14px;">${d.successes} sucesso(s)</b> <small style="color:var(--muted)">(${d.time})</small></span>
-    </div>
-  `).join('');
-}
-
-// Área do Mestre: Lore e Notas
-function saveMasterNotes(){
-  const loreText = $('#loreText');
-  if(loreText) localStorage.setItem('shrLore', loreText.value);
-}
-setTimeout(()=>{ 
-  const loreText = $('#loreText');
-  if(loreText && localStorage.getItem('shrLore')) loreText.value = localStorage.getItem('shrLore'); 
-}, 100);
-
-// Área do Mestre: Regras Caseiras (Homebrew)
-function addHomebrewRule(){
-  const ruleTitleInput = $('#ruleTitle');
-  if(!ruleTitleInput) return;
-  let title = ruleTitleInput.value.trim();
-  if(!title) return;
-  let desc = prompt("Descrição detalhada da regra caseira:");
-  homebrewRules.push({title, desc: desc || 'Sem descrição'});
-  localStorage.setItem('shrRules', JSON.stringify(homebrewRules));
-  ruleTitleInput.value = '';
-  renderHomebrewRules();
-}
-
-function renderHomebrewRules(){
-  const container = $('#ruleListContainer');
-  if(!container) return;
-  if(!homebrewRules.length){
-    container.innerHTML = '<p style="color:var(--muted); font-size:13px;">Nenhuma regra caseira cadastrada ainda.</p>';
-    return;
-  }
-  container.innerHTML = homebrewRules.map((r, i)=>`
-    <div style="background:var(--bg); padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:flex-start;">
-      <div>
-        <b>${escapeHTML(r.title)}</b>
-        <p style="margin:4px 0 0; color:var(--muted); font-size:13px;">${escapeHTML(r.desc)}</p>
-      </div>
-      <button class="danger-btn" style="padding:2px 8px; font-size:11px;" onclick="removeHomebrewRule(${i})">X</button>
-    </div>
-  `).join('');
-}
-
-function removeHomebrewRule(i){
-  homebrewRules.splice(i, 1);
-  localStorage.setItem('shrRules', JSON.stringify(homebrewRules));
-  renderHomebrewRules();
-}
-
-// Área do Mestre: Combatentes / Iniciativa
-function addCombatant(){
-  const mName = $('#mName'), mInit = $('#mInit');
-  if(!mName || !mInit) return;
-  let name = mName.value.trim();
-  let init = parseInt(mInit.value)||0;
-  if(!name)return;
-  mestreCombat.push({name,init});
-  mestreCombat.sort((a,b)=>b.init-a.init);
-  localStorage.setItem('shrCombat',JSON.stringify(mestreCombat));
-  mName.value=''; mInit.value='';
-  renderMestreCombat();
-}
-
-function renderMestreCombat(){
-  const box=$('#combatList');
-  if(!box) return;
-  box.innerHTML='';
-  if(mestreCombat.length===0){
-    box.innerHTML='<p style="color:var(--muted); font-size:13px;">Nenhum combatente no tracker.</p>';
-    return;
-  }
-  mestreCombat.forEach((c,i)=>{
-    box.innerHTML+=`
-      <div style="background:var(--bg); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-        <span><b>#${c.init}</b> — ${escapeHTML(c.name)}</span>
-        <button class="danger-btn" style="padding:2px 8px; font-size:11px;" onclick="removeCombatant(${i})">Remover</button>
-      </div>
-    `;
-  });
-}
-function removeCombatant(i){
-  mestreCombat.splice(i,1);
-  localStorage.setItem('shrCombat',JSON.stringify(mestreCombat));
-  renderMestreCombat();
-}
-
-// Global UI Controls
-const themeBtn = $('#themeBtn');
-if(themeBtn) themeBtn.onclick=()=>{
-  const dark=document.documentElement.dataset.theme!=='dark';
-  document.documentElement.dataset.theme=dark?'dark':'light';
-  localStorage.setItem('shrTheme',dark?'dark':'light');
-};
-if(localStorage.getItem('shrTheme')==='dark') document.documentElement.dataset.theme='dark';
-
-const menuBtn = $('#menuBtn');
-const sidebar = $('#sidebar');
-if(menuBtn && sidebar) menuBtn.onclick=()=>sidebar.classList.toggle('open');
-
-renderHeroes();
-renderMestreCombat();
-renderDiceFeed();
-renderHomebrewRules();
-</script>
-</body>
-</html>
+    <div class="modal-actions"><button type="button" class="secondary" id="cancelModal">Cancelar</button><button class="primary" type
