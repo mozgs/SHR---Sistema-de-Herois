@@ -3,295 +3,713 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEHR - Sistema de RPG de Super-Heróis</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>SHR — Super Hero RPG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #ff0055;
-            --secondary: #00e5ff;
-            --bg-dark: #0f1016;
-            --card-bg: #1a1c26;
-            --text-light: #f1f5f9;
-            --text-muted: #94a3b8;
+            --bg-main: #0c1210;
+            --bg-card: #131c18;
+            --bg-input: #1a2822;
+            --primary: #00ff88;
+            --primary-hover: #00cc6d;
+            --accent: #00e5ff;
+            --text-main: #e2e8f0;
+            --text-muted: #8a9991;
+            --danger: #ff3366;
+            --border: #22382f;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            line-height: 1.6;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Header / Hero */
         header {
-            background: linear-gradient(135deg, #110026 0%, #2a0845 100%);
-            padding: 3rem 1rem;
+            background: linear-gradient(180deg, #080f0c 0%, var(--bg-card) 100%);
+            border-bottom: 2px solid var(--primary);
+            padding: 1.5rem 1rem;
             text-align: center;
-            border-bottom: 4px solid var(--primary);
-            box-shadow: 0 4px 20px rgba(255, 0, 85, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.1);
         }
 
         header h1 {
-            font-family: 'Bangers', cursive;
-            font-size: 4rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.8rem;
+            color: var(--primary);
             letter-spacing: 2px;
-            color: var(--secondary);
-            text-shadow: 3px 3px 0px var(--primary);
-            margin-bottom: 0.5rem;
+            text-transform: uppercase;
         }
 
         header p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 1.5rem auto;
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            background: var(--card-bg);
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        nav a:hover {
-            background: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        /* Container Principal */
-        .container {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        /* Buscador */
-        .search-container {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .search-input {
-            width: 100%;
-            max-width: 500px;
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 25px;
-            border: 2px solid var(--secondary);
-            background: var(--card-bg);
-            color: #fff;
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
-        }
-
-        /* Grid de Seções */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-            border-color: var(--secondary);
-        }
-
-        .card h2 {
-            font-family: 'Bangers', cursive;
-            font-size: 1.8rem;
-            color: var(--primary);
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .card p {
             color: var(--text-muted);
             font-size: 0.95rem;
-            margin-bottom: 1rem;
+            margin-top: 0.3rem;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border-radius: 4px;
-            background: var(--secondary);
-            color: #000;
-            margin-bottom: 10px;
+        /* Top Action Bar */
+        .global-actions {
+            max-width: 900px;
+            margin: 1rem auto 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
         }
 
-        /* Exemplo de Calculadora/Ficha Interativa */
-        .hero-calc {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem;
+        /* Navigation Tabs */
+        .tabs-container {
+            max-width: 900px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        .tab-btn {
+            background: var(--bg-card);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 10px 18px;
             border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            border-color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #000;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto 3rem auto;
+            padding: 0 1rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2.section-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Form Elements */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--primary);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-input);
+            border-color: var(--text-muted);
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: rgba(255, 51, 102, 0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Attributes & Meters */
+        .attr-card {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .meters-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            background: var(--bg-input);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .meter-bar-bg {
+            background: #090e0c;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 5px;
+            border: 1px solid var(--border);
+        }
+
+        .meter-bar-fill {
+            height: 100%;
+            width: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .pv-fill { background: var(--danger); }
+        .pe-fill { background: var(--accent); }
+
+        /* Skills Table */
+        .skills-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 1rem;
         }
 
-        .hero-calc label {
-            display: block;
-            font-size: 0.85rem;
-            margin-bottom: 4px;
+        .skills-table th, .skills-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
         }
 
-        .hero-calc input {
-            width: 100%;
-            padding: 6px;
-            margin-bottom: 8px;
+        .skills-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Power Cards */
+        .power-card {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .power-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .power-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+
+        .toggle-btn {
+            padding: 4px 10px;
+            font-size: 0.75rem;
             border-radius: 4px;
-            border: none;
-        }
-
-        .btn-action {
-            width: 100%;
-            padding: 8px;
-            background: var(--primary);
-            border: none;
-            color: white;
             font-weight: bold;
-            border-radius: 4px;
             cursor: pointer;
-            transition: 0.2s;
+            border: 1px solid;
         }
 
-        .btn-action:hover {
-            background: #d40045;
+        .toggle-btn.off {
+            background: transparent;
+            color: var(--text-muted);
+            border-color: var(--border);
         }
 
-        /* Rodapé */
+        .toggle-btn.on {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Summary Panel */
+        .summary-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-section h3 {
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--accent);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            background: var(--bg-input);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
         footer {
             text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-            background: #090a0e;
+            padding: 1.5rem;
             color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        footer strong {
-            color: var(--secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-card);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>S.E.H.R.</h1>
-        <p>Sistema de RPG de Super-Heróis — Regras, Fichas e Gerenciador de Campanhas</p>
-        <nav>
-            <a href="#regras">Regras</a>
-            <a href="#poderes">Poderes</a>
-            <a href="#criacao">Criar Herói</a>
-            <a href="#fichas">Fichas</a>
-        </nav>
+        <h1>S.H.R.</h1>
+        <p>Super Hero RPG — Sistema de Fichas & Modificadores</p>
     </header>
+
+    <div class="global-actions">
+        <button class="btn btn-secondary" onclick="exportarFicha()">Exportar JSON</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Importar JSON</button>
+        <input type="file" id="importFile" style="display:none" onchange="importarFicha(event)">
+    </div>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="mudarAba(0)">1. Identidade</button>
+        <button class="tab-btn" onclick="mudarAba(1)">2. Atributos</button>
+        <button class="tab-btn" onclick="mudarAba(2)">3. Perícias</button>
+        <button class="tab-btn" onclick="mudarAba(3)">4. Poderes</button>
+        <button class="tab-btn" onclick="mudarAba(4)">5. Características</button>
+        <button class="tab-btn" onclick="mudarAba(5)">6. Resumo</button>
+    </div>
 
     <div class="container">
         
-        <!-- Campo de Busca Dinâmica -->
-        <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="Buscar regras, poderes ou tópicos do SEHR..." onkeyup="filtrarConteudo()">
+        <!-- ABA 1: IDENTIDADE -->
+        <div class="tab-content active" id="aba-0">
+            <h2 class="section-title">Identidade do Personagem</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nome do Personagem</label>
+                    <input type="text" id="nome" placeholder="Ex: Capitão Órion" oninput="salvarDados()">
+                </div>
+                <div class="form-group">
+                    <label>Nome do Jogador</label>
+                    <input type="text" id="jogador" placeholder="Seu nome" oninput="salvarDados()">
+                </div>
+                <div class="form-group">
+                    <label>Idade</label>
+                    <input type="number" id="idade" placeholder="Ex: 25" oninput="salvarDados()">
+                </div>
+                <div class="form-group">
+                    <label>Origem</label>
+                    <input type="text" id="origem" placeholder="Ex: Mutante, Cientista, Alien..." oninput="salvarDados()">
+                </div>
+                <div class="form-group full-width">
+                    <label>Conceito do Personagem</label>
+                    <input type="text" id="conceito" placeholder="Ex: Protetor urbano com poderes cósmicos" oninput="salvarDados()">
+                </div>
+                <div class="form-group full-width">
+                    <label>História</label>
+                    <textarea id="historia" placeholder="Escreva a origem e história do herói..." oninput="salvarDados()"></textarea>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <div></div>
+                <button class="btn" onclick="mudarAba(1)">Avançar &rarr;</button>
+            </div>
         </div>
 
-        <div class="grid" id="cardsGrid">
+        <!-- ABA 2: ATRIBUTOS -->
+        <div class="tab-content" id="aba-1">
+            <h2 class="section-title">Atributos Principais</h2>
+            <p style="color:var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Defina os valores-base. Modificadores de poderes ativos somam-se automaticamente no resultado final.</p>
             
-            <!-- Card 1: Livro de Regras -->
-            <div class="card">
-                <span class="badge">Básico</span>
-                <h2>Regras de Combates</h2>
-                <p>Aprenda como funcionam as iniciativas, turnos de ação, testes de atributo e cálculo de dano físico e elemental.</p>
-                <button class="btn-action">Ver Regras</button>
-            </div>
-
-            <!-- Card 2: Compêndio de Poderes -->
-            <div class="card">
-                <span class="badge">Sistemas</span>
-                <h2>Compêndio de Poderes</h2>
-                <p>Catálogo de superpoderes divididos por categorias: Superforça, Cinética, Magia, Tecnologia e Mutação.</p>
-                <button class="btn-action">Explorar Poderes</button>
-            </div>
-
-            <!-- Card 3: Calculadora Rápida de Atributos -->
-            <div class="card">
-                <span class="badge">Ferramenta</span>
-                <h2>Calculadora de Vida (PV)</h2>
-                <p>Calcule os Pontos de Vida (PV) do seu herói baseado na Vigor e Nível de Ameaça.</p>
-                <div class="hero-calc">
-                    <label for="vigor">Valor de Vigor:</label>
-                    <input type="number" id="vigor" placeholder="Ex: 5" value="5">
-                    <button class="btn-action" onclick="calcularPV()">Calcular</button>
-                    <p id="resultadoPV" style="margin-top: 8px; font-weight: bold; color: var(--secondary);"></p>
+            <div class="form-grid">
+                <div class="attr-card">
+                    <label>Corpo (Base)</label>
+                    <input type="number" id="corpoBase" value="2" min="1" max="10" oninput="atualizarTudo()">
+                    <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modCorpo">0</span></span>
+                    <span style="font-size: 0.9rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalCorpo" style="color: var(--accent);">2</span></span>
+                </div>
+                <div class="attr-card">
+                    <label>Mente (Base)</label>
+                    <input type="number" id="menteBase" value="2" min="1" max="10" oninput="atualizarTudo()">
+                    <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modMente">0</span></span>
+                    <span style="font-size: 0.9rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalMente" style="color: var(--accent);">2</span></span>
+                </div>
+                <div class="attr-card">
+                    <label>Percepção (Base)</label>
+                    <input type="number" id="percepcaoBase" value="2" min="1" max="10" oninput="atualizarTudo()">
+                    <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modPercepcao">0</span></span>
+                    <span style="font-size: 0.9rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalPercepcao" style="color: var(--accent);">2</span></span>
                 </div>
             </div>
 
-            <!-- Card 4: Fichas Prontas -->
-            <div class="card">
-                <span class="badge">Recursos</span>
-                <h2>Fichas de NPCs e Vilões</h2>
-                <p>Acesse o banco de dados com vilões de Classe S, capangas e aliados prontos para usar na sua mesa.</p>
-                <button class="btn-action">Abrir Banco de Dados</button>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="mudarAba(0)">&larr; Voltar</button>
+                <button class="btn" onclick="mudarAba(2)">Avançar &rarr;</button>
+            </div>
+        </div>
+
+        <!-- ABA 3: PERÍCIAS -->
+        <div class="tab-content" id="aba-2">
+            <h2 class="section-title">
+                Perícias
+                <button class="btn" style="font-size: 0.8rem; padding: 6px 12px;" onclick="adicionarPericiaModal()">+ Adicionar Perícia</button>
+            </h2>
+            <p style="color:var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Gerencie suas perícias baseadas nos atributos, bônus de treinamento e itens.</p>
+            
+            <div style="overflow-x: auto;">
+                <table class="skills-table">
+                    <thead>
+                        <tr>
+                            <th>Perícia</th>
+                            <th>Atributo</th>
+                            <th>Treinamento</th>
+                            <th>Bônus Itens/Outros</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaPericias">
+                        <!-- Gerado via JS -->
+                    </tbody>
+                </table>
             </div>
 
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="mudarAba(1)">&larr; Voltar</button>
+                <button class="btn" onclick="mudarAba(3)">Avançar &rarr;</button>
+            </div>
         </div>
+
+        <!-- ABA 4: PODERES -->
+        <div class="tab-content" id="aba-3">
+            <h2 class="section-title">
+                Poderes e Habilidades
+                <button class="btn" style="font-size: 0.8rem; padding: 6px 12px;" onclick="adicionarPoder()">+ Novo Poder</button>
+            </h2>
+            <p style="color:var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Crie suas habilidades ativas ou passivas. Ative ou desative modificadores conforme o uso em jogo.</p>
+            
+            <div id="containerPoderes">
+                <!-- Renderizado via JS -->
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="mudarAba(2)">&larr; Voltar</button>
+                <button class="btn" onclick="mudarAba(4)">Avançar &rarr;</button>
+            </div>
+        </div>
+
+        <!-- ABA 5: CARACTERÍSTICAS -->
+        <div class="tab-content" id="aba-4">
+            <h2 class="section-title">Características, Recursos & Inventário</h2>
+            
+            <!-- Barras de PV e PE -->
+            <div class="meters-container">
+                <div class="form-group">
+                    <label>Vitalidade (PV Atual / Máx)</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="number" id="pvAtual" value="20" oninput="salvarDados(); atualizarBarras();" style="width: 80px;">
+                        <span>/</span>
+                        <input type="number" id="pvMax" value="20" oninput="salvarDados(); atualizarBarras();" style="width: 80px;">
+                    </div>
+                    <div class="meter-bar-bg"><div class="meter-bar-fill pv-fill" id="pvBar"></div></div>
+                </div>
+                <div class="form-group">
+                    <label>Energia (PE Atual / Máx)</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="number" id="peAtual" value="10" oninput="salvarDados(); atualizarBarras();" style="width: 80px;">
+                        <span>/</span>
+                        <input type="number" id="peMax" value="10" oninput="salvarDados(); atualizarBarras();" style="width: 80px;">
+                        <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.8rem;" onclick="recarregarPE()">Recarregar</button>
+                    </div>
+                    <div class="meter-bar-bg"><div class="meter-bar-fill pe-fill" id="peBar"></div></div>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Equipamentos</label>
+                    <textarea id="equipamentos" placeholder="Traje tático, armas, acessórios..." oninput="salvarDados()"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Inventário</label>
+                    <textarea id="inventario" placeholder="Itens carregados, comunicador, chaves..." oninput="salvarDados()"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label>Anotações Gerais da Ficha</label>
+                    <textarea id="anotacoes" placeholder="Anotações importantes sobre a campanha..." oninput="salvarDados()"></textarea>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="mudarAba(3)">&larr; Voltar</button>
+                <button class="btn" onclick="mudarAba(5)">Avançar &rarr;</button>
+            </div>
+        </div>
+
+        <!-- ABA 6: RESUMO -->
+        <div class="tab-content" id="aba-5">
+            <h2 class="section-title">Resumo do Herói</h2>
+            
+            <div class="summary-section">
+                <h3>Identidade</h3>
+                <div class="summary-grid" id="resumoIdentidade"></div>
+            </div>
+
+            <div class="summary-section">
+                <h3>Atributos Finais</h3>
+                <div class="summary-grid" id="resumoAtributos"></div>
+            </div>
+
+            <div class="summary-section">
+                <h3>Recursos Atuais</h3>
+                <div class="summary-grid" id="resumoRecursos"></div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="mudarAba(4)">&larr; Voltar</button>
+                <button class="btn" onclick="alert('Ficha salva e pronta para jogo!')">Finalizar Ficha</button>
+            </div>
+        </div>
+
     </div>
 
     <footer>
-        <p>SEHR RPG &copy; 2026 — Desenvolvido para rodar no <strong>GitHub Pages</strong></p>
+        <p>SHR — Super Hero RPG &copy; 2026 | Hospedado no GitHub Pages</p>
     </footer>
 
     <script>
-        // Função de filtro para o campo de busca
-        function filtrarConteudo() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementsByClassName('card');
+        // Estado Global da Ficha
+        let ficha = {
+            identidade: { nome: "", jogador: "", idade: "", origem: "", conceito: "", historia: "" },
+            atributos: { corpoBase: 2, menteBase: 2, percepcaoBase: 2 },
+            pericias: [
+                { nome: "Acrobacia", atributo: "corpo", nivel: 0, bonusItem: 0 },
+                { nome: "Atletismo", atributo: "corpo", nivel: 0, bonusItem: 0 },
+                { nome: "Investigação", atributo: "mente", nivel: 0, bonusItem: 0 },
+                { nome: "Tecnologia", atributo: "mente", nivel: 0, bonusItem: 0 },
+                { nome: "Vigilância", atributo: "percepcao", nivel: 0, bonusItem: 0 },
+                { nome: "Intuição", atributo: "percepcao", nivel: 0, bonusItem: 0 }
+            ],
+            poderes: [
+                { id: 1, nome: "Super-Reflexos", tipo: "passivo", descricao: "Reflexos ampliados para desviar de ataques.", custo: 0, efeitoAtributo: "corpo", valorMod: 2, ativo: false }
+            ],
+            caracteristicas: { pvAtual: 20, pvMax: 20, peAtual: 10, peMax: 10, equipamentos: "", inventario: "", anotacoes: "" }
+        };
 
-            for (let i = 0; i < cards.length; i++) {
-                let text = cards[i].innerText.toLowerCase();
-                if (text.includes(input)) {
-                    cards[i].style.display = "block";
-                } else {
-                    cards[i].style.display = "none";
-                }
+        function mudarAba(index) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const btns = document.querySelectorAll('.tab-btn');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            btns.forEach(b => b.classList.remove('active'));
+
+            tabs[index].classList.add('active');
+            btns[index].classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if(index === 5) gerarResumo();
+        }
+
+        function salvarDados() {
+            ficha.identidade.nome = document.getElementById('nome').value;
+            ficha.identidade.jogador = document.getElementById('jogador').value;
+            ficha.identidade.idade = document.getElementById('idade').value;
+            ficha.identidade.origem = document.getElementById('origem').value;
+            ficha.identidade.conceito = document.getElementById('conceito').value;
+            ficha.identidade.historia = document.getElementById('historia').value;
+
+            ficha.atributos.corpoBase = parseInt(document.getElementById('corpoBase').value) || 1;
+            ficha.atributos.menteBase = parseInt(document.getElementById('menteBase').value) || 1;
+            ficha.atributos.percepcaoBase = parseInt(document.getElementById('percepcaoBase').value) || 1;
+
+            ficha.caracteristicas.pvAtual = parseInt(document.getElementById('pvAtual').value) || 0;
+            ficha.caracteristicas.pvMax = parseInt(document.getElementById('pvMax').value) || 1;
+            ficha.caracteristicas.peAtual = parseInt(document.getElementById('peAtual').value) || 0;
+            ficha.caracteristicas.peMax = parseInt(document.getElementById('peMax').value) || 1;
+
+            ficha.caracteristicas.equipamentos = document.getElementById('equipamentos').value;
+            ficha.caracteristicas.inventario = document.getElementById('inventario').value;
+            ficha.caracteristicas.anotacoes = document.getElementById('anotacoes').value;
+
+            localStorage.setItem('shr_ficha', JSON.stringify(ficha));
+        }
+
+        function carregarDados() {
+            const salvo = localStorage.getItem('shr_ficha');
+            if(salvo) {
+                try {
+                    ficha = JSON.parse(salvo);
+                    document.getElementById('nome').value = ficha.identidade.nome || '';
+                    document.getElementById('jogador').value = ficha.identidade.jogador || '';
+                    document.getElementById('idade').value = ficha.identidade.idade || '';
+                    document.getElementById('origem').value = ficha.identidade.origem || '';
+                    document.getElementById('conceito').value = ficha.identidade.conceito || '';
+                    document.getElementById('historia').value = ficha.identidade.historia || '';
+
+                    document.getElementById('corpoBase').value = ficha.atributos.corpoBase;
+                    document.getElementById('menteBase').value = ficha.atributos.menteBase;
+                    document.getElementById('percepcaoBase').value = ficha.atributos.percepcaoBase;
+
+                    document.getElementById('pvAtual').value = ficha.caracteristicas.pvAtual;
+                    document.getElementById('pvMax').value = ficha.caracteristicas.pvMax;
+                    document.getElementById('peAtual').value = ficha.caracteristicas.peAtual;
+                    document.getElementById('peMax').value = ficha.caracteristicas.peMax;
+
+                    document.getElementById('equipamentos').value = ficha.caracteristicas.equipamentos || '';
+                    document.getElementById('inventario').value = ficha.caracteristicas.inventario || '';
+                    document.getElementById('anotacoes').value = ficha.caracteristicas.anotacoes || '';
+                } catch(e) { console.error("Erro ao carregar localStorage"); }
             }
+            atualizarTudo();
         }
 
-        // Função de teste da Calculadora do SEHR
-        function calcularPV() {
-            let vigor = parseInt(document.getElementById('vigor').value) || 0;
-            let pvBase = 10;
-            let total = pvBase + (vigor * 5);
-            document.getElementById('resultadoPV').innerText = "PV Total: " + total;
+        function calcularAtributosFinais() {
+            let mods = { corpo: 0, mente: 0, percepcao: 0 };
+            ficha.poderes.forEach(p => {
+                if(p.ativo && p.efeitoAtributo && p.valorMod) {
+                    if(mods[p.efeitoAtributo] !== undefined) {
+                        mods[p.efeitoAtributo] += parseInt(p.valorMod) || 0;
+                    }
+                }
+            });
+
+            document.getElementById('modCorpo').innerText = (mods.corpo >= 0 ? "+" : "") + mods.corpo;
+            document.getElementById('modMente').innerText = (mods.mente >= 0 ? "+" : "") + mods.mente;
+            document.getElementById('modPercepcao').innerText = (mods.percepcao >= 0 ? "+" : "") + mods.percepcao;
+
+            document.getElementById('finalCorpo').innerText = ficha.atributos.corpoBase + mods.corpo;
+            document.getElementById('finalMente').innerText = ficha.atributos.menteBase + mods.mente;
+            document.getElementById('finalPercepcao').innerText = ficha.atributos.percepcaoBase + mods.percepcao;
+
+            return {
+                corpo: ficha.atributos.corpoBase + mods.corpo,
+                mente: ficha.atributos.menteBase + mods.mente,
+                percepcao: ficha.atributos.percepcaoBase + mods.percepcao
+            };
         }
-    </script>
-</body>
-</html>
+
+        function renderizarPericias() {
+            const finais = calcularAtributosFinais();
+            const tbody = document.getElementById('listaPericias');
+            tbody.innerHTML = '';
+
+            ficha.pericias.
