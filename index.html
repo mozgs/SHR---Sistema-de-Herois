@@ -1,287 +1,297 @@
-from pathlib import Path
-from zipfile import ZipFile, ZIP_DEFLATED
-
-path = Path("/mnt/data/SHR/index.html")
-path.parent.mkdir(parents=True, exist_ok=True)
-
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#101713">
-<title>SHR — Central de Heróis</title>
-<style>
-:root{--green:#48d597;--green2:#1e9e70;--bg:#f2f5f3;--panel:#fff;--text:#17221c;--muted:#718078;--line:#e2e9e4;--soft:#e8f8f0;--shadow:0 12px 35px #14251b0c}
-[data-theme="dark"]{--bg:#101713;--panel:#18221c;--text:#edf5ef;--muted:#9aa99f;--line:#2b3a30;--soft:#20382c;--shadow:0 12px 35px #0003}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;transition:.2s}
-button,input,select,textarea{font:inherit}button{cursor:pointer}
-.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
-.sidebar{background:#111a15;color:#eaf4ed;padding:26px 18px;display:flex;flex-direction:column;gap:28px}
-.brand{padding:4px 10px}.brand-mark{font-size:29px;font-weight:900;letter-spacing:.18em;color:#f5fff8}.brand-sub{font-size:10px;letter-spacing:.22em;color:#8ba397;margin-top:1px}
-.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:#789084;padding:0 12px;margin-bottom:8px}
-.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#b8c8be;text-align:left;padding:11px 12px;border-radius:10px;display:flex;gap:12px;align-items:center}.nav button:hover,.nav button.active{background:#20382c;color:#fff}.nav button.active .ico{color:var(--green)}
-.ico{width:20px;text-align:center;font-size:17px}.side-bottom{margin-top:auto;border-top:1px solid #2a392f;padding:17px 10px;color:#82958a;font-size:12px}
-main{min-width:0}.topbar{height:76px;padding:0 34px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--panel)}
-.crumb{font-size:13px;color:var(--muted)}.top-actions{display:flex;gap:10px;align-items:center}
-.icon-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);width:39px;height:39px;border-radius:11px}
-.avatar{width:36px;height:36px;border-radius:50%;background:var(--soft);color:var(--green2);display:grid;place-items:center;font-weight:800}
-.content{max-width:1180px;margin:auto;padding:34px}
-.welcome{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:27px}
-.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.17em;color:var(--green2);font-weight:800}
-h1{font-size:clamp(26px,4vw,35px);line-height:1.15;margin:7px 0 8px;letter-spacing:-.04em}
-.sub{color:var(--muted);margin:0}
-.primary{background:var(--green);color:#102017;border:0;border-radius:10px;padding:11px 16px;font-weight:800;box-shadow:0 5px 15px #48d59725}
-.primary:hover{background:#62e4aa}.secondary{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-weight:650}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:23px}
-.stat,.panel,.hero-card{background:var(--panel);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
-.stat{padding:18px 20px}.stat-top{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.stat-num{font-size:28px;font-weight:850;letter-spacing:-.04em;margin-top:6px}.stat-icon{color:var(--green2);font-size:18px}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin:27px 0 13px}.section-head h2{font-size:17px;margin:0;letter-spacing:-.02em}.section-head span{font-size:12px;color:var(--muted)}
-.characters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.hero-card{padding:18px;display:flex;gap:15px;align-items:flex-start}
-.hero-emblem{width:52px;height:52px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:23px;flex:none}
-.hero-info{min-width:0;flex:1}.hero-info h3{margin:1px 0 3px;font-size:16px}.hero-meta{font-size:12px;color:var(--muted)}.hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
-.tag{font-size:10px;font-weight:750;color:var(--green2);background:var(--soft);padding:4px 8px;border-radius:20px}
-.empty{padding:32px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;grid-column:1/-1}
-.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.quick{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-align:left;color:var(--text)}.quick b{display:block;margin:6px 0 2px}.quick small{color:var(--muted)}
-.page{display:none}.page.active{display:block}
-.rule-list{display:grid;gap:10px}.rule{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.rule b{display:block;margin-bottom:3px}.rule p{margin:0;color:var(--muted);font-size:13px}
-.notice{margin-top:22px;padding:14px 16px;border-radius:12px;background:var(--soft);color:var(--text);font-size:12px}
-.modal-backdrop{position:fixed;inset:0;background:#07110bc9;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal-backdrop.open{display:flex}
-.modal{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:23px;width:min(100%,470px);box-shadow:0 25px 80px #0005}.modal h2{margin:0 0 5px}.modal p{margin:0 0 18px;color:var(--muted);font-size:13px}
-.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:12px;font-weight:750;color:var(--muted)}.field input,.field select,.field textarea{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;outline:none;width:100%}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green2)}
-.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
-.mobile-menu{display:none}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEHR - Sistema de RPG de Super-Heróis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff0055;
+            --secondary: #00e5ff;
+            --bg-dark: #0f1016;
+            --card-bg: #1a1c26;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
 
-/* Criador de personagem */
-.creator{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
-.creator-head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:15px}
-.creator-head h2{font-size:18px;margin:0}.creator-head p{margin:3px 0 0;color:var(--muted);font-size:12px}
-.tabs{display:flex;gap:5px;padding:12px 16px;border-bottom:1px solid var(--line);overflow-x:auto;background:var(--bg)}
-.tab{white-space:nowrap;border:1px solid transparent;background:transparent;color:var(--muted);border-radius:9px;padding:9px 12px;font-size:12px;font-weight:750}
-.tab:hover{background:var(--soft);color:var(--text)}.tab.active{background:var(--soft);border-color:#b8e9d0;color:var(--green2)}
-.tab-panel{display:none;padding:22px}.tab-panel.active{display:block}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px}.field.full{grid-column:1/-1}
-.panel-title{font-size:15px;margin:0 0 5px}.panel-help{font-size:12px;color:var(--muted);margin:0 0 16px}
-.attribute-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.attribute{border:1px solid var(--line);border-radius:12px;padding:15px;background:var(--bg)}
-.attribute label{display:block;font-size:13px;font-weight:800;margin-bottom:10px}
-.attribute input{width:100%;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:9px;padding:10px}
-.placeholder-list{display:grid;gap:10px}
-.placeholder-item{border:1px dashed var(--line);border-radius:11px;padding:15px;color:var(--muted);font-size:13px}
-.creator-footer{display:flex;justify-content:space-between;gap:10px;padding:15px 22px;border-top:1px solid var(--line);background:var(--bg)}
-.summary-box{background:var(--soft);border-radius:12px;padding:16px;margin-top:12px}
-@media(max-width:800px){.app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:4;left:-260px;top:0;bottom:0;width:250px;transition:.2s}.sidebar.open{left:0}.mobile-menu{display:inline-block}.topbar{padding:0 17px}.content{padding:24px 17px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.characters{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.welcome{align-items:flex-start;flex-direction:column}.welcome .primary{width:100%}.attribute-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.creator-head{align-items:flex-start;flex-direction:column}.creator-footer{padding:13px}.tab-panel{padding:17px}}
-@media(max-width:390px){.stats{grid-template-columns:1fr}.stats .stat:last-child{grid-column:auto}}
-</style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Header / Hero */
+        header {
+            background: linear-gradient(135deg, #110026 0%, #2a0845 100%);
+            padding: 3rem 1rem;
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(255, 0, 85, 0.3);
+        }
+
+        header h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 4rem;
+            letter-spacing: 2px;
+            color: var(--secondary);
+            text-shadow: 3px 3px 0px var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            background: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Container Principal */
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Buscador */
+        .search-container {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 25px;
+            border: 2px solid var(--secondary);
+            background: var(--card-bg);
+            color: #fff;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+        }
+
+        /* Grid de Seções */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            border-color: var(--secondary);
+        }
+
+        .card h2 {
+            font-family: 'Bangers', cursive;
+            font-size: 1.8rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 4px;
+            background: var(--secondary);
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        /* Exemplo de Calculadora/Ficha Interativa */
+        .hero-calc {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .hero-calc label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .hero-calc input {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            border: none;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 8px;
+            background: var(--primary);
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-action:hover {
+            background: #d40045;
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background: #090a0e;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        footer strong {
+            color: var(--secondary);
+        }
+    </style>
 </head>
 <body>
-<div class="app">
-<aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="brand-mark">SHR</div><div class="brand-sub">SUPER HERO RPG</div></div>
-  <div><div class="nav-label">Plataforma</div><nav class="nav">
-    <button class="active" data-page="inicio"><span class="ico">⌂</span> Visão geral</button>
-    <button data-page="personagens"><span class="ico">♙</span> Personagens</button>
-    <button data-page="regras"><span class="ico">▤</span> Regras do sistema</button>
-    <button data-page="mestre"><span class="ico">♜</span> Área do mestre</button>
-  </nav></div>
-  <div class="side-bottom">SHR · Protótipo 0.2<br>Uma central para suas histórias.</div>
-</aside>
-<main>
-  <header class="topbar">
-    <div style="display:flex;align-items:center;gap:12px"><button class="icon-btn mobile-menu" id="menuBtn" aria-label="Abrir menu">☰</button><div class="crumb">SHR <span style="color:var(--green2)">/</span> <span id="crumb">Visão geral</span></div></div>
-    <div class="top-actions"><button class="icon-btn" id="themeBtn" title="Alternar tema">◐</button><div class="avatar">H</div></div>
-  </header>
-  <div class="content">
-    <section class="page active" id="page-inicio">
-      <div class="welcome"><div><div class="eyebrow">Central de comando</div><h1>Bem-vindo ao SHR.</h1><p class="sub">Tudo pronto para acompanhar a próxima geração de heróis?</p></div><button class="primary" id="newHeroTop">＋ Criar personagem</button></div>
-      <div class="stats">
-        <div class="stat"><div class="stat-top"><span>Personagens criados</span><span class="stat-icon">♙</span></div><div class="stat-num" id="statHeroes">0</div></div>
-        <div class="stat"><div class="stat-top"><span>Campanhas</span><span class="stat-icon">◇</span></div><div class="stat-num">—</div></div>
-        <div class="stat"><div class="stat-top"><span>Versão da plataforma</span><span class="stat-icon">⌘</span></div><div class="stat-num">0.2</div></div>
-      </div>
-      <div class="section-head"><h2>Seus personagens</h2><span id="heroCount">0 registros</span></div>
-      <div class="characters" id="recentHeroes"><div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div></div>
-      <div class="section-head"><h2>Acesso rápido</h2><span>Ferramentas da plataforma</span></div>
-      <div class="quick-grid">
-        <button class="quick" data-goto="personagens"><span class="stat-icon">♙</span><b>Personagens</b><small>Crie e organize suas fichas.</small></button>
-        <button class="quick" data-goto="regras"><span class="stat-icon">▤</span><b>Livro de regras</b><small>Consulte as regras do sistema.</small></button>
-        <button class="quick" data-goto="mestre"><span class="stat-icon">♜</span><b>Ferramentas do mestre</b><small>Área reservada à organização da campanha.</small></button>
-      </div>
-      <div class="notice">Os personagens ficam salvos somente neste navegador/dispositivo. Ainda não há contas, login ou sincronização online.</div>
-    </section>
 
-    <section class="page" id="page-personagens">
-      <div class="welcome"><div><div class="eyebrow">Arquivo de heróis</div><h1>Personagens</h1><p class="sub">Crie, consulte e organize seus personagens.</p></div><button class="primary" id="newHeroPage">＋ Novo personagem</button></div>
-      <div class="characters" id="allHeroes"><div class="empty">Nenhum personagem cadastrado ainda.</div></div>
-    </section>
+    <header>
+        <h1>S.E.H.R.</h1>
+        <p>Sistema de RPG de Super-Heróis — Regras, Fichas e Gerenciador de Campanhas</p>
+        <nav>
+            <a href="#regras">Regras</a>
+            <a href="#poderes">Poderes</a>
+            <a href="#criacao">Criar Herói</a>
+            <a href="#fichas">Fichas</a>
+        </nav>
+    </header>
 
-    <section class="page" id="page-criador">
-      <div class="welcome"><div><div class="eyebrow">Criação de herói</div><h1 id="creatorTitle">Novo personagem</h1><p class="sub">Preencha as informações do personagem. Você pode voltar e alterar os campos antes de salvar.</p></div></div>
-      <div class="creator">
-        <div class="creator-head"><div><h2>Ficha de personagem</h2><p>As regras específicas serão configuradas conforme você definir o sistema.</p></div><span class="tag">Rascunho local</span></div>
-        <div class="tabs" role="tablist" aria-label="Seções da ficha">
-          <button class="tab active" data-tab="identidade" role="tab">01 · Identidade</button>
-          <button class="tab" data-tab="atributos" role="tab">02 · Atributos</button>
-          <button class="tab" data-tab="pericias" role="tab">03 · Perícias</button>
-          <button class="tab" data-tab="poderes" role="tab">04 · Poderes</button>
-          <button class="tab" data-tab="caracteristicas" role="tab">05 · Características</button>
-          <button class="tab" data-tab="resumo" role="tab">06 · Resumo</button>
+    <div class="container">
+        
+        <!-- Campo de Busca Dinâmica -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Buscar regras, poderes ou tópicos do SEHR..." onkeyup="filtrarConteudo()">
         </div>
-        <form id="characterForm">
-          <section class="tab-panel active" id="tab-identidade">
-            <h3 class="panel-title">Identidade</h3><p class="panel-help">Informações básicas e conceito do personagem.</p>
-            <div class="form-grid">
-              <div class="field"><label for="charName">Nome do personagem *</label><input id="charName" name="name" maxlength="50" required placeholder="Nome do herói"></div>
-              <div class="field"><label for="charPlayer">Jogador</label><input id="charPlayer" name="player" maxlength="50" placeholder="Nome do jogador"></div>
-              <div class="field"><label for="charAge">Idade</label><input id="charAge" name="age" maxlength="20" placeholder="Ex.: 22 anos"></div>
-              <div class="field"><label for="charOrigin">Origem / conceito</label><input id="charOrigin" name="origin" maxlength="80" placeholder="Ex.: Herói tecnológico"></div>
-              <div class="field full"><label for="charStory">História</label><textarea id="charStory" name="story" rows="4" maxlength="1500" placeholder="Conte um pouco sobre o personagem..."></textarea></div>
-            </div>
-          </section>
-          <section class="tab-panel" id="tab-atributos">
-            <h3 class="panel-title">Atributos</h3><p class="panel-help">Campos preparados para os três atributos definidos até agora. Nenhum cálculo ou limite foi imposto.</p>
-            <div class="attribute-grid">
-              <div class="attribute"><label for="attrCorpo">Corpo</label><input id="attrCorpo" name="corpo" placeholder="Valor / dado"></div>
-              <div class="attribute"><label for="attrMente">Mente</label><input id="attrMente" name="mente" placeholder="Valor / dado"></div>
-              <div class="attribute"><label for="attrPercepcao">Percepção</label><input id="attrPercepcao" name="percepcao" placeholder="Valor / dado"></div>
-            </div>
-          </section>
-          <section class="tab-panel" id="tab-pericias">
-            <h3 class="panel-title">Perícias</h3><p class="panel-help">Área inicial para registrar perícias e níveis de treinamento que você definir.</p>
-            <div class="form-grid">
-              <div class="field full"><label for="skillsText">Perícias e treinamentos</label><textarea id="skillsText" name="skills" rows="7" placeholder="Ex.: Atletismo — Básico&#10;Investigação — Treinado&#10;(Edite conforme as regras do seu sistema)"></textarea></div>
-            </div>
-          </section>
-          <section class="tab-panel" id="tab-poderes">
-            <h3 class="panel-title">Poderes e habilidades</h3><p class="panel-help">Registre os poderes do herói sem regras automáticas por enquanto.</p>
-            <div class="form-grid">
-              <div class="field full"><label for="powersText">Poderes</label><textarea id="powersText" name="powers" rows="7" placeholder="Nome do poder, descrição, limitações..."></textarea></div>
-            </div>
-          </section>
-          <section class="tab-panel" id="tab-caracteristicas">
-            <h3 class="panel-title">Características</h3><p class="panel-help">Espaço para recursos, equipamentos e outras características da ficha.</p>
-            <div class="form-grid">
-              <div class="field"><label for="vitality">Vitalidade</label><input id="vitality" name="vitality" placeholder="A definir"></div>
-              <div class="field"><label for="resources">Outros recursos</label><input id="resources" name="resources" placeholder="A definir"></div>
-              <div class="field full"><label for="inventory">Equipamentos / inventário</label><textarea id="inventory" name="inventory" rows="5" placeholder="Itens e equipamentos..."></textarea></div>
-              <div class="field full"><label for="notes">Anotações</label><textarea id="notes" name="notes" rows="4" placeholder="Outras informações importantes..."></textarea></div>
-            </div>
-          </section>
-          <section class="tab-panel" id="tab-resumo">
-            <h3 class="panel-title">Resumo da ficha</h3><p class="panel-help">Confira as informações antes de salvar o personagem.</p>
-            <div class="summary-box" id="characterSummary">Preencha a identidade para visualizar o resumo.</div>
-          </section>
-          <div class="creator-footer">
-            <button type="button" class="secondary" id="prevTab">← Anterior</button>
-            <div style="display:flex;gap:8px"><button type="button" class="secondary" id="nextTab">Próxima →</button><button type="submit" class="primary" id="saveCharacter">Salvar ficha</button></div>
-          </div>
-        </form>
-      </div>
-      <div class="notice">Nesta versão, os dados são guardados localmente no navegador. Login e sincronização entre jogadores serão etapas futuras.</div>
-    </section>
 
-    <section class="page" id="page-regras">
-      <div class="eyebrow">Documentação</div><h1>Regras do sistema</h1><p class="sub" style="margin-bottom:22px">O espaço para consultar as regras oficiais do seu RPG.</p>
-      <div class="rule-list">
-        <div class="rule"><b>Atributos</b><p>Corpo, Mente e Percepção. As regras e os valores serão adicionados conforme definirmos o sistema.</p></div>
-        <div class="rule"><b>Perícias</b><p>As perícias representam treinamento e conhecimento em áreas específicas.</p></div>
-        <div class="rule"><b>Poderes</b><p>O catálogo de poderes reunirá habilidades, efeitos, limitações e condições de uso.</p></div>
-        <div class="rule"><b>Testes e combate</b><p>Espaço reservado para dificuldade, rolagens, ações, defesa e resolução de conflitos.</p></div>
-      </div>
-    </section>
-    <section class="page" id="page-mestre">
-      <div class="eyebrow">Controle da campanha</div><h1>Área do mestre</h1><p class="sub" style="margin-bottom:22px">Ferramentas para preparar e acompanhar suas sessões.</p>
-      <div class="quick-grid">
-        <div class="quick"><span class="stat-icon">♧</span><b>Campanhas</b><small>Organização de aventuras e sessões — em desenvolvimento.</small></div>
-        <div class="quick"><span class="stat-icon">♜</span><b>NPCs e ameaças</b><small>Registro de aliados, rivais e antagonistas — em desenvolvimento.</small></div>
-        <div class="quick"><span class="stat-icon">⚑</span><b>Controle de jogadores</b><small>Visão geral dos personagens — em desenvolvimento.</small></div>
-      </div>
-      <div class="notice">O painel do mestre será conectado às campanhas quando implementarmos contas e banco de dados.</div>
-    </section>
-  </div>
-</main>
-</div>
-<div class="modal-backdrop" id="modal">
-  <form class="modal" id="heroForm">
-    <h2>Novo personagem</h2><p>Cadastre a identidade inicial do seu herói.</p>
-    <div class="field"><label for="heroName">Nome do personagem *</label><input id="heroName" maxlength="40" required placeholder="Ex.: Sentinela"></div>
-    <div class="field"><label for="heroPlayer">Jogador</label><input id="heroPlayer" maxlength="40" placeholder="Nome do jogador"></div>
-    <div class="field"><label for="heroOrigin">Origem ou conceito</label><input id="heroOrigin" maxlength="60" placeholder="Ex.: Herói tecnológico"></div>
-    <div class="field"><label for="heroPower">Poder principal</label><input id="heroPower" maxlength="60" placeholder="Ex.: Manipulação de energia"></div>
-    <div class="modal-actions"><button type="button" class="secondary" id="cancelModal">Cancelar</button><button class="primary" type="submit">Salvar personagem</button></div>
-  </form>
-</div>
-<script>
-const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-let heroes=JSON.parse(localStorage.getItem('shrHeroes')||'[]');
-let activeTab=0;
-const tabNames=['identidade','atributos','pericias','poderes','caracteristicas','resumo'];
-let editingId=null;
-function save(){localStorage.setItem('shrHeroes',JSON.stringify(heroes));renderHeroes()}
-function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function card(h){return `<article class="hero-card"><div class="hero-emblem">✦</div><div class="hero-info"><h3>${escapeHTML(h.name)}</h3><div class="hero-meta">${escapeHTML(h.player||'Jogador não informado')} · ${escapeHTML(h.origin||'Origem não definida')}</div><div class="hero-tags">${h.power?`<span class="tag">${escapeHTML(h.power)}</span>`:''}<span class="tag">Ficha salva</span><button class="secondary edit-hero" data-id="${h.id}" style="padding:4px 9px;font-size:11px">Editar ficha</button></div></div></article>`}
-function renderHeroes(){
- $('#statHeroes').textContent=heroes.length;$('#heroCount').textContent=heroes.length+' registro(s)';
- $('#recentHeroes').innerHTML=heroes.length?heroes.slice(-4).reverse().map(card).join(''):'<div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div>';
- $('#allHeroes').innerHTML=heroes.length?heroes.slice().reverse().map(card).join(''):'<div class="empty">Nenhum personagem cadastrado ainda.</div>';
-}
-function openModal(){$('#modal').classList.add('open');$('#heroName').focus()}
-function closeModal(){$('#modal').classList.remove('open')}
-function navigate(page){$$('.page').forEach(p=>p.classList.remove('active'));$('#page-'+page).classList.add('active');$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('#crumb').textContent=({inicio:'Visão geral',personagens:'Personagens',criador:'Criação de personagem',regras:'Regras do sistema',mestre:'Área do mestre'})[page];$('#sidebar').classList.remove('open')}
-function showTab(index){activeTab=Math.max(0,Math.min(tabNames.length-1,index));$$('.tab').forEach((b,i)=>b.classList.toggle('active',i===activeTab));$$('.tab-panel').forEach((p,i)=>p.classList.toggle('active',i===activeTab));$('#prevTab').disabled=activeTab===0;$('#nextTab').style.display=activeTab===tabNames.length-1?'none':'inline-block';$('#saveCharacter').style.display=activeTab===tabNames.length-1?'inline-block':'none';if(activeTab===5)updateSummary()}
-function updateSummary(){
- const d=new FormData($('#characterForm'));const fields=[['Nome',d.get('name')],['Jogador',d.get('player')],['Idade',d.get('age')],['Origem',d.get('origin')],['Corpo',d.get('corpo')],['Mente',d.get('mente')],['Percepção',d.get('percepcao')],['Perícias',d.get('skills')],['Poderes',d.get('powers')]];
- $('#characterSummary').innerHTML=fields.map(([k,v])=>`<p><b>${k}:</b> ${escapeHTML(v||'Não informado')}</p>`).join('');
-}
-function resetCharacterForm(){ $('#characterForm').reset();editingId=null;$('#creatorTitle').textContent='Novo personagem';showTab(0)}
-function editHero(id){const h=heroes.find(x=>x.id===id);if(!h)return;editingId=id;$('#creatorTitle').textContent='Editar personagem';const f=$('#characterForm');Object.entries(h).forEach(([k,v])=>{const el=f.elements.namedItem(k);if(el)el.value=v??''});navigate('criador');showTab(0)}
-function openCreator(){resetCharacterForm();navigate('criador')}
-$$('.nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
-$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.goto)));
-$('#newHeroTop').onclick=openCreator;$('#newHeroPage').onclick=openCreator;
-$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-$('#heroForm').addEventListener('submit',e=>{e.preventDefault();heroes.push({id:crypto.randomUUID(),name:$('#heroName').value.trim(),player:$('#heroPlayer').value.trim(),origin:$('#heroOrigin').value.trim(),power:$('#heroPower').value.trim()});save();e.target.reset();closeModal()});
-$$('.tab').forEach((b,i)=>b.addEventListener('click',()=>showTab(i)));
-$('#prevTab').onclick=()=>showTab(activeTab-1);$('#nextTab').onclick=()=>showTab(activeTab+1);
-$('#characterForm').addEventListener('submit',e=>{
- e.preventDefault();const d=new FormData(e.target);const obj={id:editingId||crypto.randomUUID()};
- for(const [k,v] of d.entries())obj[k]=String(v).trim();
- const idx=heroes.findIndex(h=>h.id===obj.id);if(idx>=0)heroes[idx]=obj;else heroes.push(obj);
- save();resetCharacterForm();navigate('personagens');
-});
-document.addEventListener('click',e=>{const btn=e.target.closest('.edit-hero');if(btn)editHero(btn.dataset.id)});
-$('#themeBtn').onclick=()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';localStorage.setItem('shrTheme',dark?'dark':'light')};
-if(localStorage.getItem('shrTheme')==='dark')document.documentElement.dataset.theme='dark';
-$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open');
-renderHeroes();showTab(0);
-</script>
+        <div class="grid" id="cardsGrid">
+            
+            <!-- Card 1: Livro de Regras -->
+            <div class="card">
+                <span class="badge">Básico</span>
+                <h2>Regras de Combates</h2>
+                <p>Aprenda como funcionam as iniciativas, turnos de ação, testes de atributo e cálculo de dano físico e elemental.</p>
+                <button class="btn-action">Ver Regras</button>
+            </div>
+
+            <!-- Card 2: Compêndio de Poderes -->
+            <div class="card">
+                <span class="badge">Sistemas</span>
+                <h2>Compêndio de Poderes</h2>
+                <p>Catálogo de superpoderes divididos por categorias: Superforça, Cinética, Magia, Tecnologia e Mutação.</p>
+                <button class="btn-action">Explorar Poderes</button>
+            </div>
+
+            <!-- Card 3: Calculadora Rápida de Atributos -->
+            <div class="card">
+                <span class="badge">Ferramenta</span>
+                <h2>Calculadora de Vida (PV)</h2>
+                <p>Calcule os Pontos de Vida (PV) do seu herói baseado na Vigor e Nível de Ameaça.</p>
+                <div class="hero-calc">
+                    <label for="vigor">Valor de Vigor:</label>
+                    <input type="number" id="vigor" placeholder="Ex: 5" value="5">
+                    <button class="btn-action" onclick="calcularPV()">Calcular</button>
+                    <p id="resultadoPV" style="margin-top: 8px; font-weight: bold; color: var(--secondary);"></p>
+                </div>
+            </div>
+
+            <!-- Card 4: Fichas Prontas -->
+            <div class="card">
+                <span class="badge">Recursos</span>
+                <h2>Fichas de NPCs e Vilões</h2>
+                <p>Acesse o banco de dados com vilões de Classe S, capangas e aliados prontos para usar na sua mesa.</p>
+                <button class="btn-action">Abrir Banco de Dados</button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>SEHR RPG &copy; 2026 — Desenvolvido para rodar no <strong>GitHub Pages</strong></p>
+    </footer>
+
+    <script>
+        // Função de filtro para o campo de busca
+        function filtrarConteudo() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('card');
+
+            for (let i = 0; i < cards.length; i++) {
+                let text = cards[i].innerText.toLowerCase();
+                if (text.includes(input)) {
+                    cards[i].style.display = "block";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        // Função de teste da Calculadora do SEHR
+        function calcularPV() {
+            let vigor = parseInt(document.getElementById('vigor').value) || 0;
+            let pvBase = 10;
+            let total = pvBase + (vigor * 5);
+            document.getElementById('resultadoPV').innerText = "PV Total: " + total;
+        }
+    </script>
 </body>
-</html>'''
-
-path.write_text(html, encoding="utf-8")
-readme = Path("/mnt/data/SHR/README.md")
-readme.write_text("""# SHR — Super Hero RPG
-
-Protótipo 0.2 com painel, temas claro/escuro e criador de personagens com abas.
-
-## Publicar no GitHub Pages
-Substitua o `index.html` do repositório pelo arquivo desta pasta e faça Commit changes. O GitHub Pages atualizará o site automaticamente.
-
-## O que funciona
-- Abas da ficha: Identidade, Atributos, Perícias, Poderes, Características e Resumo.
-- Cadastro e edição de fichas.
-- Salvamento local no navegador (`localStorage`).
-- Alternância entre tema claro e escuro.
-
-## Limitações atuais
-Ainda não há login, banco de dados, sincronização entre dispositivos nem regras/cálculos automáticos. Os campos de regras ficam neutros para que o autor do sistema defina as mecânicas.
-""", encoding="utf-8")
-zip_path = Path("/mnt/data/SHR-prototipo-0.2.zip")
-with ZipFile(zip_path, "w", ZIP_DEFLATED) as z:
-    z.write(path, "SHR/index.html")
-    z.write(readme, "SHR/README.md")
-print("Versão 0.2 criada com sucesso.")
-print("HTML:", path)
-print("ZIP:", zip_path)
+</html>
