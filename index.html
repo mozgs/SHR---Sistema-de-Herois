@@ -1,715 +1,149 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHR — Super Hero RPG</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-main: #0c1210;
-            --bg-card: #131c18;
-            --bg-input: #1a2822;
-            --primary: #00ff88;
-            --primary-hover: #00cc6d;
-            --accent: #00e5ff;
-            --text-main: #e2e8f0;
-            --text-muted: #8a9991;
-            --danger: #ff3366;
-            --border: #22382f;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background: linear-gradient(180deg, #080f0c 0%, var(--bg-card) 100%);
-            border-bottom: 2px solid var(--primary);
-            padding: 1.5rem 1rem;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.1);
-        }
-
-        header h1 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2.8rem;
-            color: var(--primary);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-top: 0.3rem;
-        }
-
-        /* Top Action Bar */
-        .global-actions {
-            max-width: 900px;
-            margin: 1rem auto 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        /* Navigation Tabs */
-        .tabs-container {
-            max-width: 900px;
-            margin: 1rem auto;
-            padding: 0 1rem;
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            width: 100%;
-        }
-
-        .tab-btn {
-            background: var(--bg-card);
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-        }
-
-        .tab-btn:hover {
-            color: var(--text-main);
-            border-color: var(--primary);
-        }
-
-        .tab-btn.active {
-            background: var(--primary);
-            color: #000;
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 900px;
-            margin: 0 auto 3rem auto;
-            padding: 0 1rem;
-            width: 100%;
-            flex: 1;
-        }
-
-        .tab-content {
-            display: none;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h2.section-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Form Elements */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input, select, textarea {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 90px;
-        }
-
-        /* Buttons */
-        .btn {
-            background: var(--primary);
-            color: #000;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            background: var(--primary-hover);
-            box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-main);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-input);
-            border-color: var(--text-muted);
-            box-shadow: none;
-        }
-
-        .btn-danger {
-            background: rgba(255, 51, 102, 0.15);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-
-        .btn-danger:hover {
-            background: var(--danger);
-            color: #fff;
-        }
-
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
-        }
-
-        /* Attributes & Meters */
-        .attr-card {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .meters-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            background: var(--bg-input);
-            padding: 1.2rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .meter-bar-bg {
-            background: #090e0c;
-            height: 12px;
-            border-radius: 6px;
-            overflow: hidden;
-            margin-top: 5px;
-            border: 1px solid var(--border);
-        }
-
-        .meter-bar-fill {
-            height: 100%;
-            width: 100%;
-            transition: width 0.3s ease;
-        }
-
-        .pv-fill { background: var(--danger); }
-        .pe-fill { background: var(--accent); }
-
-        /* Skills Table */
-        .skills-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .skills-table th, .skills-table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
-        }
-
-        .skills-table th {
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        /* Power Cards */
-        .power-card {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            position: relative;
-        }
-
-        .power-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .power-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--accent);
-        }
-
-        .toggle-btn {
-            padding: 4px 10px;
-            font-size: 0.75rem;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            border: 1px solid;
-        }
-
-        .toggle-btn.off {
-            background: transparent;
-            color: var(--text-muted);
-            border-color: var(--border);
-        }
-
-        .toggle-btn.on {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        /* Summary Panel */
-        .summary-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .summary-section h3 {
-            font-family: 'Rajdhani', sans-serif;
-            color: var(--accent);
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            background: var(--bg-input);
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border);
-            background: var(--bg-card);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101713">
+<title>SHR — Central de Heróis</title>
+<style>
+:root{--green:#48d597;--green2:#1e9e70;--bg:#f2f5f3;--panel:#fff;--text:#17221c;--muted:#718078;--line:#e2e9e4;--soft:#e8f8f0;--shadow:0 12px 35px #14251b0c}
+[data-theme="dark"]{--bg:#101713;--panel:#18221c;--text:#edf5ef;--muted:#9aa99f;--line:#2b3a30;--soft:#20382c;--shadow:0 12px 35px #0003}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;transition:.2s}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{background:#111a15;color:#eaf4ed;padding:26px 18px;display:flex;flex-direction:column;gap:28px}
+.brand{padding:4px 10px}.brand-mark{font-size:29px;font-weight:900;letter-spacing:.18em;color:#f5fff8}.brand-sub{font-size:10px;letter-spacing:.22em;color:#8ba397;margin-top:1px}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:#789084;padding:0 12px;margin-bottom:8px}
+.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#b8c8be;text-align:left;padding:11px 12px;border-radius:10px;display:flex;gap:12px;align-items:center}.nav button:hover,.nav button.active{background:#20382c;color:#fff}.nav button.active .ico{color:var(--green)}
+.ico{width:20px;text-align:center;font-size:17px}.side-bottom{margin-top:auto;border-top:1px solid #2a392f;padding:17px 10px;color:#82958a;font-size:12px}
+main{min-width:0}.topbar{height:76px;padding:0 34px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--panel)}
+.crumb{font-size:13px;color:var(--muted)}.top-actions{display:flex;gap:10px;align-items:center}
+.icon-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);width:39px;height:39px;border-radius:11px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--soft);color:var(--green2);display:grid;place-items:center;font-weight:800}
+.content{max-width:1180px;margin:auto;padding:34px}
+.welcome{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:27px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.17em;color:var(--green2);font-weight:800}
+h1{font-size:clamp(26px,4vw,35px);line-height:1.15;margin:7px 0 8px;letter-spacing:-.04em}
+.sub{color:var(--muted);margin:0}
+.primary{background:var(--green);color:#102017;border:0;border-radius:10px;padding:11px 16px;font-weight:800;box-shadow:0 5px 15px #48d59725}
+.primary:hover{background:#62e4aa}.secondary{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-weight:650}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:23px}
+.stat,.panel,.hero-card{background:var(--panel);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
+.stat{padding:18px 20px}.stat-top{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.stat-num{font-size:28px;font-weight:850;letter-spacing:-.04em;margin-top:6px}.stat-icon{color:var(--green2);font-size:18px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:27px 0 13px}.section-head h2{font-size:17px;margin:0;letter-spacing:-.02em}.section-head span{font-size:12px;color:var(--muted)}
+.characters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.hero-card{padding:18px;display:flex;gap:15px;align-items:flex-start}
+.hero-emblem{width:52px;height:52px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:23px;flex:none}
+.hero-info{min-width:0;flex:1}.hero-info h3{margin:1px 0 3px;font-size:16px}.hero-meta{font-size:12px;color:var(--muted)}.hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+.tag{font-size:10px;font-weight:750;color:var(--green2);background:var(--soft);padding:4px 8px;border-radius:20px}
+.empty{padding:32px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;grid-column:1/-1}
+.panel{padding:20px}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.quick{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-align:left;color:var(--text)}.quick b{display:block;margin:6px 0 2px}.quick small{color:var(--muted)}
+.page{display:none}.page.active{display:block}
+.rule-list{display:grid;gap:10px}.rule{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.rule b{display:block;margin-bottom:3px}.rule p{margin:0;color:var(--muted);font-size:13px}
+.notice{margin-top:22px;padding:14px 16px;border-radius:12px;background:var(--soft);color:var(--text);font-size:12px}
+.modal-backdrop{position:fixed;inset:0;background:#07110bc9;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal-backdrop.open{display:flex}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:23px;width:min(100%,470px);box-shadow:0 25px 80px #0005}.modal h2{margin:0 0 5px}.modal p{margin:0 0 18px;color:var(--muted);font-size:13px}
+.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:12px;font-weight:750;color:var(--muted)}.field input,.field select{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;outline:none}.field input:focus,.field select:focus{border-color:var(--green2)}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+.mobile-menu{display:none}
+@media(max-width:800px){.app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:4;left:-260px;top:0;bottom:0;width:250px;transition:.2s}.sidebar.open{left:0}.mobile-menu{display:inline-block}.topbar{padding:0 17px}.content{padding:24px 17px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.characters{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.welcome{align-items:flex-start;flex-direction:column}.welcome .primary{width:100%}}
+@media(max-width:390px){.stats{grid-template-columns:1fr}.stats .stat:last-child{grid-column:auto}}
+</style>
 </head>
 <body>
-
-    <header>
-        <h1>S.H.R.</h1>
-        <p>Super Hero RPG — Sistema de Fichas & Modificadores</p>
-    </header>
-
-    <div class="global-actions">
-        <button class="btn btn-secondary" onclick="exportarFicha()">Exportar JSON</button>
-        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Importar JSON</button>
-        <input type="file" id="importFile" style="display:none" onchange="importarFicha(event)">
-    </div>
-
-    <div class="tabs-container">
-        <button class="tab-btn active" onclick="mudarAba(0)">1. Identidade</button>
-        <button class="tab-btn" onclick="mudarAba(1)">2. Atributos</button>
-        <button class="tab-btn" onclick="mudarAba(2)">3. Perícias</button>
-        <button class="tab-btn" onclick="mudarAba(3)">4. Poderes</button>
-        <button class="tab-btn" onclick="mudarAba(4)">5. Características</button>
-        <button class="tab-btn" onclick="mudarAba(5)">6. Resumo</button>
-    </div>
-
-    <div class="container">
-        
-        <!-- ABA 1: IDENTIDADE -->
-        <div class="tab-content active" id="aba-0">
-            <h2 class="section-title">Identidade do Personagem</h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Nome do Personagem</label>
-                    <input type="text" id="nome" placeholder="Ex: Capitão Órion" oninput="salvarDados()">
-                </div>
-                <div class="form-group">
-                    <label>Nome do Jogador</label>
-                    <input type="text" id="jogador" placeholder="Seu nome" oninput="salvarDados()">
-                </div>
-                <div class="form-group">
-                    <label>Idade</label>
-                    <input type="number" id="idade" placeholder="Ex: 25" oninput="salvarDados()">
-                </div>
-                <div class="form-group">
-                    <label>Origem</label>
-                    <input type="text" id="origem" placeholder="Ex: Mutante, Cientista, Alien..." oninput="salvarDados()">
-                </div>
-                <div class="form-group full-width">
-                    <label>Conceito do Personagem</label>
-                    <input type="text" id="conceito" placeholder="Ex: Protetor urbano com poderes cósmicos" oninput="salvarDados()">
-                </div>
-                <div class="form-group full-width">
-                    <label>História</label>
-                    <textarea id="historia" placeholder="Escreva a origem e história do herói..." oninput="salvarDados()"></textarea>
-                </div>
-            </div>
-            <div class="nav-buttons">
-                <div></div>
-                <button class="btn" onclick="mudarAba(1)">Avançar &rarr;</button>
-            </div>
-        </div>
-
-        <!-- ABA 2: ATRIBUTOS -->
-        <div class="tab-content" id="aba-1">
-            <h2 class="section-title">Atributos Principais</h2>
-            <p style="color:var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Defina os valores-base. Modificadores de poderes ativos somam-se automaticamente no resultado final.</p>
-            
-            <div class="form-grid">
-                <div class="attr-card">
-                    <label>Corpo (Base)</label>
-                    <input type="number" id="corpoBase" value="2" min="1" max="10" oninput="atualizarTudo()">
-                    <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modCorpo">0</span></span>
-                    <span style="font-size: 0.9rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalCorpo" style="color: var(--accent);">2</span></span>
-                </div>
-                <div class="attr-card">
-                    <label>Mente (Base)</label>
-                    <input type="number" id="menteBase" value="2" min="1" max="10" oninput="atualizarTudo()">
-                    <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modMente">0</span></span>
-                    <span style="font-size: 0.9rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalMente" style="color: var(--accent);">2</span></span>
-                </div>
-                <div class="attr-card">
-                    <label>Percepção (Base)</label>
-                    <input type="number" id="percepcaoBase" value="2" min="1" max="10" oninput="atualizarTudo()">
-                    <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modPercepcao">0</span></span>
-                    <span style="font-size: 0.9rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalPercepcao" style="color: var(--accent);">2</span></span>
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <button class="btn btn-secondary" onclick="mudarAba(0)">&larr; Voltar</button>
-                <button class="btn" onclick="mudarAba(2)">Avançar &rarr;</button>
-            </div>
-        </div>
-
-        <!-- ABA 3: PERÍCIAS -->
-        <div class="tab-content" id="aba-2">
-            <h2 class="section-title">
-                Perícias
-                <button class="btn" style="font-size: 0.8rem; padding: 6px 12px;" onclick="adicionarPericiaModal()">+ Adicionar Perícia</button>
-            </h2>
-            <p style="color:var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Gerencie suas perícias baseadas nos atributos, bônus de treinamento e itens.</p>
-            
-            <div style="overflow-x: auto;">
-                <table class="skills-table">
-                    <thead>
-                        <tr>
-                            <th>Perícia</th>
-                            <th>Atributo</th>
-                            <th>Treinamento</th>
-                            <th>Bônus Itens/Outros</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="listaPericias">
-                        <!-- Gerado via JS -->
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="nav-buttons">
-                <button class="btn btn-secondary" onclick="mudarAba(1)">&larr; Voltar</button>
-                <button class="btn" onclick="mudarAba(3)">Avançar &rarr;</button>
-            </div>
-        </div>
-
-        <!-- ABA 4: PODERES -->
-        <div class="tab-content" id="aba-3">
-            <h2 class="section-title">
-                Poderes e Habilidades
-                <button class="btn" style="font-size: 0.8rem; padding: 6px 12px;" onclick="adicionarPoder()">+ Novo Poder</button>
-            </h2>
-            <p style="color:var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Crie suas habilidades ativas ou passivas. Ative ou desative modificadores conforme o uso em jogo.</p>
-            
-            <div id="containerPoderes">
-                <!-- Renderizado via JS -->
-            </div>
-
-            <div class="nav-buttons">
-                <button class="btn btn-secondary" onclick="mudarAba(2)">&larr; Voltar</button>
-                <button class="btn" onclick="mudarAba(4)">Avançar &rarr;</button>
-            </div>
-        </div>
-
-        <!-- ABA 5: CARACTERÍSTICAS -->
-        <div class="tab-content" id="aba-4">
-            <h2 class="section-title">Características, Recursos & Inventário</h2>
-            
-            <!-- Barras de PV e PE -->
-            <div class="meters-container">
-                <div class="form-group">
-                    <label>Vitalidade (PV Atual / Máx)</label>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <input type="number" id="pvAtual" value="20" oninput="salvarDados(); atualizarBarras();" style="width: 80px;">
-                        <span>/</span>
-                        <input type="number" id="pvMax" value="20" oninput="salvarDados(); atualizarBarras();" style="width: 80px;">
-                    </div>
-                    <div class="meter-bar-bg"><div class="meter-bar-fill pv-fill" id="pvBar"></div></div>
-                </div>
-                <div class="form-group">
-                    <label>Energia (PE Atual / Máx)</label>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <input type="number" id="peAtual" value="10" oninput="salvarDados(); atualizarBarras();" style="width: 80px;">
-                        <span>/</span>
-                        <input type="number" id="peMax" value="10" oninput="salvarDados(); atualizarBarras();" style="width: 80px;">
-                        <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.8rem;" onclick="recarregarPE()">Recarregar</button>
-                    </div>
-                    <div class="meter-bar-bg"><div class="meter-bar-fill pe-fill" id="peBar"></div></div>
-                </div>
-            </div>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Equipamentos</label>
-                    <textarea id="equipamentos" placeholder="Traje tático, armas, acessórios..." oninput="salvarDados()"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Inventário</label>
-                    <textarea id="inventario" placeholder="Itens carregados, comunicador, chaves..." oninput="salvarDados()"></textarea>
-                </div>
-                <div class="form-group full-width">
-                    <label>Anotações Gerais da Ficha</label>
-                    <textarea id="anotacoes" placeholder="Anotações importantes sobre a campanha..." oninput="salvarDados()"></textarea>
-                </div>
-            </div>
-
-            <div class="nav-buttons">
-                <button class="btn btn-secondary" onclick="mudarAba(3)">&larr; Voltar</button>
-                <button class="btn" onclick="mudarAba(5)">Avançar &rarr;</button>
-            </div>
-        </div>
-
-        <!-- ABA 6: RESUMO -->
-        <div class="tab-content" id="aba-5">
-            <h2 class="section-title">Resumo do Herói</h2>
-            
-            <div class="summary-section">
-                <h3>Identidade</h3>
-                <div class="summary-grid" id="resumoIdentidade"></div>
-            </div>
-
-            <div class="summary-section">
-                <h3>Atributos Finais</h3>
-                <div class="summary-grid" id="resumoAtributos"></div>
-            </div>
-
-            <div class="summary-section">
-                <h3>Recursos Atuais</h3>
-                <div class="summary-grid" id="resumoRecursos"></div>
-            </div>
-
-            <div class="nav-buttons">
-                <button class="btn btn-secondary" onclick="mudarAba(4)">&larr; Voltar</button>
-                <button class="btn" onclick="alert('Ficha salva e pronta para jogo!')">Finalizar Ficha</button>
-            </div>
-        </div>
-
-    </div>
-
-    <footer>
-        <p>SHR — Super Hero RPG &copy; 2026 | Hospedado no GitHub Pages</p>
-    </footer>
-
-    <script>
-        // Estado Global da Ficha
-        let ficha = {
-            identidade: { nome: "", jogador: "", idade: "", origem: "", conceito: "", historia: "" },
-            atributos: { corpoBase: 2, menteBase: 2, percepcaoBase: 2 },
-            pericias: [
-                { nome: "Acrobacia", atributo: "corpo", nivel: 0, bonusItem: 0 },
-                { nome: "Atletismo", atributo: "corpo", nivel: 0, bonusItem: 0 },
-                { nome: "Investigação", atributo: "mente", nivel: 0, bonusItem: 0 },
-                { nome: "Tecnologia", atributo: "mente", nivel: 0, bonusItem: 0 },
-                { nome: "Vigilância", atributo: "percepcao", nivel: 0, bonusItem: 0 },
-                { nome: "Intuição", atributo: "percepcao", nivel: 0, bonusItem: 0 }
-            ],
-            poderes: [
-                { id: 1, nome: "Super-Reflexos", tipo: "passivo", descricao: "Reflexos ampliados para desviar de ataques.", custo: 0, efeitoAtributo: "corpo", valorMod: 2, ativo: false }
-            ],
-            caracteristicas: { pvAtual: 20, pvMax: 20, peAtual: 10, peMax: 10, equipamentos: "", inventario: "", anotacoes: "" }
-        };
-
-        function mudarAba(index) {
-            const tabs = document.querySelectorAll('.tab-content');
-            const btns = document.querySelectorAll('.tab-btn');
-            
-            tabs.forEach(t => t.classList.remove('active'));
-            btns.forEach(b => b.classList.remove('active'));
-
-            tabs[index].classList.add('active');
-            btns[index].classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            if(index === 5) gerarResumo();
-        }
-
-        function salvarDados() {
-            ficha.identidade.nome = document.getElementById('nome').value;
-            ficha.identidade.jogador = document.getElementById('jogador').value;
-            ficha.identidade.idade = document.getElementById('idade').value;
-            ficha.identidade.origem = document.getElementById('origem').value;
-            ficha.identidade.conceito = document.getElementById('conceito').value;
-            ficha.identidade.historia = document.getElementById('historia').value;
-
-            ficha.atributos.corpoBase = parseInt(document.getElementById('corpoBase').value) || 1;
-            ficha.atributos.menteBase = parseInt(document.getElementById('menteBase').value) || 1;
-            ficha.atributos.percepcaoBase = parseInt(document.getElementById('percepcaoBase').value) || 1;
-
-            ficha.caracteristicas.pvAtual = parseInt(document.getElementById('pvAtual').value) || 0;
-            ficha.caracteristicas.pvMax = parseInt(document.getElementById('pvMax').value) || 1;
-            ficha.caracteristicas.peAtual = parseInt(document.getElementById('peAtual').value) || 0;
-            ficha.caracteristicas.peMax = parseInt(document.getElementById('peMax').value) || 1;
-
-            ficha.caracteristicas.equipamentos = document.getElementById('equipamentos').value;
-            ficha.caracteristicas.inventario = document.getElementById('inventario').value;
-            ficha.caracteristicas.anotacoes = document.getElementById('anotacoes').value;
-
-            localStorage.setItem('shr_ficha', JSON.stringify(ficha));
-        }
-
-        function carregarDados() {
-            const salvo = localStorage.getItem('shr_ficha');
-            if(salvo) {
-                try {
-                    ficha = JSON.parse(salvo);
-                    document.getElementById('nome').value = ficha.identidade.nome || '';
-                    document.getElementById('jogador').value = ficha.identidade.jogador || '';
-                    document.getElementById('idade').value = ficha.identidade.idade || '';
-                    document.getElementById('origem').value = ficha.identidade.origem || '';
-                    document.getElementById('conceito').value = ficha.identidade.conceito || '';
-                    document.getElementById('historia').value = ficha.identidade.historia || '';
-
-                    document.getElementById('corpoBase').value = ficha.atributos.corpoBase;
-                    document.getElementById('menteBase').value = ficha.atributos.menteBase;
-                    document.getElementById('percepcaoBase').value = ficha.atributos.percepcaoBase;
-
-                    document.getElementById('pvAtual').value = ficha.caracteristicas.pvAtual;
-                    document.getElementById('pvMax').value = ficha.caracteristicas.pvMax;
-                    document.getElementById('peAtual').value = ficha.caracteristicas.peAtual;
-                    document.getElementById('peMax').value = ficha.caracteristicas.peMax;
-
-                    document.getElementById('equipamentos').value = ficha.caracteristicas.equipamentos || '';
-                    document.getElementById('inventario').value = ficha.caracteristicas.inventario || '';
-                    document.getElementById('anotacoes').value = ficha.caracteristicas.anotacoes || '';
-                } catch(e) { console.error("Erro ao carregar localStorage"); }
-            }
-            atualizarTudo();
-        }
-
-        function calcularAtributosFinais() {
-            let mods = { corpo: 0, mente: 0, percepcao: 0 };
-            ficha.poderes.forEach(p => {
-                if(p.ativo && p.efeitoAtributo && p.valorMod) {
-                    if(mods[p.efeitoAtributo] !== undefined) {
-                        mods[p.efeitoAtributo] += parseInt(p.valorMod) || 0;
-                    }
-                }
-            });
-
-            document.getElementById('modCorpo').innerText = (mods.corpo >= 0 ? "+" : "") + mods.corpo;
-            document.getElementById('modMente').innerText = (mods.mente >= 0 ? "+" : "") + mods.mente;
-            document.getElementById('modPercepcao').innerText = (mods.percepcao >= 0 ? "+" : "") + mods.percepcao;
-
-            document.getElementById('finalCorpo').innerText = ficha.atributos.corpoBase + mods.corpo;
-            document.getElementById('finalMente').innerText = ficha.atributos.menteBase + mods.mente;
-            document.getElementById('finalPercepcao').innerText = ficha.atributos.percepcaoBase + mods.percepcao;
-
-            return {
-                corpo: ficha.atributos.corpoBase + mods.corpo,
-                mente: ficha.atributos.menteBase + mods.mente,
-                percepcao: ficha.atributos.percepcaoBase + mods.percepcao
-            };
-        }
-
-        function renderizarPericias() {
-            const finais = calcularAtributosFinais();
-            const tbody = document.getElementById('listaPericias');
-            tbody.innerHTML = '';
-
-            ficha.pericias.
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="brand-mark">SHR</div><div class="brand-sub">SUPER HERO RPG</div></div>
+  <div><div class="nav-label">Plataforma</div><nav class="nav">
+    <button class="active" data-page="inicio"><span class="ico">⌂</span> Visão geral</button>
+    <button data-page="personagens"><span class="ico">♙</span> Personagens</button>
+    <button data-page="regras"><span class="ico">▤</span> Regras do sistema</button>
+    <button data-page="mestre"><span class="ico">♜</span> Área do mestre</button>
+  </nav></div>
+  <div class="side-bottom">SHR · Protótipo 0.1<br>Uma central para suas histórias.</div>
+</aside>
+<main>
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px"><button class="icon-btn mobile-menu" id="menuBtn" aria-label="Abrir menu">☰</button><div class="crumb">SHR <span style="color:var(--green2)">/</span> <span id="crumb">Visão geral</span></div></div>
+    <div class="top-actions"><button class="icon-btn" id="themeBtn" title="Alternar tema">◐</button><div class="avatar">H</div></div>
+  </header>
+  <div class="content">
+    <section class="page active" id="page-inicio">
+      <div class="welcome"><div><div class="eyebrow">Central de comando</div><h1>Bem-vindo ao SHR.</h1><p class="sub">Tudo pronto para acompanhar a próxima geração de heróis?</p></div><button class="primary" id="newHeroTop">＋ Criar personagem</button></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-top"><span>Personagens criados</span><span class="stat-icon">♙</span></div><div class="stat-num" id="statHeroes">0</div></div>
+        <div class="stat"><div class="stat-top"><span>Campanhas</span><span class="stat-icon">◇</span></div><div class="stat-num">—</div></div>
+        <div class="stat"><div class="stat-top"><span>Versão da plataforma</span><span class="stat-icon">⌘</span></div><div class="stat-num">0.1</div></div>
+      </div>
+      <div class="section-head"><h2>Seus personagens</h2><span id="heroCount">0 registros</span></div>
+      <div class="characters" id="recentHeroes"><div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div></div>
+      <div class="section-head"><h2>Acesso rápido</h2><span>Ferramentas da plataforma</span></div>
+      <div class="quick-grid">
+        <button class="quick" data-goto="personagens"><span class="stat-icon">♙</span><b>Personagens</b><small>Crie e organize suas fichas.</small></button>
+        <button class="quick" data-goto="regras"><span class="stat-icon">▤</span><b>Livro de regras</b><small>Consulte as regras do sistema.</small></button>
+        <button class="quick" data-goto="mestre"><span class="stat-icon">♜</span><b>Ferramentas do mestre</b><small>Área reservada à organização da campanha.</small></button>
+      </div>
+      <div class="notice">Este é o primeiro protótipo do SHR. Os personagens ficam salvos somente neste navegador/dispositivo. Ainda não há contas, login ou sincronização online.</div>
+    </section>
+    <section class="page" id="page-personagens">
+      <div class="welcome"><div><div class="eyebrow">Arquivo de heróis</div><h1>Personagens</h1><p class="sub">Crie, consulte e organize seus personagens.</p></div><button class="primary" id="newHeroPage">＋ Novo personagem</button></div>
+      <div class="characters" id="allHeroes"><div class="empty">Nenhum personagem cadastrado ainda.</div></div>
+    </section>
+    <section class="page" id="page-regras">
+      <div class="eyebrow">Documentação</div><h1>Regras do sistema</h1><p class="sub" style="margin-bottom:22px">O espaço para consultar as regras oficiais do seu RPG.</p>
+      <div class="rule-list">
+        <div class="rule"><b>Atributos</b><p>Os atributos representam as capacidades gerais dos personagens. As regras e os valores serão adicionados conforme definirmos o sistema.</p></div>
+        <div class="rule"><b>Perícias</b><p>As perícias representam treinamento e conhecimento em áreas específicas.</p></div>
+        <div class="rule"><b>Poderes</b><p>O catálogo de poderes reunirá habilidades, efeitos, limitações e condições de uso.</p></div>
+        <div class="rule"><b>Testes e combate</b><p>Espaço reservado para dificuldade, rolagens, ações, defesa e resolução de conflitos.</p></div>
+      </div>
+    </section>
+    <section class="page" id="page-mestre">
+      <div class="eyebrow">Controle da campanha</div><h1>Área do mestre</h1><p class="sub" style="margin-bottom:22px">Ferramentas para preparar e acompanhar suas sessões.</p>
+      <div class="quick-grid">
+        <div class="quick"><span class="stat-icon">♧</span><b>Campanhas</b><small>Organização de aventuras e sessões — em desenvolvimento.</small></div>
+        <div class="quick"><span class="stat-icon">♜</span><b>NPCs e ameaças</b><small>Registro de aliados, rivais e antagonistas — em desenvolvimento.</small></div>
+        <div class="quick"><span class="stat-icon">⚑</span><b>Controle de jogadores</b><small>Visão geral dos personagens — em desenvolvimento.</small></div>
+      </div>
+      <div class="notice">O painel do mestre será conectado às campanhas quando implementarmos contas e banco de dados.</div>
+    </section>
+  </div>
+</main>
+</div>
+<div class="modal-backdrop" id="modal">
+  <form class="modal" id="heroForm">
+    <h2>Novo personagem</h2><p>Cadastre a identidade inicial do seu herói.</p>
+    <div class="field"><label for="heroName">Nome do personagem *</label><input id="heroName" maxlength="40" required placeholder="Ex.: Sentinela"></div>
+    <div class="field"><label for="heroPlayer">Jogador</label><input id="heroPlayer" maxlength="40" placeholder="Nome do jogador"></div>
+    <div class="field"><label for="heroOrigin">Origem ou conceito</label><input id="heroOrigin" maxlength="60" placeholder="Ex.: Herói tecnológico"></div>
+    <div class="field"><label for="heroPower">Poder principal</label><input id="heroPower" maxlength="60" placeholder="Ex.: Manipulação de energia"></div>
+    <div class="modal-actions"><button type="button" class="secondary" id="cancelModal">Cancelar</button><button class="primary" type="submit">Salvar personagem</button></div>
+  </form>
+</div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+let heroes=JSON.parse(localStorage.getItem('shrHeroes')||'[]');
+function save(){localStorage.setItem('shrHeroes',JSON.stringify(heroes));renderHeroes()}
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function card(h){return `<article class="hero-card"><div class="hero-emblem">✦</div><div class="hero-info"><h3>${escapeHTML(h.name)}</h3><div class="hero-meta">${escapeHTML(h.player||'Jogador não informado')} · ${escapeHTML(h.origin||'Origem não definida')}</div><div class="hero-tags">${h.power?`<span class="tag">${escapeHTML(h.power)}</span>`:''}<span class="tag">Ficha inicial</span></div></div></article>`}
+function renderHeroes(){
+ $('#statHeroes').textContent=heroes.length;$('#heroCount').textContent=heroes.length+' registro(s)';
+ $('#recentHeroes').innerHTML=heroes.length?heroes.slice(-4).reverse().map(card).join(''):'<div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div>';
+ $('#allHeroes').innerHTML=heroes.length?heroes.slice().reverse().map(card).join(''):'<div class="empty">Nenhum personagem cadastrado ainda.</div>';
+}
+function openModal(){$('#modal').classList.add('open');$('#heroName').focus()}
+function closeModal(){$('#modal').classList.remove('open')}
+function navigate(page){$$('.page').forEach(p=>p.classList.remove('active'));$('#page-'+page).classList.add('active');$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('#crumb').textContent=({inicio:'Visão geral',personagens:'Personagens',regras:'Regras do sistema',mestre:'Área do mestre'})[page];$('#sidebar').classList.remove('open')}
+$$('.nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.goto)));
+$('#newHeroTop').onclick=openModal;$('#newHeroPage').onclick=openModal;$('#cancelModal').onclick=closeModal;
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+$('#heroForm').addEventListener('submit',e=>{e.preventDefault();heroes.push({name:$('#heroName').value.trim(),player:$('#heroPlayer').value.trim(),origin:$('#heroOrigin').value.trim(),power:$('#heroPower').value.trim()});save();e.target.reset();closeModal();navigate('personagens')});
+$('#themeBtn').onclick=()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';localStorage.setItem('shrTheme',dark?'dark':'light')};
+if(localStorage.getItem('shrTheme')==='dark')document.documentElement.dataset.theme='dark';
+$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open');
+renderHeroes();
+</script>
+</body>
+</html>
