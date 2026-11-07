@@ -336,12 +336,510 @@ function saveHeroes(){
 function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;}[c]))}
 
 function renderHeroes(){
-  $('#statHeroes').textContent=heroes.length;
-  $('#heroCount').textContent=heroes.length+' registro(s)';
+  const statHeroes = $('#statHeroes');
+  const heroCount = $('#heroCount');
+  if(statHeroes) statHeroes.textContent=heroes.length;
+  if(heroCount) heroCount.textContent=heroes.length+' registro(s)';
   
   const cardHTML=(h)=>`
     <article class="hero-card" onclick="openHeroSheet('${h.id}')">
       <div class="hero-emblem">✦</div>
       <div class="hero-info">
         <h3>${escapeHTML(h.name)}</h3>
-        <div class="hero-meta">${escapeHTML(h
+        <div class="hero-meta">${escapeHTML(h.player||'Jogador não informado')} · ${escapeHTML(h.origin||'Origem não definida')}</div>
+        <div class="hero-tags"><span class="tag">PV: ${h.pvAtual}/${h.pvMax}</span><span class="tag">PE: ${h.peAtual}/${h.peMax}</span></div>
+      </div>
+    </article>
+  `;
+
+  const recent = $('#recentHeroes');
+  const all = $('#allHeroes');
+  if(recent) recent.innerHTML=heroes.length?heroes.slice(-4).reverse().map(cardHTML).join(''):'<div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div>';
+  if(all) all.innerHTML=heroes.length?heroes.slice().reverse().map(cardHTML).join(''):'<div class="empty">Nenhum personagem cadastrado ainda.</div>';
+}
+
+function navigate(page){
+  $$('.page').forEach(p=>p.classList.remove('active'));
+  const target = $('#page-'+page);
+  if(target) target.classList.add('active');
+  $$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  const crumb = $('#crumb');
+  if(crumb) crumb.textContent=({inicio:'Visão geral',personagens:'Personagens','ficha-detalhe':'Ficha do Herói',regras:'Regras do sistema',mestre:'Área do mestre & Campanha'})[page]||page;
+  const sidebar = $('#sidebar');
+  if(sidebar) sidebar.classList.remove('open');
+  if(page==='mestre'){ renderDiceFeed(); renderHomebrewRules(); renderMestreCombat(); }
+}
+
+$$('.nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.goto)));
+
+function openModal(){
+  const modal = $('#modal');
+  if(modal) modal.classList.add('open');
+  const heroName = $('#heroName');
+  if(heroName) heroName.focus();
+}
+function closeModal(){
+  const modal = $('#modal');
+  if(modal) modal.classList.remove('open');
+}
+
+const newHeroTop = $('#newHeroTop');
+const newHeroPage = $('#newHeroPage');
+const cancelModal = $('#cancelModal');
+const modalEl = $('#modal');
+const heroForm = $('#heroForm');
+
+if(newHeroTop) newHeroTop.onclick = openModal;
+if(newHeroPage) newHeroPage.onclick = openModal;
+if(cancelModal) cancelModal.onclick = closeModal;
+if(modalEl) modalEl.addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+
+if(heroForm){
+  heroForm.addEventListener('submit',e=>{
+    e.preventDefault();
+    const newH={
+      id:'h_'+Date.now(),
+      name:$('#heroName').value.trim(),
+      player:$('#heroPlayer').value.trim(),
+      origin:$('#heroOrigin').value.trim(),
+      concept:$('#heroPower').value.trim(),
+      history:'', age:'',
+      corpoBase:2, menteBase:2, percepcaoBase:2,
+      pvAtual:20, pvMax:20, peAtual:10, peMax:10,
+      equip:'', inv:'', notes:'',
+      pericias:[
+        {name:'Acrobacia',attr:'corpo',nivel:0,bonusItem:0},
+        {name:'Atletismo',attr:'corpo',nivel:0,bonusItem:0},
+        {name:'Investigação',attr:'mente',nivel:0,bonusItem:0},
+        {name:'Tecnologia',attr:'mente',nivel:0,bonusItem:0},
+        {name:'Vigilância',attr:'percepcao',nivel:0,bonusItem:0}
+      ],
+      poderes:[
+        {id:1,name:$('#heroPower').value.trim()||'Poder Principal',type:'ativo',desc:'Habilidade principal',cost:2,dt:5,attr:'corpo',mod:2,ativo:false}
+      ]
+    };
+    heroes.push(newH);
+    saveHeroes();
+    e.target.reset();
+    closeModal();
+    openHeroSheet(newH.id);
+  });
+}
+
+// Lógica da Ficha Detalhada
+function openHeroSheet(id){
+  currentHeroId=id;
+  const h=heroes.find(x=>x.id===id);
+  if(!h)return;
+  
+  $('#fNome').value=h.name||'';
+  $('#fPlayer').value=h.player||'';
+  $('#fAge').value=h.age||'';
+  $('#fOrigin').value=h.origin||'';
+  $('#fConcept').value=h.concept||'';
+  $('#fHistory').value=h.history||'';
+  
+  $('#fCorpo').value=h.corpoBase||2;
+  $('#fMente').value=h.menteBase||2;
+  $('#fPercepcao').value=h.percepcaoBase||2;
+  
+  $('#fPvAtual').value=h.pvAtual||20;
+  $('#fPvMax').value=h.pvMax||20;
+  $('#fPeAtual').value=h.peAtual||10;
+  $('#fPeMax').value=h.peMax||10;
+  
+  $('#fEquip').value=h.equip||'';
+  $('#fInv').value=h.inv||'';
+  $('#fNotes').value=h.notes||'';
+
+  switchSheetTab(0);
+  calcSheet();
+  navigate('ficha-detalhe');
+}
+
+function getActiveHero(){ return heroes.find(x=>x.id===currentHeroId); }
+
+function switchSheetTab(idx){
+  $$('.sheet-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  $$('.sheet-content').forEach((c,i)=>c.classList.toggle('active',i===idx));
+  if(idx===5) renderSummary();
+}
+
+function updateSheetField(field,val){
+  const h=getActiveHero();if(!h)return;
+  h[field]=val;
+  saveHeroes();
+}
+
+function updateAttrBase(attr,val){
+  const h=getActiveHero();if(!h)return;
+  h[attr+'Base']=parseInt(val)||1;
+  saveHeroes();
+  calcSheet();
+}
+
+function updateResource(res,val){
+  const h=getActiveHero();if(!h)return;
+  h[res]=parseInt(val)||0;
+  saveHeroes();
+  updateBars();
+}
+
+function restorePe(){
+  const h=getActiveHero();if(!h)return;
+  h.peAtual=h.peMax;
+  $('#fPeAtual').value=h.peAtual;
+  saveHeroes();
+  updateBars();
+  alert("Energia totalmente restaurada!");
+}
+
+function updateBars(){
+  const h=getActiveHero();if(!h)return;
+  let pvPct=Math.max(0,Math.min(100,(h.pvAtual/h.pvMax)*100));
+  let pePct=Math.max(0,Math.min(100,(h.peAtual/h.peMax)*100));
+  const pvBar = $('#pvBar');
+  const peBar = $('#peBar');
+  if(pvBar) pvBar.style.width=pvPct+'%';
+  if(peBar) peBar.style.width=pePct+'%';
+}
+
+function calcSheet(){
+  const h=getActiveHero();if(!h)return;
+  let mods={corpo:0,mente:0,percepcao:0};
+  (h.poderes||[]).forEach(p=>{
+    if(p.ativo && p.attr && p.mod) mods[p.attr]=(mods[p.attr]||0)+parseInt(p.mod);
+  });
+
+  const modC = $('#modCorpo'), modM = $('#modMente'), modP = $('#modPercepcao');
+  if(modC) modC.textContent=(mods.corpo>=0?'+':'')+mods.corpo;
+  if(modM) modM.textContent=(mods.mente>=0?'+':'')+mods.mente;
+  if(modP) modP.textContent=(mods.percepcao>=0?'+':'')+mods.percepcao;
+
+  let fC=(h.corpoBase||2)+mods.corpo;
+  let fM=(h.menteBase||2)+mods.mente;
+  let fP=(h.percepcaoBase||2)+mods.percepcao;
+
+  const fCorpoEl = $('#finalCorpo'), fMenteEl = $('#finalMente'), fPercepEl = $('#finalPercepcao');
+  if(fCorpoEl) fCorpoEl.textContent=fC;
+  if(fMenteEl) fMenteEl.textContent=fM;
+  if(fPercepEl) fPercepEl.textContent=fP;
+
+  renderSkills({corpo:fC,mente:fM,percepcao:fP});
+  renderPowers();
+  updateBars();
+}
+
+function renderSkills(totals){
+  const h=getActiveHero();if(!h)return;
+  const tbody=$('#skillsTableBody');
+  if(!tbody) return;
+  tbody.innerHTML='';
+  (h.pericias||[]).forEach((s,i)=>{
+    let base=totals[s.attr]||2;
+    let total=base+(s.nivel*2)+(s.bonusItem||0);
+    tbody.innerHTML+=`
+      <tr>
+        <td><strong>${escapeHTML(s.name)}</strong></td>
+        <td style="text-transform:capitalize">${s.attr}</td>
+        <td>
+          <select onchange="updateSkillLevel(${i},this.value)">
+            <option value="0" ${s.nivel==0?'selected':''}>Leigo (+0)</option>
+            <option value="1" ${s.nivel==1?'selected':''}>Treinado (+2)</option>
+            <option value="2" ${s.nivel==2?'selected':''}>Veterano (+4)</option>
+            <option value="3" ${s.nivel==3?'selected':''}>Expert (+6)</option>
+          </select>
+        </td>
+        <td><input type="number" value="${s.bonusItem||0}" style="width:70px;" oninput="updateSkillItem(${i},this.value)"></td>
+        <td><strong style="color:var(--green2)">${total} d6</strong></td>
+      </tr>
+    `;
+  });
+}
+
+function updateSkillLevel(idx,val){
+  const h=getActiveHero();if(!h)return;
+  h.pericias[idx].nivel=parseInt(val);
+  saveHeroes();
+  calcSheet();
+}
+function updateSkillItem(idx,val){
+  const h=getActiveHero();if(!h)return;
+  h.pericias[idx].bonusItem=parseInt(val)||0;
+  saveHeroes();
+  calcSheet();
+}
+
+function addSkillModal(){
+  const h=getActiveHero();if(!h)return;
+  let name=prompt("Nome da nova perícia:");
+  if(!name)return;
+  let attr=prompt("Atributo base (corpo, mente, percepcao):","corpo").toLowerCase();
+  if(['corpo','mente','percepcao'].includes(attr)){
+    h.pericias.push({name,attr,nivel:0,bonusItem:0});
+    saveHeroes();
+    calcSheet();
+  }else{alert("Atributo inválido!");}
+}
+
+function renderPowers(){
+  const h=getActiveHero();if(!h)return;
+  const container=$('#powersContainer');
+  if(!container) return;
+  container.innerHTML='';
+  if(!h.poderes || h.poderes.length===0){
+    container.innerHTML='<p style="color:var(--muted)">Nenhum poder cadastrado.</p>';
+    return;
+  }
+  h.poderes.forEach((p,i)=>{
+    container.innerHTML+=`
+      <div class="power-card">
+        <div class="power-head">
+          <strong>${escapeHTML(p.name)} (${(p.type||'ativo').toUpperCase()})</strong>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="toggle-btn ${p.ativo?'on':'off'}" onclick="togglePower(${i})">${p.ativo?'ATIVO (ON)':'OFF'}</button>
+            <button class="danger-btn" style="padding:2px 8px;font-size:11px;" onclick="removePower(${i})">X</button>
+          </div>
+        </div>
+        <p style="margin:4px 0; color:var(--muted); font-size:13px;">${escapeHTML(p.desc||'Sem descrição')}</p>
+        <div style="font-size:12px; display:flex; gap:15px; margin-top:6px; flex-wrap:wrap; align-items:center;">
+          <span>Custo PE: <b>${p.cost||0}</b></span>
+          <span>DT: <b style="color:var(--accent)">${p.dt||'-'}</b></span>
+          <span>Bônus: <b>+${p.mod||0} em ${p.attr||'nenhum'}</b></span>
+          ${p.type==='ativo'?`<button class="secondary" style="padding:2px 8px; font-size:11px;" onclick="usePower(${i})">Usar Habilidade</button>`:''}
+        </div>
+      </div>
+    `;
+  });
+}
+
+function togglePower(idx){
+  const h=getActiveHero();if(!h)return;
+  h.poderes[idx].ativo=!h.poderes[idx].ativo;
+  saveHeroes();
+  calcSheet();
+}
+
+function removePower(idx){
+  const h=getActiveHero();if(!h)return;
+  h.poderes.splice(idx,1);
+  saveHeroes();
+  calcSheet();
+}
+
+function addPowerModal(){
+  const h=getActiveHero();if(!h)return;
+  let name=prompt("Nome do Poder/Habilidade:");
+  if(!name)return;
+  let type=prompt("Tipo (ativo ou passivo):","ativo").toLowerCase();
+  let desc=prompt("Descrição:");
+  let cost=parseInt(prompt("Custo em PE:","0"))||0;
+  let dt=parseInt(prompt("DT do Poder (Dificuldade):","5"))||5;
+  let attr=prompt("Modifica qual atributo? (corpo, mente, percepcao ou deixe vazio):","").toLowerCase();
+  let mod=parseInt(prompt("Valor do bônus de atributo:","0"))||0;
+
+  h.poderes.push({id:Date.now(),name,type,desc,cost,dt,attr,mod,ativo:false});
+  saveHeroes();
+  calcSheet();
+}
+
+function usePower(idx){
+  const h=getActiveHero();if(!h)return;
+  let p=h.poderes[idx];
+  let cost=p.cost||0;
+  if(h.peAtual>=cost){
+    h.peAtual-=cost;
+    $('#fPeAtual').value=h.peAtual;
+    saveHeroes();
+    updateBars();
+    alert(`Poder [${p.name}] utilizado (DT ${p.dt || 'N/A'})! -${cost} PE.`);
+  }else{
+    alert("Energia (PE) insuficiente!");
+  }
+}
+
+function renderSummary(){
+  const h=getActiveHero();if(!h)return;
+  const summaryBox = $('#sheetSummary');
+  if(summaryBox){
+    summaryBox.innerHTML=`
+      <div style="background:var(--bg); padding:12px; border-radius:8px;">
+        <p><b>Nome:</b> ${escapeHTML(h.name)} | <b>Jogador:</b> ${escapeHTML(h.player||'N/D')}</p>
+        <p><b>Origem:</b> ${escapeHTML(h.origin||'N/D')} | <b>Conceito:</b> ${escapeHTML(h.concept||'N/D')}</p>
+      </div>
+      <div style="background:var(--bg); padding:12px; border-radius:8px;">
+        <p><b>Vitalidade:</b> ${h.pvAtual}/${h.pvMax} | <b>Energia:</b> ${h.peAtual}/${h.peMax}</p>
+        <p><b>Poderes registrados:</b> ${h.poderes?h.poderes.length:0}</p>
+      </div>
+    `;
+  }
+}
+
+const backToHeroes = $('#backToHeroes');
+const deleteHeroBtn = $('#deleteHeroBtn');
+const exportJsonBtn = $('#exportJsonBtn');
+
+if(backToHeroes) backToHeroes.onclick=()=>navigate('personagens');
+if(deleteHeroBtn) deleteHeroBtn.onclick=()=>{
+  if(confirm("Deseja realmente excluir este herói?")){
+    heroes=heroes.filter(x=>x.id!==currentHeroId);
+    saveHeroes();
+    navigate('personagens');
+  }
+};
+
+if(exportJsonBtn) exportJsonBtn.onclick=()=>{
+  const h=getActiveHero();if(!h)return;
+  const dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(h,null,2));
+  const dl=document.createElement('a');
+  dl.setAttribute("href",dataStr);
+  dl.setAttribute("download",(h.name||"heroi")+".json");
+  dl.click();
+};
+
+// Rolador de Dados d6 com DT e Feed Público
+function rollCustomD6(){
+  let roller = $('#rollerName').value.trim() || 'Participante';
+  let count = parseInt($('#diceCount').value) || 3;
+  let dt = parseInt($('#targetDt').value) || 4;
+  
+  let rolls = [];
+  let successes = 0;
+  for(let i=0; i<count; i++){
+    let r = Math.floor(Math.random() * 6) + 1;
+    rolls.push(r);
+    if(r >= dt) successes++;
+  }
+  
+  diceLog.unshift({
+    roller, 
+    details: `${count}d6 vs DT ${dt}`, 
+    rolls: rolls.join(', '), 
+    successes, 
+    time: new Date().toLocaleTimeString()
+  });
+  if(diceLog.length > 20) diceLog.pop();
+  localStorage.setItem('shrDiceLog', JSON.stringify(diceLog));
+  renderDiceFeed();
+}
+
+function renderDiceFeed(){
+  const feed = $('#diceFeed');
+  if(!feed) return;
+  if(!diceLog.length){
+    feed.innerHTML = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">Nenhuma rolagem feita nesta sessão ainda.</div>';
+    return;
+  }
+  feed.innerHTML = diceLog.map(d=>`
+    <div class="feed-item">
+      <span><b>${escapeHTML(d.roller)}</b> rolou <b>${d.details}</b> [${d.rolls}]</span>
+      <span><b style="color:var(--green2); font-size:14px;">${d.successes} sucesso(s)</b> <small style="color:var(--muted)">(${d.time})</small></span>
+    </div>
+  `).join('');
+}
+
+// Área do Mestre: Lore e Notas
+function saveMasterNotes(){
+  const loreText = $('#loreText');
+  if(loreText) localStorage.setItem('shrLore', loreText.value);
+}
+setTimeout(()=>{ 
+  const loreText = $('#loreText');
+  if(loreText && localStorage.getItem('shrLore')) loreText.value = localStorage.getItem('shrLore'); 
+}, 100);
+
+// Área do Mestre: Regras Caseiras (Homebrew)
+function addHomebrewRule(){
+  const ruleTitleInput = $('#ruleTitle');
+  if(!ruleTitleInput) return;
+  let title = ruleTitleInput.value.trim();
+  if(!title) return;
+  let desc = prompt("Descrição detalhada da regra caseira:");
+  homebrewRules.push({title, desc: desc || 'Sem descrição'});
+  localStorage.setItem('shrRules', JSON.stringify(homebrewRules));
+  ruleTitleInput.value = '';
+  renderHomebrewRules();
+}
+
+function renderHomebrewRules(){
+  const container = $('#ruleListContainer');
+  if(!container) return;
+  if(!homebrewRules.length){
+    container.innerHTML = '<p style="color:var(--muted); font-size:13px;">Nenhuma regra caseira cadastrada ainda.</p>';
+    return;
+  }
+  container.innerHTML = homebrewRules.map((r, i)=>`
+    <div style="background:var(--bg); padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <b>${escapeHTML(r.title)}</b>
+        <p style="margin:4px 0 0; color:var(--muted); font-size:13px;">${escapeHTML(r.desc)}</p>
+      </div>
+      <button class="danger-btn" style="padding:2px 8px; font-size:11px;" onclick="removeHomebrewRule(${i})">X</button>
+    </div>
+  `).join('');
+}
+
+function removeHomebrewRule(i){
+  homebrewRules.splice(i, 1);
+  localStorage.setItem('shrRules', JSON.stringify(homebrewRules));
+  renderHomebrewRules();
+}
+
+// Área do Mestre: Combatentes / Iniciativa
+function addCombatant(){
+  const mName = $('#mName'), mInit = $('#mInit');
+  if(!mName || !mInit) return;
+  let name = mName.value.trim();
+  let init = parseInt(mInit.value)||0;
+  if(!name)return;
+  mestreCombat.push({name,init});
+  mestreCombat.sort((a,b)=>b.init-a.init);
+  localStorage.setItem('shrCombat',JSON.stringify(mestreCombat));
+  mName.value=''; mInit.value='';
+  renderMestreCombat();
+}
+
+function renderMestreCombat(){
+  const box=$('#combatList');
+  if(!box) return;
+  box.innerHTML='';
+  if(mestreCombat.length===0){
+    box.innerHTML='<p style="color:var(--muted); font-size:13px;">Nenhum combatente no tracker.</p>';
+    return;
+  }
+  mestreCombat.forEach((c,i)=>{
+    box.innerHTML+=`
+      <div style="background:var(--bg); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+        <span><b>#${c.init}</b> — ${escapeHTML(c.name)}</span>
+        <button class="danger-btn" style="padding:2px 8px; font-size:11px;" onclick="removeCombatant(${i})">Remover</button>
+      </div>
+    `;
+  });
+}
+function removeCombatant(i){
+  mestreCombat.splice(i,1);
+  localStorage.setItem('shrCombat',JSON.stringify(mestreCombat));
+  renderMestreCombat();
+}
+
+// Global UI Controls
+const themeBtn = $('#themeBtn');
+if(themeBtn) themeBtn.onclick=()=>{
+  const dark=document.documentElement.dataset.theme!=='dark';
+  document.documentElement.dataset.theme=dark?'dark':'light';
+  localStorage.setItem('shrTheme',dark?'dark':'light');
+};
+if(localStorage.getItem('shrTheme')==='dark') document.documentElement.dataset.theme='dark';
+
+const menuBtn = $('#menuBtn');
+const sidebar = $('#sidebar');
+if(menuBtn && sidebar) menuBtn.onclick=()=>sidebar.classList.toggle('open');
+
+renderHeroes();
+renderMestreCombat();
+renderDiceFeed();
+renderHomebrewRules();
+</script>
+</body>
+</html>
