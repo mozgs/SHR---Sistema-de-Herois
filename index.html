@@ -3,276 +3,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHR — Super Hero RPG</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>SHR — Super Hero RPG (Sistema Completo)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #070b09;
-            --bg-card: #101814;
-            --bg-input: #16221c;
+            --bg-main: #060a08;
+            --bg-card: #0d1612;
+            --bg-input: #13221b;
             --primary: #00ff88;
-            --primary-glow: rgba(0, 255, 136, 0.25);
+            --primary-hover: #00cc6d;
             --accent: #00e5ff;
+            --text-main: #e2e8f0;
+            --text-muted: #829e90;
             --danger: #ff3366;
-            --text-light: #f1f5f9;
-            --text-muted: #7e9488;
-            --border: #1f3329;
+            --border: #1e382b;
+            --glow: rgba(0, 255, 136, 0.2);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg-dark); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
         header {
-            background: linear-gradient(180deg, #030504 0%, var(--bg-card) 100%);
+            background: linear-gradient(180deg, #020504 0%, var(--bg-card) 100%);
             border-bottom: 2px solid var(--primary);
-            padding: 1.2rem 1rem;
+            padding: 1.5rem 1rem;
             text-align: center;
-            box-shadow: 0 4px 20px var(--primary-glow);
+            box-shadow: 0 4px 25px var(--glow);
         }
 
         header h1 {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2.6rem;
+            font-size: 3rem;
             color: var(--primary);
             letter-spacing: 3px;
             text-transform: uppercase;
         }
 
-        .mode-switch {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 1rem;
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.3rem;
         }
 
-        .btn-mode {
+        /* Seletor de Modo (Global) */
+        .global-mode-bar {
+            max-width: 1000px;
+            margin: 1.2rem auto 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .mode-toggles {
+            display: flex;
+            gap: 10px;
+        }
+
+        .mode-btn {
             background: var(--bg-input);
             color: var(--text-muted);
             border: 1px solid var(--border);
-            padding: 8px 22px;
+            padding: 10px 22px;
             border-radius: 20px;
             font-weight: 700;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
-        .btn-mode.active {
+        .mode-btn.active {
             background: var(--primary);
             color: #000;
             border-color: var(--primary);
-            box-shadow: 0 0 15px var(--primary-glow);
+            box-shadow: 0 0 15px var(--glow);
         }
 
-        .container { max-width: 1000px; margin: 1.5rem auto; padding: 0 1rem; flex: 1; width: 100%; }
+        /* Container Principal */
+        .container {
+            max-width: 1000px;
+            margin: 1.5rem auto 3rem auto;
+            padding: 0 1rem;
+            width: 100%;
+            flex: 1;
+        }
 
-        .view-section { display: none; }
-        .view-section.active { display: block; animation: fadeIn 0.25s ease; }
+        .app-view { display: none; }
+        .app-view.active { display: block; animation: fadeIn 0.3s ease; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Nav Abas Jogador */
-        .tabs-bar {
+        /* Abas do Jogador */
+        .tabs-container {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             overflow-x: auto;
             margin-bottom: 1.5rem;
             padding-bottom: 4px;
         }
 
-        .tab-item {
+        .tab-btn {
             background: var(--bg-card);
             color: var(--text-muted);
             border: 1px solid var(--border);
-            padding: 10px 16px;
+            padding: 10px 18px;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             cursor: pointer;
             white-space: nowrap;
             transition: 0.2s;
         }
 
-        .tab-item.active {
+        .tab-btn.active {
             background: var(--accent);
             color: #000;
             border-color: var(--accent);
             font-weight: 700;
         }
 
+        /* Cartões de Conteúdo */
         .panel-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 2rem;
             margin-bottom: 1.5rem;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        h2.title {
+        h2.section-title {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.7rem;
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
-            padding-bottom: 0.4rem;
+            padding-bottom: 0.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-        .form-group { display: flex; flex-direction: column; gap: 5px; }
-        .full { grid-column: 1 / -1; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+        }
 
-        label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         input, select, textarea {
             background: var(--bg-input);
             border: 1px solid var(--border);
-            color: var(--text-light);
-            padding: 10px;
+            color: var(--text-main);
+            padding: 11px 14px;
             border-radius: 6px;
             font-size: 0.95rem;
             outline: none;
+            transition: border-color 0.2s;
         }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
-        textarea { resize: vertical; min-height: 85px; }
 
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Botões */
         .btn {
             background: var(--primary);
             color: #000;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 6px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
+            justify-content: center;
+            gap: 8px;
         }
-        .btn:hover { background: #00cc6d; box-shadow: 0 0 10px var(--primary-glow); }
-        .btn-sec { background: transparent; border: 1px solid var(--border); color: var(--text-light); }
-        .btn-sec:hover { background: var(--bg-input); }
-        .btn-danger { background: rgba(255, 51, 102, 0.15); color: var(--danger); border: 1px solid var(--danger); }
-        .btn-danger:hover { background: var(--danger); color: #fff; }
 
-        /* Barras de Status */
-        .bars-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-        .meter-bg { background: #050806; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin-top: 6px; }
-        .meter-fill { height: 100%; transition: width 0.3s; }
+        .btn:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 0 12px var(--glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-input);
+            border-color: var(--text-muted);
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: rgba(255, 51, 102, 0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Atributos & Barras */
+        .attr-card {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .meters-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            background: var(--bg-input);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .meter-bar-bg {
+            background: #040806;
+            height: 14px;
+            border-radius: 7px;
+            overflow: hidden;
+            margin-top: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .meter-bar-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
         .pv-fill { background: var(--danger); }
         .pe-fill { background: var(--accent); }
 
-        /* Tabela de Perícias */
-        table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
-        th { color: var(--text-muted); }
+        /* Tabelas */
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
 
-        /* Cards de Poderes */
+        .custom-table th, .custom-table td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .custom-table th {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Cartões de Poderes */
         .power-card {
             background: var(--bg-input);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 0.8rem;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
-        .power-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
-        .badge-toggle {
-            padding: 4px 10px;
-            border-radius: 4px;
+
+        .power-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .power-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+
+        .toggle-btn {
+            padding: 5px 12px;
             font-size: 0.75rem;
+            border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
             border: 1px solid;
+            transition: 0.2s;
         }
-        .badge-toggle.off { background: transparent; color: var(--text-muted); border-color: var(--border); }
-        .badge-toggle.on { background: rgba(0, 255, 136, 0.2); color: var(--primary); border-color: var(--primary); }
 
-        footer { text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); background: var(--bg-card); }
+        .toggle-btn.off {
+            background: transparent;
+            color: var(--text-muted);
+            border-color: var(--border);
+        }
+
+        .toggle-btn.on {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Resumo & Campanhas */
+        .summary-section {
+            margin-bottom: 1.8rem;
+        }
+
+        .summary-section h3 {
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 4px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            background: var(--bg-input);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        /* Tracker de Combate Mestre */
+        .combat-item {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.8rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-card);
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>S.H.R. — Super Hero RPG</h1>
-        <div class="mode-switch">
-            <button class="btn-mode active" onclick="setModo('jogador')">🎮 Modo Jogador</button>
-            <button class="btn-mode" onclick="setModo('mestre')">🎲 Modo Mestre</button>
-        </div>
+        <h1>S.H.R.</h1>
+        <p>Super Hero RPG — Central de Campanhas & Fichas</p>
     </header>
+
+    <!-- Barra Superior Global -->
+    <div class="global-mode-bar">
+        <div class="mode-toggles">
+            <button class="mode-btn active" onclick="mudarModoPrincipal('jogador')">🎮 Modo Jogador</button>
+            <button class="mode-btn" onclick="mudarModoPrincipal('mestre')">🎲 Modo Mestre</button>
+        </div>
+        <div id="acoesJogadorGlobal" style="display: flex; gap: 8px;">
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size:0.8rem;" onclick="exportarFichaJSON()">Exportar JSON</button>
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size:0.8rem;" onclick="document.getElementById('importFile').click()">Importar JSON</button>
+            <input type="file" id="importFile" style="display:none" onchange="importarFichaJSON(event)">
+        </div>
+    </div>
 
     <div class="container">
 
-        <!-- ================= MODO JOGADOR ================= -->
-        <div class="view-section active" id="view-jogador">
-            <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom:1rem;">
-                <button class="btn btn-sec" onclick="exportarJSON()">Exportar Ficha (.JSON)</button>
-                <button class="btn btn-sec" onclick="document.getElementById('fileIn').click()">Importar JSON</button>
-                <input type="file" id="fileIn" style="display:none" onchange="importarJSON(event)">
-            </div>
-
-            <div class="tabs-bar">
-                <button class="tab-item active" onclick="setAba(0)">1. Identidade</button>
-                <button class="tab-item" onclick="setAba(1)">2. Atributos</button>
-                <button class="tab-item" onclick="setAba(2)">3. Perícias</button>
-                <button class="tab-item" onclick="setAba(3)">4. Poderes</button>
-                <button class="tab-item" onclick="setAba(4)">5. Status & Inventário</button>
-                <button class="tab-item" onclick="setAba(5)">6. Resumo</button>
+        <!-- ======================= MODO JOGADOR ======================= -->
+        <div class="app-view active" id="view-jogador">
+            
+            <div class="tabs-container">
+                <button class="tab-item tab-btn active" onclick="mudarAbaJogador(0)">1. Identidade</button>
+                <button class="tab-item tab-btn" onclick="mudarAbaJogador(1)">2. Atributos</button>
+                <button class="tab-item tab-btn" onclick="mudarAbaJogador(2)">3. Perícias</button>
+                <button class="tab-item tab-btn" onclick="mudarAbaJogador(3)">4. Poderes</button>
+                <button class="tab-item tab-btn" onclick="mudarAbaJogador(4)">5. Características</button>
+                <button class="tab-item tab-btn" onclick="mudarAbaJogador(5)">6. Resumo</button>
             </div>
 
             <!-- Aba 1: Identidade -->
-            <div class="panel-card aba-content" id="aba-0">
-                <h2 class="title">Identidade do Herói</h2>
+            <div class="panel-card aba-conteudo" id="aba-j-0">
+                <h2 class="section-title">Identidade do Personagem</h2>
                 <div class="form-grid">
-                    <div class="form-group"><label>Nome do Personagem</label><input type="text" id="nome" placeholder="Ex: Capitão Vórtex" oninput="salvar()"></div>
-                    <div class="form-group"><label>Nome do Jogador</label><input type="text" id="jogador" placeholder="Seu nome" oninput="salvar()"></div>
-                    <div class="form-group"><label>Idade</label><input type="number" id="idade" placeholder="Ex: 24" oninput="salvar()"></div>
-                    <div class="form-group"><label>Origem</label><input type="text" id="origem" placeholder="Ex: Experimento Genético" oninput="salvar()"></div>
-                    <div class="form-group full"><label>Conceito</label><input type="text" id="conceito" placeholder="Ex: Velocista vigilante das ruas" oninput="salvar()"></div>
-                    <div class="form-group full"><label>História</label><textarea id="historia" placeholder="Descreva o passado do personagem..." oninput="salvar()"></textarea></div>
+                    <div class="form-group"><label>Nome do Personagem</label><input type="text" id="nome" placeholder="Ex: Capitão Vórtex" oninput="salvarDadosJogador()"></div>
+                    <div class="form-group"><label>Nome do Jogador</label><input type="text" id="jogador" placeholder="Seu nome" oninput="salvarDadosJogador()"></div>
+                    <div class="form-group"><label>Idade</label><input type="number" id="idade" placeholder="Ex: 25" oninput="salvarDadosJogador()"></div>
+                    <div class="form-group"><label>Origem</label><input type="text" id="origem" placeholder="Ex: Mutante, Cientista..." oninput="salvarDadosJogador()"></div>
+                    <div class="form-group full-width"><label>Conceito do Personagem</label><input type="text" id="conceito" placeholder="Ex: Protetor urbano com poderes cinéticos" oninput="salvarDadosJogador()"></div>
+                    <div class="form-group full-width"><label>História e Origem</label><textarea id="historia" placeholder="Descreva a história e passado do herói..." oninput="salvarDadosJogador()"></textarea></div>
+                </div>
+                <div class="nav-buttons">
+                    <div></div>
+                    <button class="btn" onclick="mudarAbaJogador(1)">Avançar &rarr;</button>
                 </div>
             </div>
 
             <!-- Aba 2: Atributos -->
-            <div class="panel-card aba-content" id="aba-1" style="display:none;">
-                <h2 class="title">Atributos Principais</h2>
+            <div class="panel-card aba-conteudo" id="aba-j-1" style="display:none;">
+                <h2 class="section-title">Atributos Principais</h2>
+                <p style="color:var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Separação entre valores-base e modificadores ativos de poderes.</p>
                 <div class="form-grid">
-                    <div class="form-group">
+                    <div class="attr-card">
                         <label>Corpo (Base)</label>
-                        <input type="number" id="cBase" value="2" min="1" max="10" oninput="salvar(); reCalc();">
-                        <span style="font-size:0.85rem; color:var(--primary); font-weight:bold; margin-top:4px;">Total Final: <span id="cTotal">2</span></span>
+                        <input type="number" id="corpoBase" value="2" min="1" max="10" oninput="salvarDadosJogador(); calcularTudo();">
+                        <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modCorpo">0</span></span>
+                        <span style="font-size: 0.95rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalCorpo" style="color: var(--accent);">2</span></span>
                     </div>
-                    <div class="form-group">
+                    <div class="attr-card">
                         <label>Mente (Base)</label>
-                        <input type="number" id="mBase" value="2" min="1" max="10" oninput="salvar(); reCalc();">
-                        <span style="font-size:0.85rem; color:var(--primary); font-weight:bold; margin-top:4px;">Total Final: <span id="mTotal">2</span></span>
+                        <input type="number" id="menteBase" value="2" min="1" max="10" oninput="salvarDadosJogador(); calcularTudo();">
+                        <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modMente">0</span></span>
+                        <span style="font-size: 0.95rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalMente" style="color: var(--accent);">2</span></span>
                     </div>
-                    <div class="form-group">
+                    <div class="attr-card">
                         <label>Percepção (Base)</label>
-                        <input type="number" id="pBase" value="2" min="1" max="10" oninput="salvar(); reCalc();">
-                        <span style="font-size:0.85rem; color:var(--primary); font-weight:bold; margin-top:4px;">Total Final: <span id="pTotal">2</span></span>
+                        <input type="number" id="percepcaoBase" value="2" min="1" max="10" oninput="salvarDadosJogador(); calcularTudo();">
+                        <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modPercepcao">0</span></span>
+                        <span style="font-size: 0.95rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalPercepcao" style="color: var(--accent);">2</span></span>
                     </div>
                 </div>
-            </div>
-
-            <!-- Aba 3: Perícias -->
-            <div class="panel-card aba-content" id="aba-2" style="display:none;">
-                <h2 class="title">Perícias <button class="btn" style="font-size:0.75rem;" onclick="addPericia()">+ Nova Perícia</button></h2>
-                <div style="overflow-x:auto;">
-                    <table>
-                        <thead>
-                            <tr><th>Perícia</th><th>Atributo Base</th><th>Treinamento</th><th>Bônus Itens/Outros</th><th>Total Final</th></tr>
-                        </thead>
-                        <tbody id="tblPericias"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Aba 4: Poderes -->
-            <div class="panel-card aba-content" id="aba-3" style="display:none;">
-                <h2 class="title">Poderes & Habilidades <button class="btn" style="font-size:0.75rem;" onclick="addPoder()">+ Novo Poder
+                <div class="nav-buttons">
+                    <button class
