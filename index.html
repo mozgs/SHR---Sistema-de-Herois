@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101713">
+<title>SHR — Central de Heróis</title>
+<style>
+:root{--green:#48d597;--green2:#1e9e70;--bg:#f2f5f3;--panel:#fff;--text:#17221c;--muted:#718078;--line:#e2e9e4;--soft:#e8f8f0;--shadow:0 12px 35px #14251b0c}
+[data-theme="dark"]{--bg:#101713;--panel:#18221c;--text:#edf5ef;--muted:#9aa99f;--line:#2b3a30;--soft:#20382c;--shadow:0 12px 35px #0003}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;transition:.2s}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{background:#111a15;color:#eaf4ed;padding:26px 18px;display:flex;flex-direction:column;gap:28px}
+.brand{padding:4px 10px}.brand-mark{font-size:29px;font-weight:900;letter-spacing:.18em;color:#f5fff8}.brand-sub{font-size:10px;letter-spacing:.22em;color:#8ba397;margin-top:1px}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:#789084;padding:0 12px;margin-bottom:8px}
+.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#b8c8be;text-align:left;padding:11px 12px;border-radius:10px;display:flex;gap:12px;align-items:center}.nav button:hover,.nav button.active{background:#20382c;color:#fff}.nav button.active .ico{color:var(--green)}
+.ico{width:20px;text-align:center;font-size:17px}.side-bottom{margin-top:auto;border-top:1px solid #2a392f;padding:17px 10px;color:#82958a;font-size:12px}
+main{min-width:0}.topbar{height:76px;padding:0 34px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--panel)}
+.crumb{font-size:13px;color:var(--muted)}.top-actions{display:flex;gap:10px;align-items:center}
+.icon-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);width:39px;height:39px;border-radius:11px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--soft);color:var(--green2);display:grid;place-items:center;font-weight:800}
+.content{max-width:1180px;margin:auto;padding:34px}
+.welcome{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:27px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.17em;color:var(--green2);font-weight:800}
+h1{font-size:clamp(26px,4vw,35px);line-height:1.15;margin:7px 0 8px;letter-spacing:-.04em}
+.sub{color:var(--muted);margin:0}
+.primary{background:var(--green);color:#102017;border:0;border-radius:10px;padding:11px 16px;font-weight:800;box-shadow:0 5px 15px #48d59725}
+.primary:hover{background:#62e4aa}.secondary{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-weight:650}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:23px}
+.stat,.panel,.hero-card{background:var(--panel);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
+.stat{padding:18px 20px}.stat-top{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.stat-num{font-size:28px;font-weight:850;letter-spacing:-.04em;margin-top:6px}.stat-icon{color:var(--green2);font-size:18px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:27px 0 13px}.section-head h2{font-size:17px;margin:0;letter-spacing:-.02em}.section-head span{font-size:12px;color:var(--muted)}
+.characters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.hero-card{padding:18px;display:flex;gap:15px;align-items:flex-start}
+.hero-emblem{width:52px;height:52px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:23px;flex:none}
+.hero-info{min-width:0;flex:1}.hero-info h3{margin:1px 0 3px;font-size:16px}.hero-meta{font-size:12px;color:var(--muted)}.hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+.tag{font-size:10px;font-weight:750;color:var(--green2);background:var(--soft);padding:4px 8px;border-radius:20px}
+.empty{padding:32px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;grid-column:1/-1}
+.panel{padding:20px}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.quick{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-align:left;color:var(--text)}.quick b{display:block;margin:6px 0 2px}.quick small{color:var(--muted)}
+.page{display:none}.page.active{display:block}
+.rule-list{display:grid;gap:10px}.rule{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.rule b{display:block;margin-bottom:3px}.rule p{margin:0;color:var(--muted);font-size:13px}
+.notice{margin-top:22px;padding:14px 16px;border-radius:12px;background:var(--soft);color:var(--text);font-size:12px}
+.modal-backdrop{position:fixed;inset:0;background:#07110bc9;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal-backdrop.open{display:flex}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:23px;width:min(100%,470px);box-shadow:0 25px 80px #0005}.modal h2{margin:0 0 5px}.modal p{margin:0 0 18px;color:var(--muted);font-size:13px}
+.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:12px;font-weight:750;color:var(--muted)}.field input,.field select{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:11px;outline:none}.field input:focus,.field select:focus{border-color:var(--green2)}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+.mobile-menu{display:none}
+@media(max-width:800px){.app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:4;left:-260px;top:0;bottom:0;width:250px;transition:.2s}.sidebar.open{left:0}.mobile-menu{display:inline-block}.topbar{padding:0 17px}.content{padding:24px 17px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.characters{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.welcome{align-items:flex-start;flex-direction:column}.welcome .primary{width:100%}}
+@media(max-width:390px){.stats{grid-template-columns:1fr}.stats .stat:last-child{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="brand-mark">SHR</div><div class="brand-sub">SUPER HERO RPG</div></div>
+  <div><div class="nav-label">Plataforma</div><nav class="nav">
+    <button class="active" data-page="inicio"><span class="ico">⌂</span> Visão geral</button>
+    <button data-page="personagens"><span class="ico">♙</span> Personagens</button>
+    <button data-page="regras"><span class="ico">▤</span> Regras do sistema</button>
+    <button data-page="mestre"><span class="ico">♜</span> Área do mestre</button>
+  </nav></div>
+  <div class="side-bottom">SHR · Protótipo 0.1<br>Uma central para suas histórias.</div>
+</aside>
+<main>
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px"><button class="icon-btn mobile-menu" id="menuBtn" aria-label="Abrir menu">☰</button><div class="crumb">SHR <span style="color:var(--green2)">/</span> <span id="crumb">Visão geral</span></div></div>
+    <div class="top-actions"><button class="icon-btn" id="themeBtn" title="Alternar tema">◐</button><div class="avatar">H</div></div>
+  </header>
+  <div class="content">
+    <section class="page active" id="page-inicio">
+      <div class="welcome"><div><div class="eyebrow">Central de comando</div><h1>Bem-vindo ao SHR.</h1><p class="sub">Tudo pronto para acompanhar a próxima geração de heróis?</p></div><button class="primary" id="newHeroTop">＋ Criar personagem</button></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-top"><span>Personagens criados</span><span class="stat-icon">♙</span></div><div class="stat-num" id="statHeroes">0</div></div>
+        <div class="stat"><div class="stat-top"><span>Campanhas</span><span class="stat-icon">◇</span></div><div class="stat-num">—</div></div>
+        <div class="stat"><div class="stat-top"><span>Versão da plataforma</span><span class="stat-icon">⌘</span></div><div class="stat-num">0.1</div></div>
+      </div>
+      <div class="section-head"><h2>Seus personagens</h2><span id="heroCount">0 registros</span></div>
+      <div class="characters" id="recentHeroes"><div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div></div>
+      <div class="section-head"><h2>Acesso rápido</h2><span>Ferramentas da plataforma</span></div>
+      <div class="quick-grid">
+        <button class="quick" data-goto="personagens"><span class="stat-icon">♙</span><b>Personagens</b><small>Crie e organize suas fichas.</small></button>
+        <button class="quick" data-goto="regras"><span class="stat-icon">▤</span><b>Livro de regras</b><small>Consulte as regras do sistema.</small></button>
+        <button class="quick" data-goto="mestre"><span class="stat-icon">♜</span><b>Ferramentas do mestre</b><small>Área reservada à organização da campanha.</small></button>
+      </div>
+      <div class="notice">Este é o primeiro protótipo do SHR. Os personagens ficam salvos somente neste navegador/dispositivo. Ainda não há contas, login ou sincronização online.</div>
+    </section>
+    <section class="page" id="page-personagens">
+      <div class="welcome"><div><div class="eyebrow">Arquivo de heróis</div><h1>Personagens</h1><p class="sub">Crie, consulte e organize seus personagens.</p></div><button class="primary" id="newHeroPage">＋ Novo personagem</button></div>
+      <div class="characters" id="allHeroes"><div class="empty">Nenhum personagem cadastrado ainda.</div></div>
+    </section>
+    <section class="page" id="page-regras">
+      <div class="eyebrow">Documentação</div><h1>Regras do sistema</h1><p class="sub" style="margin-bottom:22px">O espaço para consultar as regras oficiais do seu RPG.</p>
+      <div class="rule-list">
+        <div class="rule"><b>Atributos</b><p>Os atributos representam as capacidades gerais dos personagens. As regras e os valores serão adicionados conforme definirmos o sistema.</p></div>
+        <div class="rule"><b>Perícias</b><p>As perícias representam treinamento e conhecimento em áreas específicas.</p></div>
+        <div class="rule"><b>Poderes</b><p>O catálogo de poderes reunirá habilidades, efeitos, limitações e condições de uso.</p></div>
+        <div class="rule"><b>Testes e combate</b><p>Espaço reservado para dificuldade, rolagens, ações, defesa e resolução de conflitos.</p></div>
+      </div>
+    </section>
+    <section class="page" id="page-mestre">
+      <div class="eyebrow">Controle da campanha</div><h1>Área do mestre</h1><p class="sub" style="margin-bottom:22px">Ferramentas para preparar e acompanhar suas sessões.</p>
+      <div class="quick-grid">
+        <div class="quick"><span class="stat-icon">♧</span><b>Campanhas</b><small>Organização de aventuras e sessões — em desenvolvimento.</small></div>
+        <div class="quick"><span class="stat-icon">♜</span><b>NPCs e ameaças</b><small>Registro de aliados, rivais e antagonistas — em desenvolvimento.</small></div>
+        <div class="quick"><span class="stat-icon">⚑</span><b>Controle de jogadores</b><small>Visão geral dos personagens — em desenvolvimento.</small></div>
+      </div>
+      <div class="notice">O painel do mestre será conectado às campanhas quando implementarmos contas e banco de dados.</div>
+    </section>
+  </div>
+</main>
+</div>
+<div class="modal-backdrop" id="modal">
+  <form class="modal" id="heroForm">
+    <h2>Novo personagem</h2><p>Cadastre a identidade inicial do seu herói.</p>
+    <div class="field"><label for="heroName">Nome do personagem *</label><input id="heroName" maxlength="40" required placeholder="Ex.: Sentinela"></div>
+    <div class="field"><label for="heroPlayer">Jogador</label><input id="heroPlayer" maxlength="40" placeholder="Nome do jogador"></div>
+    <div class="field"><label for="heroOrigin">Origem ou conceito</label><input id="heroOrigin" maxlength="60" placeholder="Ex.: Herói tecnológico"></div>
+    <div class="field"><label for="heroPower">Poder principal</label><input id="heroPower" maxlength="60" placeholder="Ex.: Manipulação de energia"></div>
+    <div class="modal-actions"><button type="button" class="secondary" id="cancelModal">Cancelar</button><button class="primary" type="submit">Salvar personagem</button></div>
+  </form>
+</div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+let heroes=JSON.parse(localStorage.getItem('shrHeroes')||'[]');
+function save(){localStorage.setItem('shrHeroes',JSON.stringify(heroes));renderHeroes()}
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function card(h){return `<article class="hero-card"><div class="hero-emblem">✦</div><div class="hero-info"><h3>${escapeHTML(h.name)}</h3><div class="hero-meta">${escapeHTML(h.player||'Jogador não informado')} · ${escapeHTML(h.origin||'Origem não definida')}</div><div class="hero-tags">${h.power?`<span class="tag">${escapeHTML(h.power)}</span>`:''}<span class="tag">Ficha inicial</span></div></div></article>`}
+function renderHeroes(){
+ $('#statHeroes').textContent=heroes.length;$('#heroCount').textContent=heroes.length+' registro(s)';
+ $('#recentHeroes').innerHTML=heroes.length?heroes.slice(-4).reverse().map(card).join(''):'<div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div>';
+ $('#allHeroes').innerHTML=heroes.length?heroes.slice().reverse().map(card).join(''):'<div class="empty">Nenhum personagem cadastrado ainda.</div>';
+}
+function openModal(){$('#modal').classList.add('open');$('#heroName').focus()}
+function closeModal(){$('#modal').classList.remove('open')}
+function navigate(page){$$('.page').forEach(p=>p.classList.remove('active'));$('#page-'+page).classList.add('active');$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('#crumb').textContent=({inicio:'Visão geral',personagens:'Personagens',regras:'Regras do sistema',mestre:'Área do mestre'})[page];$('#sidebar').classList.remove('open')}
+$$('.nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.goto)));
+$('#newHeroTop').onclick=openModal;$('#newHeroPage').onclick=openModal;$('#cancelModal').onclick=closeModal;
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+$('#heroForm').addEventListener('submit',e=>{e.preventDefault();heroes.push({name:$('#heroName').value.trim(),player:$('#heroPlayer').value.trim(),origin:$('#heroOrigin').value.trim(),power:$('#heroPower').value.trim()});save();e.target.reset();closeModal();navigate('personagens')});
+$('#themeBtn').onclick=()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';localStorage.setItem('shrTheme',dark?'dark':'light')};
+if(localStorage.getItem('shrTheme')==='dark')document.documentElement.dataset.theme='dark';
+$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open');
+renderHeroes();
+</script>
+</body>
+</html>
