@@ -1,511 +1,659 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHR — Super Hero RPG (Sistema Completo V2)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-main: #060a08;
-            --bg-card: #0d1612;
-            --bg-input: #13221b;
-            --primary: #00ff88;
-            --primary-hover: #00cc6d;
-            --accent: #00e5ff;
-            --text-main: #e2e8f0;
-            --text-muted: #829e90;
-            --danger: #ff3366;
-            --border: #1e382b;
-            --glow: rgba(0, 255, 136, 0.2);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101713">
+<title>SHR — Central de Heróis & RPG</title>
+<style>
+:root{--green:#48d597;--green2:#1e9e70;--bg:#f2f5f3;--panel:#fff;--text:#17221c;--muted:#718078;--line:#e2e9e4;--soft:#e8f8f0;--shadow:0 12px 35px #14251b0c;--accent:#00e5ff;--danger:#ff3366}
+[data-theme="dark"]{--bg:#101713;--panel:#18221c;--text:#edf5ef;--muted:#9aa99f;--line:#2b3a30;--soft:#20382c;--shadow:0 12px 35px #0003}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;transition:.2s}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{background:#111a15;color:#eaf4ed;padding:26px 18px;display:flex;flex-direction:column;gap:28px}
+.brand{padding:4px 10px}.brand-mark{font-size:29px;font-weight:900;letter-spacing:.18em;color:#f5fff8}.brand-sub{font-size:10px;letter-spacing:.22em;color:#8ba397;margin-top:1px}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:#789084;padding:0 12px;margin-bottom:8px}
+.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#b8c8be;text-align:left;padding:11px 12px;border-radius:10px;display:flex;gap:12px;align-items:center}.nav button:hover,.nav button.active{background:#20382c;color:#fff}.nav button.active .ico{color:var(--green)}
+.ico{width:20px;text-align:center;font-size:17px}.side-bottom{margin-top:auto;border-top:1px solid #2a392f;padding:17px 10px;color:#82958a;font-size:12px}
+main{min-width:0}.topbar{height:76px;padding:0 34px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--panel)}
+.crumb{font-size:13px;color:var(--muted)}.top-actions{display:flex;gap:10px;align-items:center}
+.icon-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);width:39px;height:39px;border-radius:11px;display:grid;place-items:center}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--soft);color:var(--green2);display:grid;place-items:center;font-weight:800}
+.content{max-width:1180px;margin:auto;padding:34px}
+.welcome{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:27px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.17em;color:var(--green2);font-weight:800}
+h1{font-size:clamp(26px,4vw,35px);line-height:1.15;margin:7px 0 8px;letter-spacing:-.04em}
+.sub{color:var(--muted);margin:0}
+.primary{background:var(--green);color:#102017;border:0;border-radius:10px;padding:11px 16px;font-weight:800;box-shadow:0 5px 15px #48d59725}
+.primary:hover{background:#62e4aa}.secondary{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-weight:650}
+.danger-btn{background:rgba(255,51,102,0.15);color:var(--danger);border:1px solid var(--danger);border-radius:10px;padding:10px 14px;font-weight:650}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:23px}
+.stat,.panel,.hero-card{background:var(--panel);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
+.stat{padding:18px 20px}.stat-top{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.stat-num{font-size:28px;font-weight:850;letter-spacing:-.04em;margin-top:6px}.stat-icon{color:var(--green2);font-size:18px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:27px 0 13px}.section-head h2{font-size:17px;margin:0;letter-spacing:-.02em}.section-head span{font-size:12px;color:var(--muted)}
+.characters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.hero-card{padding:18px;display:flex;gap:15px;align-items:flex-start;cursor:pointer;transition:transform .2s}
+.hero-card:hover{transform:translateY(-2px);border-color:var(--green)}
+.hero-emblem{width:52px;height:52px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:23px;flex:none;color:var(--green2)}
+.hero-info{min-width:0;flex:1}.hero-info h3{margin:1px 0 3px;font-size:16px}.hero-meta{font-size:12px;color:var(--muted)}.hero-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+.tag{font-size:10px;font-weight:750;color:var(--green2);background:var(--soft);padding:4px 8px;border-radius:20px}
+.empty{padding:32px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;grid-column:1/-1}
+.panel{padding:20px}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.quick{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel);text-align:left;color:var(--text);cursor:pointer}.quick b{display:block;margin:6px 0 2px}.quick small{color:var(--muted)}
+.page{display:none}.page.active{display:block}
+.rule-list{display:grid;gap:10px}.rule{padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.rule b{display:block;margin-bottom:3px}.rule p{margin:0;color:var(--muted);font-size:13px}
+.notice{margin-top:22px;padding:14px 16px;border-radius:12px;background:var(--soft);color:var(--text);font-size:12px}
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+/* Estilos da Ficha Detalhada (6 Abas) */
+.sheet-tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+.sheet-tab{background:var(--panel);color:var(--muted);border:1px solid var(--line);padding:8px 16px;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;white-space:nowrap}
+.sheet-tab.active{background:var(--green);color:#102017;border-color:var(--green)}
+.sheet-content{display:none}.sheet-content.active{display:block}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-bottom:15px}
+.field{display:grid;gap:6px;margin:10px 0}.field label{font-size:12px;font-weight:750;color:var(--muted)}.field input,.field select,.field textarea{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:9px;padding:10px;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green2)}
+.field textarea{min-height:90px;resize:vertical}
+.attr-box{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:15px;display:flex;flex-direction:column;gap:8px}
+.bars-container{display:grid;grid-template-columns:1fr 1fr;gap:15px;background:var(--bg);padding:15px;border-radius:10px;border:1px solid var(--line);margin-bottom:15px}
+.meter-bg{background:var(--panel);height:10px;border-radius:5px;overflow:hidden;border:1px solid var(--line);margin-top:5px}
+.meter-fill{height:100%;transition:width 0.3s}.pv-fill{background:var(--danger)}.pe-fill{background:var(--accent)}
+.power-card{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:15px;margin-bottom:10px}
+.power-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.toggle-btn{padding:4px 10px;font-size:0.75rem;border-radius:4px;font-weight:bold;cursor:pointer;border:1px solid}
+.toggle-btn.off{background:transparent;color:var(--muted);border-color:var(--line)}
+.toggle-btn.on{background:var(--soft);color:var(--green2);border-color:var(--green)}
+table.skills-table{width:100%;border-collapse:collapse;margin-top:10px}
+table.skills-table th,table.skills-table td{padding:10px;text-align:left;border-bottom:1px solid var(--line);font-size:0.9rem}
+table.skills-table th{color:var(--muted)}
 
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+.modal-backdrop{position:fixed;inset:0;background:#07110bc9;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal-backdrop.open{display:flex}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:23px;width:min(100%,470px);box-shadow:0 25px 80px #0005}.modal h2{margin:0 0 5px}.modal p{margin:0 0 18px;color:var(--muted);font-size:13px}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+.mobile-menu{display:none}
 
-        header {
-            background: linear-gradient(180deg, #020504 0%, var(--bg-card) 100%);
-            border-bottom: 2px solid var(--primary);
-            padding: 1.5rem 1rem;
-            text-align: center;
-            box-shadow: 0 4px 25px var(--glow);
-        }
-
-        header h1 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 3rem;
-            color: var(--primary);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-top: 0.3rem;
-        }
-
-        /* Seletor de Modo (Global) */
-        .global-mode-bar {
-            max-width: 1000px;
-            margin: 1.2rem auto 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .mode-toggles {
-            display: flex;
-            gap: 10px;
-        }
-
-        .mode-btn {
-            background: var(--bg-input);
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-            padding: 10px 22px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .mode-btn.active {
-            background: var(--primary);
-            color: #000;
-            border-color: var(--primary);
-            box-shadow: 0 0 15px var(--glow);
-        }
-
-        /* Container Principal */
-        .container {
-            max-width: 1000px;
-            margin: 1.5rem auto 3rem auto;
-            padding: 0 1rem;
-            width: 100%;
-            flex: 1;
-        }
-
-        .app-view { display: none; }
-        .app-view.active { display: block; animation: fadeIn 0.3s ease; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Abas do Jogador */
-        .tabs-container {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            margin-bottom: 1.5rem;
-            padding-bottom: 4px;
-        }
-
-        .tab-btn {
-            background: var(--bg-card);
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: 0.2s;
-        }
-
-        .tab-btn.active {
-            background: var(--accent);
-            color: #000;
-            border-color: var(--accent);
-            font-weight: 700;
-        }
-
-        /* Cartões de Conteúdo */
-        .panel-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        h2.section-title {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input, select, textarea {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 11px 14px;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        /* Botões */
-        .btn {
-            background: var(--primary);
-            color: #000;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            background: var(--primary-hover);
-            box-shadow: 0 0 12px var(--glow);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-main);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-input);
-            border-color: var(--text-muted);
-            box-shadow: none;
-        }
-
-        .btn-danger {
-            background: rgba(255, 51, 102, 0.15);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-
-        .btn-danger:hover {
-            background: var(--danger);
-            color: #fff;
-        }
-
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
-        }
-
-        /* Atributos & Barras */
-        .attr-card {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .meters-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            background: var(--bg-input);
-            padding: 1.2rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .meter-bar-bg {
-            background: #040806;
-            height: 14px;
-            border-radius: 7px;
-            overflow: hidden;
-            margin-top: 6px;
-            border: 1px solid var(--border);
-        }
-
-        .meter-bar-fill {
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-
-        .pv-fill { background: var(--danger); }
-        .pe-fill { background: var(--accent); }
-
-        /* Tabelas */
-        .custom-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .custom-table th, .custom-table td {
-            padding: 12px 10px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
-        }
-
-        .custom-table th {
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        /* Cartões de Poderes */
-        .power-card {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.2rem;
-            margin-bottom: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .power-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .power-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--accent);
-        }
-
-        .toggle-btn {
-            padding: 5px 12px;
-            font-size: 0.75rem;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            border: 1px solid;
-            transition: 0.2s;
-        }
-
-        .toggle-btn.off {
-            background: transparent;
-            color: var(--text-muted);
-            border-color: var(--border);
-        }
-
-        .toggle-btn.on {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        /* Resumo & Campanhas */
-        .summary-section {
-            margin-bottom: 1.8rem;
-        }
-
-        .summary-section h3 {
-            font-family: 'Rajdhani', sans-serif;
-            color: var(--accent);
-            font-size: 1.4rem;
-            margin-bottom: 0.8rem;
-            border-bottom: 1px dashed var(--border);
-            padding-bottom: 4px;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 12px;
-            background: var(--bg-input);
-            padding: 1.2rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        /* Tracker de Combate Mestre */
-        .combat-item {
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            padding: 1rem 1.2rem;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.8rem;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border);
-            background: var(--bg-card);
-        }
-    </style>
+@media(max-width:800px){.app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:4;left:-260px;top:0;bottom:0;width:250px;transition:.2s}.sidebar.open{left:0}.mobile-menu{display:inline-block}.topbar{padding:0 17px}.content{padding:24px 17px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.characters{grid-template-columns:1fr}.quick-grid{grid-template-columns:1fr}.welcome{align-items:flex-start;flex-direction:column}.welcome .primary{width:100%}}
+</style>
 </head>
 <body>
-
-    <header>
-        <h1>S.H.R.</h1>
-        <p>Super Hero RPG — Central de Campanhas & Fichas</p>
-    </header>
-
-    <!-- Barra Superior Global -->
-    <div class="global-mode-bar">
-        <div class="mode-toggles">
-            <button class="mode-btn active" onclick="mudarModoPrincipal('jogador')">🎮 Modo Jogador</button>
-            <button class="mode-btn" onclick="mudarModoPrincipal('mestre')">🎲 Modo Mestre</button>
-        </div>
-        <div id="acoesJogadorGlobal" style="display: flex; gap: 8px;">
-            <button class="btn btn-secondary" style="padding: 6px 12px; font-size:0.8rem;" onclick="exportarFichaJSON()">Exportar JSON</button>
-            <button class="btn btn-secondary" style="padding: 6px 12px; font-size:0.8rem;" onclick="document.getElementById('importFile').click()">Importar JSON</button>
-            <input type="file" id="importFile" style="display:none" onchange="importarFichaJSON(event)">
-        </div>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="brand-mark">SHR</div><div class="brand-sub">SUPER HERO RPG</div></div>
+  <div><div class="nav-label">Plataforma</div><nav class="nav">
+    <button class="active" data-page="inicio"><span class="ico">⌂</span> Visão geral</button>
+    <button data-page="personagens"><span class="ico">♙</span> Personagens</button>
+    <button data-page="regras"><span class="ico">▤</span> Regras do sistema</button>
+    <button data-page="mestre"><span class="ico">♜</span> Área do mestre</button>
+  </nav></div>
+  <div class="side-bottom">SHR · Central Oficial<br>Gerenciador de Campanhas.</div>
+</aside>
+<main>
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px"><button class="icon-btn mobile-menu" id="menuBtn" aria-label="Abrir menu">☰</button><div class="crumb">SHR <span style="color:var(--green2)">/</span> <span id="crumb">Visão geral</span></div></div>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeBtn" title="Alternar tema">◐</button>
+      <div class="avatar" id="userAvatar">H</div>
     </div>
+  </header>
+  <div class="content">
+    
+    <!-- 1. PÁGINA: INÍCIO / VISÃO GERAL -->
+    <section class="page active" id="page-inicio">
+      <div class="welcome">
+        <div><div class="eyebrow">Central de comando</div><h1>Bem-vindo ao SHR.</h1><p class="sub">Tudo pronto para acompanhar a próxima geração de heróis?</p></div>
+        <button class="primary" id="newHeroTop">＋ Criar personagem</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-top"><span>Personagens criados</span><span class="stat-icon">♙</span></div><div class="stat-num" id="statHeroes">0</div></div>
+        <div class="stat"><div class="stat-top"><span>Campanhas ativas</span><span class="stat-icon">◇</span></div><div class="stat-num">1</div></div>
+        <div class="stat"><div class="stat-top"><span>Versão da plataforma</span><span class="stat-icon">⌘</span></div><div class="stat-num">1.0</div></div>
+      </div>
+      <div class="section-head"><h2>Seus personagens</h2><span id="heroCount">0 registros</span></div>
+      <div class="characters" id="recentHeroes"><div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div></div>
+      <div class="section-head"><h2>Acesso rápido</h2><span>Ferramentas da plataforma</span></div>
+      <div class="quick-grid">
+        <button class="quick" data-goto="personagens"><span class="stat-icon">♙</span><b>Personagens</b><small>Crie e organize suas fichas detalhadas.</small></button>
+        <button class="quick" data-goto="regras"><span class="stat-icon">▤</span><b>Livro de regras</b><small>Consulte o sistema de atributos e perícias.</small></button>
+        <button class="quick" data-goto="mestre"><span class="stat-icon">♜</span><b>Ferramentas do mestre</b><small>Tracker de iniciativa e notas de campanha.</small></button>
+      </div>
+    </section>
 
-    <div class="container">
+    <!-- 2. PÁGINA: PERSONAGENS (LISTA) -->
+    <section class="page" id="page-personagens">
+      <div class="welcome">
+        <div><div class="eyebrow">Arquivo de heróis</div><h1>Personagens</h1><p class="sub">Selecione um herói para abrir a ficha completa ou crie um novo.</p></div>
+        <button class="primary" id="newHeroPage">＋ Novo personagem</button>
+      </div>
+      <div class="characters" id="allHeroes"><div class="empty">Nenhum personagem cadastrado ainda.</div></div>
+    </section>
 
-        <!-- ======================= MODO JOGADOR ======================= -->
-        <div class="app-view active" id="view-jogador">
-            
-            <div class="tabs-container">
-                <button class="tab-item tab-btn active" onclick="mudarAbaJogador(0)">1. Identidade</button>
-                <button class="tab-item tab-btn" onclick="mudarAbaJogador(1)">2. Atributos</button>
-                <button class="tab-item tab-btn" onclick="mudarAbaJogador(2)">3. Perícias</button>
-                <button class="tab-item tab-btn" onclick="mudarAbaJogador(3)">4. Poderes</button>
-                <button class="tab-item tab-btn" onclick="mudarAbaJogador(4)">5. Características</button>
-                <button class="tab-item tab-btn" onclick="mudarAbaJogador(5)">6. Resumo</button>
+    <!-- 2.1 PÁGINA: FICHA DETALHADA DO PERSONAGEM (6 ABAS) -->
+    <section class="page" id="page-ficha-detalhe">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <button class="secondary" id="backToHeroes">&larr; Voltar para lista</button>
+        <div style="display:flex; gap:8px;">
+          <button class="secondary" id="exportJsonBtn">Exportar JSON</button>
+          <button class="danger-btn" id="deleteHeroBtn">Excluir herói</button>
+        </div>
+      </div>
+
+      <div class="sheet-tabs">
+        <button class="sheet-tab active" onclick="switchSheetTab(0)">1. Identidade</button>
+        <button class="sheet-tab" onclick="switchSheetTab(1)">2. Atributos</button>
+        <button class="sheet-tab" onclick="switchSheetTab(2)">3. Perícias</button>
+        <button class="sheet-tab" onclick="switchSheetTab(3)">4. Poderes</button>
+        <button class="sheet-tab" onclick="switchSheetTab(4)">5. Características</button>
+        <button class="sheet-tab" onclick="switchSheetTab(5)">6. Resumo</button>
+      </div>
+
+      <!-- Aba 1: Identidade -->
+      <div class="panel sheet-content active" id="sheet-tab-0">
+        <h2>Identidade do Herói</h2>
+        <div class="form-grid">
+          <div class="field"><label>Nome do Personagem</label><input type="text" id="fNome" oninput="updateSheetField('name', this.value)"></div>
+          <div class="field"><label>Nome do Jogador</label><input type="text" id="fPlayer" oninput="updateSheetField('player', this.value)"></div>
+          <div class="field"><label>Idade</label><input type="number" id="fAge" oninput="updateSheetField('age', this.value)"></div>
+          <div class="field"><label>Origem</label><input type="text" id="fOrigin" oninput="updateSheetField('origin', this.value)"></div>
+          <div class="field full"><label>Conceito</label><input type="text" id="fConcept" oninput="updateSheetField('concept', this.value)"></div>
+          <div class="field full"><label>História</label><textarea id="fHistory" oninput="updateSheetField('history', this.value)"></textarea></div>
+        </div>
+      </div>
+
+      <!-- Aba 2: Atributos -->
+      <div class="panel sheet-content" id="sheet-tab-1">
+        <h2>Atributos Principais</h2>
+        <p style="color:var(--muted); font-size:13px; margin-bottom:15px;">Corpo, Mente e Percepção. Modificadores de poderes ativos somam-se automaticamente.</p>
+        <div class="form-grid">
+          <div class="attr-box">
+            <label>Corpo (Base)</label>
+            <input type="number" id="fCorpo" value="2" min="1" max="10" oninput="updateAttrBase('corpo', this.value)">
+            <span style="font-size:12px; color:var(--green2); font-weight:bold;">Modificador: <span id="modCorpo">0</span></span>
+            <span style="font-size:13px; font-weight:bold;">Final: <span id="finalCorpo" style="color:var(--accent);">2</span></span>
+          </div>
+          <div class="attr-box">
+            <label>Mente (Base)</label>
+            <input type="number" id="fMente" value="2" min="1" max="10" oninput="updateAttrBase('mente', this.value)">
+            <span style="font-size:12px; color:var(--green2); font-weight:bold;">Modificador: <span id="modMente">0</span></span>
+            <span style="font-size:13px; font-weight:bold;">Final: <span id="finalMente" style="color:var(--accent);">2</span></span>
+          </div>
+          <div class="attr-box">
+            <label>Percepção (Base)</label>
+            <input type="number" id="fPercepcao" value="2" min="1" max="10" oninput="updateAttrBase('percepcao', this.value)">
+            <span style="font-size:12px; color:var(--green2); font-weight:bold;">Modificador: <span id="modPercepcao">0</span></span>
+            <span style="font-size:13px; font-weight:bold;">Final: <span id="finalPercepcao" style="color:var(--accent);">2</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 3: Perícias -->
+      <div class="panel sheet-content" id="sheet-tab-2">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h2 style="margin:0;">Perícias</h2>
+          <button class="primary" style="padding:6px 12px; font-size:12px;" onclick="addSkillModal()">+ Perícia</button>
+        </div>
+        <table class="skills-table">
+          <thead><tr><th>Perícia</th><th>Atributo</th><th>Treinamento</th><th>Bônus Item</th><th>Total</th></tr></thead>
+          <tbody id="skillsTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Aba 4: Poderes -->
+      <div class="panel sheet-content" id="sheet-tab-3">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h2 style="margin:0;">Poderes & Habilidades</h2>
+          <button class="primary" style="padding:6px 12px; font-size:12px;" onclick="addPowerModal()">+ Novo Poder</button>
+        </div>
+        <div id="powersContainer"></div>
+      </div>
+
+      <!-- Aba 5: Características -->
+      <div class="panel sheet-content" id="sheet-tab-4">
+        <h2>Características & Recursos</h2>
+        <div class="bars-container">
+          <div class="field">
+            <label>Vitalidade (PV Atual / Máx)</label>
+            <div style="display:flex; gap:6px;">
+              <input type="number" id="fPvAtual" value="20" oninput="updateResource('pvAtual', this.value)">
+              <input type="number" id="fPvMax" value="20" oninput="updateResource('pvMax', this.value)">
             </div>
-
-            <!-- Aba 1: Identidade -->
-            <div class="panel-card aba-conteudo" id="aba-j-0">
-                <h2 class="section-title">Identidade do Personagem</h2>
-                <div class="form-grid">
-                    <div class="form-group"><label>Nome do Personagem</label><input type="text" id="nome" placeholder="Ex: Capitão Vórtex" oninput="salvarDadosJogador()"></div>
-                    <div class="form-group"><label>Nome do Jogador</label><input type="text" id="jogador" placeholder="Seu nome" oninput="salvarDadosJogador()"></div>
-                    <div class="form-group"><label>Idade</label><input type="number" id="idade" placeholder="Ex: 25" oninput="salvarDadosJogador()"></div>
-                    <div class="form-group"><label>Origem</label><input type="text" id="origem" placeholder="Ex: Mutante, Cientista..." oninput="salvarDadosJogador()"></div>
-                    <div class="form-group full-width"><label>Conceito do Personagem</label><input type="text" id="conceito" placeholder="Ex: Protetor urbano com poderes cinéticos" oninput="salvarDadosJogador()"></div>
-                    <div class="form-group full-width"><label>História e Origem</label><textarea id="historia" placeholder="Descreva a história e passado do herói..." oninput="salvarDadosJogador()"></textarea></div>
-                </div>
-                <div class="nav-buttons">
-                    <div></div>
-                    <button class="btn" onclick="mudarAbaJogador(1)">Avançar &rarr;</button>
-                </div>
+            <div class="meter-bg"><div class="meter-fill pv-fill" id="pvBar" style="width:100%"></div></div>
+          </div>
+          <div class="field">
+            <label>Energia (PE Atual / Máx)</label>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <input type="number" id="fPeAtual" value="10" oninput="updateResource('peAtual', this.value)">
+              <input type="number" id="fPeMax" value="10" oninput="updateResource('peMax', this.value)">
+              <button class="secondary" style="padding:8px 10px; font-size:11px;" onclick="restorePe()">Restaurar</button>
             </div>
+            <div class="meter-bg"><div class="meter-fill pe-fill" id="peBar" style="width:100%"></div></div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label>Equipamentos</label><textarea id="fEquip" oninput="updateSheetField('equip', this.value)"></textarea></div>
+          <div class="field"><label>Inventário</label><textarea id="fInv" oninput="updateSheetField('inv', this.value)"></textarea></div>
+          <div class="field full"><label>Anotações</label><textarea id="fNotes" oninput="updateSheetField('notes', this.value)"></textarea></div>
+        </div>
+      </div>
 
-            <!-- Aba 2: Atributos -->
-            <div class="panel-card aba-conteudo" id="aba-j-1" style="display:none;">
-                <h2 class="section-title">Atributos Principais</h2>
-                <p style="color:var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Separação entre valores-base e modificadores ativos de poderes.</p>
-                <div class="form-grid">
-                    <div class="attr-card">
-                        <label>Corpo (Base)</label>
-                        <input type="number" id="corpoBase" value="2" min="1" max="10" oninput="salvarDadosJogador(); calcularTudo();">
-                        <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modCorpo">0</span></span>
-                        <span style="font-size: 0.95rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalCorpo" style="color: var(--accent);">2</span></span>
-                    </div>
-                    <div class="attr-card">
-                        <label>Mente (Base)</label>
-                        <input type="number" id="menteBase" value="2" min="1" max="10" oninput="salvarDadosJogador(); calcularTudo();">
-                        <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modMente">0</span></span>
-                        <span style="font-size: 0.95rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalMente" style="color: var(--accent);">2</span></span>
-                    </div>
-                    <div class="attr-card">
-                        <label>Percepção (Base)</label>
-                        <input type="number" id="percepcaoBase" value="2" min="1" max="10" oninput="salvarDadosJogador(); calcularTudo();">
-                        <span style="font-size: 0.85rem; color: var(--primary); font-weight: bold;">Modificador: <span id="modPercepcao">0</span></span>
-                        <span style="font-size: 0.95rem; font-weight: bold; margin-top: 4px;">Valor Final: <span id="finalPercepcao" style="color: var(--accent);">2</span></span>
-                    </div>
-                </div>
-                <div class="nav-buttons">
-                    <button class="btn btn-secondary" onclick="mudarAbaJogador(0)">&larr; Voltar</button>
-                    <button class="btn" onclick="mudarAbaJogador(2)">Avançar &rarr;</button>
-                </div>
-            </div>
+      <!-- Aba 6: Resumo -->
+      <div class="panel sheet-content" id="sheet-tab-5">
+        <h2>Resumo da Ficha</h2>
+        <div id="sheetSummary" style="display:grid; gap:12px;"></div>
+      </div>
+    </section>
 
-            <!-- Aba 3: Perícias -->
-            <div class="panel-card aba-conteudo" id="aba-j-2" style="display:none;">
-                <h2 class="section-title">
-                    Perícias
-                    <button class="btn" style="font-size: 0.8rem; padding: 6px 14px;" onclick="adicionarNovaPericia()">+ Adicionar Perícia</button>
-                </h2>
-                <div style="overflow-x: auto;">
-                    <table class="custom-table">
-                        <thead>
-                            <tr>
-                                <th>Perícia</th>
-                                <th>Atributo</th>
-                                <th>Treinamento</th>
-                                <th>Bônus Itens</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaPericiasCorpo"></tbody>
-                    </table>
-                </div>
-                <div class="nav-buttons">
-                    <button class="btn btn-secondary" onclick="mudarAbaJogador(1)">&larr; Voltar</button>
-                    <button class="btn" onclick="mudarAbaJogador(3)">Avançar &rarr;</button>
-                </div>
+    <!-- 3. PÁGINA: REGRAS DO SISTEMA -->
+    <section class="page" id="page-regras">
+      <div class="eyebrow">Documentação</div><h1>Regras do sistema</h1><p class="sub" style="margin-bottom:22px">O espaço para consultar as regras oficiais do seu RPG.</p>
+      <div class="rule-list">
+        <div class="rule"><b>Atributos</b><p>Divididos em Corpo, Mente e Percepção. Cada um reflete a capacidade física, intelectual e sensorial do herói.</p></div>
+        <div class="rule"><b>Perícias & Modificadores</b><p>Calculadas somando o valor base do atributo, bônus de treinamento (Leigo +0, Treinado +2, Veterano +4, Expert +6) e bônus de itens.</p></div>
+        <div class="rule"><b>Poderes Ativos e Passivos</b><p>Habilidades criadas livremente. Poderes passivos ou ativos podem conceder bônus temporários ao serem ativados na aba de poderes.</p></div>
+        <div class="rule"><b>Pontos de Energia (PE)</b><p>Utilizados para custear poderes ativos durante o combate ou exploração.</p></div>
+      </div>
+    </section>
+
+    <!-- 4. PÁGINA: ÁREA DO MESTRE -->
+    <section class="page" id="page-mestre">
+      <div class="eyebrow">Controle da campanha</div><h1>Área do mestre</h1><p class="sub" style="margin-bottom:22px">Ferramentas para preparar e acompanhar suas sessões.</p>
+      <div class="panel" style="margin-bottom:20px;">
+        <h2 style="margin-top:0; font-size:18px;">Tracker de Iniciativa & Combate</h2>
+        <div class="field"><label>Adicionar Combatente (Herói ou Vilão)</label>
+          <div style="display:flex; gap:10px;"><input id="mName" placeholder="Nome"><input id="mInit" type="number" placeholder="Iniciativa" style="width:110px;"><button class="primary" onclick="addCombatant()">Adicionar</button></div>
+        </div>
+        <div id="combatList" style="margin-top:15px; display:grid; gap:8px;"></div>
+      </div>
+    </section>
+  </div>
+</main>
+</div>
+
+<!-- MODAL CRIAR PERSONAGEM -->
+<div class="modal-backdrop" id="modal">
+  <form class="modal" id="heroForm">
+    <h2>Novo personagem</h2><p>Cadastre a identidade inicial do seu herói.</p>
+    <div class="field"><label for="heroName">Nome do personagem *</label><input id="heroName" maxlength="40" required placeholder="Ex.: Sentinela"></div>
+    <div class="field"><label for="heroPlayer">Jogador</label><input id="heroPlayer" maxlength="40" placeholder="Nome do jogador"></div>
+    <div class="field"><label for="heroOrigin">Origem ou conceito</label><input id="heroOrigin" maxlength="60" placeholder="Ex.: Herói tecnológico"></div>
+    <div class="field"><label for="heroPower">Poder principal</label><input id="heroPower" maxlength="60" placeholder="Ex.: Manipulação de energia"></div>
+    <div class="modal-actions"><button type="button" class="secondary" id="cancelModal">Cancelar</button><button class="primary" type="submit">Salvar personagem</button></div>
+  </form>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+let heroes=JSON.parse(localStorage.getItem('shrHeroes')||'[]');
+let currentHeroId=null;
+let mestreCombat=JSON.parse(localStorage.getItem('shrCombat')||'[]');
+
+function saveHeroes(){
+  localStorage.setItem('shrHeroes',JSON.stringify(heroes));
+  renderHeroes();
+}
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function renderHeroes(){
+  $('#statHeroes').textContent=heroes.length;
+  $('#heroCount').textContent=heroes.length+' registro(s)';
+  
+  const cardHTML=(h)=>`
+    <article class="hero-card" onclick="openHeroSheet('${h.id}')">
+      <div class="hero-emblem">✦</div>
+      <div class="hero-info">
+        <h3>${escapeHTML(h.name)}</h3>
+        <div class="hero-meta">${escapeHTML(h.player||'Jogador não informado')} · ${escapeHTML(h.origin||'Origem não definida')}</div>
+        <div class="hero-tags"><span class="tag">PV: ${h.pvAtual}/${h.pvMax}</span><span class="tag">PE: ${h.peAtual}/${h.peMax}</span></div>
+      </div>
+    </article>
+  `;
+
+  $('#recentHeroes').innerHTML=heroes.length?heroes.slice(-4).reverse().map(cardHTML).join(''):'<div class="empty">Você ainda não criou nenhum personagem.<br>Use <b>Criar personagem</b> para começar.</div>';
+  $('#allHeroes').innerHTML=heroes.length?heroes.slice().reverse().map(cardHTML).join(''):'<div class="empty">Nenhum personagem cadastrado ainda.</div>';
+}
+
+function navigate(page){
+  $$('.page').forEach(p=>p.classList.remove('active'));
+  $('#page-'+page).classList.add('active');
+  $$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  $('#crumb').textContent=({inicio:'Visão geral',personagens:'Personagens','ficha-detalhe':'Ficha do Herói',regras:'Regras do sistema',mestre:'Área do mestre'})[page]||page;
+  $('#sidebar').classList.remove('open');
+}
+
+$$('.nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.goto)));
+
+function openModal(){$('#modal').classList.add('open');$('#heroName').focus()}
+function closeModal(){$('#modal').classList.remove('open')}
+$('#newHeroTop').onclick=openModal;$('#newHeroPage').onclick=openModal;$('#cancelModal').onclick=closeModal;
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+
+$('#heroForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const newH={
+    id:'h_'+Date.now(),
+    name:$('#heroName').value.trim(),
+    player:$('#heroPlayer').value.trim(),
+    origin:$('#heroOrigin').value.trim(),
+    concept:$('#heroPower').value.trim(),
+    history:'', age:'',
+    corpoBase:2, menteBase:2, percepcaoBase:2,
+    pvAtual:20, pvMax:20, peAtual:10, peMax:10,
+    equip:'', inv:'', notes:'',
+    pericias:[
+      {name:'Acrobacia',attr:'corpo',nivel:0,bonusItem:0},
+      {name:'Atletismo',attr:'corpo',nivel:0,bonusItem:0},
+      {name:'Investigação',attr:'mente',nivel:0,bonusItem:0},
+      {name:'Tecnologia',attr:'mente',nivel:0,bonusItem:0},
+      {name:'Vigilância',attr:'percepcao',nivel:0,bonusItem:0}
+    ],
+    poderes:[
+      {id:1,name:$('#heroPower').value.trim()||'Poder Principal',type:'ativo',desc:'Habilidade principal do herói',cost:2,attr:'corpo',mod:2,ativo:false}
+    ]
+  };
+  heroes.push(newH);
+  saveHeroes();
+  e.target.reset();
+  closeModal();
+  openHeroSheet(newH.id);
+});
+
+// Lógica da Ficha Detalhada
+function openHeroSheet(id){
+  currentHeroId=id;
+  const h=heroes.find(x=>x.id===id);
+  if(!h)return;
+  
+  $('#fNome').value=h.name||'';
+  $('#fPlayer').value=h.player||'';
+  $('#fAge').value=h.age||'';
+  $('#fOrigin').value=h.origin||'';
+  $('#fConcept').value=h.concept||'';
+  $('#fHistory').value=h.history||'';
+  
+  $('#fCorpo').value=h.corpoBase||2;
+  $('#fMente').value=h.menteBase||2;
+  $('#fPercepcao').value=h.percepcaoBase||2;
+  
+  $('#fPvAtual').value=h.pvAtual||20;
+  $('#fPvMax').value=h.pvMax||20;
+  $('#fPeAtual').value=h.peAtual||10;
+  $('#fPeMax').value=h.peMax||10;
+  
+  $('#fEquip').value=h.equip||'';
+  $('#fInv').value=h.inv||'';
+  $('#fNotes').value=h.notes||'';
+
+  switchSheetTab(0);
+  calcSheet();
+  navigate('ficha-detalhe');
+}
+
+function getActiveHero(){ return heroes.find(x=>x.id===currentHeroId); }
+
+function switchSheetTab(idx){
+  $$('.sheet-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  $$('.sheet-content').forEach((c,i)=>c.classList.toggle('active',i===idx));
+  if(idx===5) renderSummary();
+}
+
+function updateSheetField(field,val){
+  const h=getActiveHero();if(!h)return;
+  h[field]=val;
+  saveHeroes();
+}
+
+function updateAttrBase(attr,val){
+  const h=getActiveHero();if(!h)return;
+  h[attr+'Base']=parseInt(val)||1;
+  saveHeroes();
+  calcSheet();
+}
+
+function updateResource(res,val){
+  const h=getActiveHero();if(!h)return;
+  h[res]=parseInt(val)||0;
+  saveHeroes();
+  updateBars();
+}
+
+function restorePe(){
+  const h=getActiveHero();if(!h)return;
+  h.peAtual=h.peMax;
+  $('#fPeAtual').value=h.peAtual;
+  saveHeroes();
+  updateBars();
+  alert("Energia totalmente restaurada!");
+}
+
+function updateBars(){
+  const h=getActiveHero();if(!h)return;
+  let pvPct=Math.max(0,Math.min(100,(h.pvAtual/h.pvMax)*100));
+  let pePct=Math.max(0,Math.min(100,(h.peAtual/h.peMax)*100));
+  $('#pvBar').style.width=pvPct+'%';
+  $('#peBar').style.width=pePct+'%';
+}
+
+function calcSheet(){
+  const h=getActiveHero();if(!h)return;
+  let mods={corpo:0,mente:0,percepcao:0};
+  (h.poderes||[]).forEach(p=>{
+    if(p.ativo && p.attr && p.mod) mods[p.attr]=(mods[p.attr]||0)+parseInt(p.mod);
+  });
+
+  $('#modCorpo').textContent=(mods.corpo>=0?'+':'')+mods.corpo;
+  $('#modMente').textContent=(mods.mente>=0?'+':'')+mods.mente;
+  $('#modPercepcao').textContent=(mods.percepcao>=0?'+':'')+mods.percepcao;
+
+  let fC=(h.corpoBase||2)+mods.corpo;
+  let fM=(h.menteBase||2)+mods.mente;
+  let fP=(h.percepcaoBase||2)+mods.percepcao;
+
+  $('#finalCorpo').textContent=fC;
+  $('#finalMente').textContent=fM;
+  $('#finalPercepcao').textContent=fP;
+
+  renderSkills({corpo:fC,mente:fM,percepcao:fP});
+  renderPowers();
+  updateBars();
+}
+
+function renderSkills(totals){
+  const h=getActiveHero();if(!h)return;
+  const tbody=$('#skillsTableBody');tbody.innerHTML='';
+  (h.pericias||[]).forEach((s,i)=>{
+    let base=totals[s.attr]||2;
+    let total=base+(s.nivel*2)+(s.bonusItem||0);
+    tbody.innerHTML+=`
+      <tr>
+        <td><strong>${escapeHTML(s.name)}</strong></td>
+        <td style="text-transform:capitalize">${s.attr}</td>
+        <td>
+          <select onchange="updateSkillLevel(${i},this.value)">
+            <option value="0" ${s.nivel==0?'selected':''}>Leigo (+0)</option>
+            <option value="1" ${s.nivel==1?'selected':''}>Treinado (+2)</option>
+            <option value="2" ${s.nivel==2?'selected':''}>Veterano (+4)</option>
+            <option value="3" ${s.nivel==3?'selected':''}>Expert (+6)</option>
+          </select>
+        </td>
+        <td><input type="number" value="${s.bonusItem||0}" style="width:70px;" oninput="updateSkillItem(${i},this.value)"></td>
+        <td><strong style="color:var(--green2)">${total}</strong></td>
+      </tr>
+    `;
+  });
+}
+
+function updateSkillLevel(idx,val){
+  const h=getActiveHero();if(!h)return;
+  h.pericias[idx].nivel=parseInt(val);
+  saveHeroes();
+  calcSheet();
+}
+function updateSkillItem(idx,val){
+  const h=getActiveHero();if(!h)return;
+  h.pericias[idx].bonusItem=parseInt(val)||0;
+  saveHeroes();
+  calcSheet();
+}
+
+function addSkillModal(){
+  const h=getActiveHero();if(!h)return;
+  let name=prompt("Nome da nova perícia:");
+  if(!name)return;
+  let attr=prompt("Atributo base (corpo, mente, percepcao):","corpo").toLowerCase();
+  if(['corpo','mente','percepcao'].includes(attr)){
+    h.pericias.push({name,attr,nivel:0,bonusItem:0});
+    saveHeroes();
+    calcSheet();
+  }else{alert("Atributo inválido!");}
+}
+
+function renderPowers(){
+  const h=getActiveHero();if(!h)return;
+  const container=$('#powersContainer');container.innerHTML='';
+  if(!h.poderes || h.poderes.length===0){
+    container.innerHTML='<p style="color:var(--muted)">Nenhum poder cadastrado.</p>';
+    return;
+  }
+  h.poderes.forEach((p,i)=>{
+    container.innerHTML+=`
+      <div class="power-card">
+        <div class="power-head">
+          <strong>${escapeHTML(p.name)} (${(p.type||'ativo').toUpperCase()})</strong>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="toggle-btn ${p.ativo?'on':'off'}" onclick="togglePower(${i})">${p.ativo?'ATIVO (ON)':'OFF'}</button>
+            <button class="danger-btn" style="padding:2px 8px;font-size:11px;" onclick="removePower(${i})">X</button>
+          </div>
+        </div>
+        <p style="margin:4px 0; color:var(--muted); font-size:13px;">${escapeHTML(p.desc||'Sem descrição')}</p>
+        <div style="font-size:12px; display:flex; gap:15px; margin-top:6px;">
+          <span>Custo PE: <b>${p.cost||0}</b></span>
+          <span>Bônus: <b>+${p.mod||0} em ${p.attr||'nenhum'}</b></span>
+          ${p.type==='ativo'?`<button class="secondary" style="padding:2px 8px; font-size:11px;" onclick="usePower(${i})">Usar Habilidade</button>`:''}
+        </div>
+      </div>
+    `;
+  });
+}
+
+function togglePower(idx){
+  const h=getActiveHero();if(!h)return;
+  h.poderes[idx].ativo=!h.poderes[idx].ativo;
+  saveHeroes();
+  calcSheet();
+}
+
+function removePower(idx){
+  const h=getActiveHero();if(!h)return;
+  h.poderes.splice(idx,1);
+  saveHeroes();
+  calcSheet();
+}
+
+function addPowerModal(){
+  const h=getActiveHero();if(!h)return;
+  let name=prompt("Nome do Poder/Habilidade:");
+  if(!name)return;
+  let type=prompt("Tipo (ativo ou passivo):","ativo").toLowerCase();
+  let desc=prompt("Descrição:");
+  let cost=parseInt(prompt("Custo em PE:","0"))||0;
+  let attr=prompt("Modifica qual atributo? (corpo, mente, percepcao ou deixe vazio):","").toLowerCase();
+  let mod=parseInt(prompt("Valor do bônus:","0"))||0;
+
+  h.poderes.push({id:Date.now(),name,type,desc,cost,attr,mod,ativo:false});
+  saveHeroes();
+  calcSheet();
+}
+
+function usePower(idx){
+  const h=getActiveHero();if(!h)return;
+  let p=h.poderes[idx];
+  let cost=p.cost||0;
+  if(h.peAtual>=cost){
+    h.peAtual-=cost;
+    $('#fPeAtual').value=h.peAtual;
+    saveHeroes();
+    updateBars();
+    alert(`Poder [${p.name}] utilizado! -${cost} PE.`);
+  }else{
+    alert("Energia (PE) insuficiente!");
+  }
+}
+
+function renderSummary(){
+  const h=getActiveHero();if(!h)return;
+  $('#sheetSummary').innerHTML=`
+    <div style="background:var(--bg); padding:12px; border-radius:8px;">
+      <p><b>Nome:</b> ${escapeHTML(h.name)} | <b>Jogador:</b> ${escapeHTML(h.player||'N/D')}</p>
+      <p><b>Origem:</b> ${escapeHTML(h.origin||'N/D')} | <b>Conceito:</b> ${escapeHTML(h.concept||'N/D')}</p>
+    </div>
+    <div style="background:var(--bg); padding:12px; border-radius:8px;">
+      <p><b>Vitalidade:</b> ${h.pvAtual}/${h.pvMax} | <b>Energia:</b> ${h.peAtual}/${h.peMax}</p>
+      <p><b>Poderes registrados:</b> ${h.poderes?h.poderes.length:0}</p>
+    </div>
+  `;
+}
+
+$('#backToHeroes').onclick=()=>navigate('personagens');
+$('#deleteHeroBtn').onclick=()=>{
+  if(confirm("Deseja realmente excluir este herói?")){
+    heroes=heroes.filter(x=>x.id!==currentHeroId);
+    saveHeroes();
+    navigate('personagens');
+  }
+};
+
+$('#exportJsonBtn').onclick=()=>{
+  const h=getActiveHero();if(!h)return;
+  const dataStr="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(h,null,2));
+  const dl=document.createElement('a');
+  dl.setAttribute("href",dataStr);
+  dl.setAttribute("download",(h.name||"heroi")+".json");
+  dl.click();
+};
+
+// Área do Mestre / Combatentes
+function addCombatant(){
+  let name=$('#mName').value.trim();
+  let init=parseInt($('#mInit').value)||0;
+  if(!name)return;
+  mestreCombat.push({name,init});
+  mestreCombat.sort((a,b)=>b.init-a.init);
+  localStorage.setItem('shrCombat',JSON.stringify(mestreCombat));
+  $('#mName').value='';$('#mInit').value='';
+  renderMestreCombat();
+}
+
+function renderMestreCombat(){
+  const box=$('#combatList');box.innerHTML='';
+  if(mestreCombat.length===0){
+    box.innerHTML='<p style="color:var(--muted); font-size:13px;">Nenhum combatente no tracker.</p>';
+    return;
+  }
+  mestreCombat.forEach((c,i)=>{
+    box.innerHTML+=`
+      <div style="background:var(--bg); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+        <span><b>#${c.init}</b> — ${escapeHTML(c.name)}</span>
+        <button class="danger-btn" style="padding:2px 8px; font-size:11px;" onclick="removeCombatant(${i})">Remover</button>
+      </div>
+    `;
+  });
+}
+function removeCombatant(i){
+  mestreCombat.splice(i,1);
+  localStorage.setItem('shrCombat',JSON.stringify(mestreCombat));
+  renderMestreCombat();
+}
+
+// Global UI Controls
+$('#themeBtn').onclick=()=>{
+  const dark=document.documentElement.dataset.theme!=='dark';
+  document.documentElement.dataset.theme=dark?'dark':'light';
+  localStorage.setItem('shrTheme',dark?'dark':'light');
+};
+if(localStorage.getItem('shrTheme')==='dark')document.documentElement.dataset.theme='dark';
+$('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open');
+
+renderHeroes();
+renderMestreCombat();
+</script>
+</body>
+</html>
